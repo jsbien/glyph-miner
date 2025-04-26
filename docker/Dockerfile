@@ -1,53 +1,42 @@
-###########################################################
-# Dockerfile to build Glyph Miner containers              #
-###########################################################
+FROM ubuntu:20.04
 
-# Set the base image to ubuntu
-FROM ubuntu:14.04
+LABEL maintainer="benedikt.budig@uni-wuerzburg.de"
+LABEL org.opencontainers.image.source="https://github.com/benedikt-budig/glyph-miner"
 
-MAINTAINER Benedikt Budig "glyphminer@benedikt-budig.de"
+ENV DEBIAN_FRONTEND=noninteractive
 
-ENV DEBIAN_FRONTEND noninteractive
-
-################## BEGIN INSTALLATION #####################
-# install required dependencies through apt-get
 RUN apt-get update && apt-get install -y \
     g++ \
     git \
     make \
     mysql-server \
     nginx \
-    python-dev \
-    python-numpy \
-    python-mysqldb \
-    python-pil \
-    python-pip \
- && rm -rf /var/lib/apt/lists/*
+    python3 \
+    python3-dev \
+    python3-numpy \
+    python3-mysqldb \
+    python3-pil \
+    python3-pip \
+    libpq-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zlib1g-dev \
+    libxml2-dev \
+    libxslt-dev \
+    build-essential \
+    gcc && \
+    rm -rf /var/lib/apt/lists/*
 
-# install uswgi through pip
-RUN pip install uwsgi
+RUN pip3 install uwsgi
 
-# configure nginx
-COPY default /etc/nginx/sites-enabled/default
-RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
+WORKDIR /opt/glyph-miner
 
-# pull the Glyph Miner repository from GitHub
-WORKDIR /opt
-RUN git clone https://github.com/benedikt-budig/glyph-miner.git
-#COPY temp/ /opt/glyph-miner/
+RUN git clone https://github.com/benedikt-budig/glyph-miner .
 
-# compile the template matching module
-WORKDIR /opt/glyph-miner/server
-RUN make standalone
+COPY wsgi.py /opt/glyph-miner/wsgi.py
+COPY start-container.sh /opt/glyph-miner/start-container.sh
+COPY default /etc/mysql/conf.d/glyphminer.cnf
 
-# copy the start-up script
-COPY start-container.sh /opt/glyph-miner/
-
-################### INSTALLATION END ######################
-
-# expose the default port
 EXPOSE 80
 
-# set the default command
 CMD ["/opt/glyph-miner/start-container.sh"]
-
