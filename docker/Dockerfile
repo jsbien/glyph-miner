@@ -33,10 +33,11 @@ WORKDIR /opt/glyph-miner
 
 RUN git clone https://github.com/benedikt-budig/glyph-miner .
 
-COPY wsgi.py /opt/glyph-miner/wsgi.py
 COPY start-container.sh /opt/glyph-miner/start-container.sh
 COPY default /etc/mysql/conf.d/glyphminer.cnf
 
-EXPOSE 80
+# inside Dockerfile
 
-CMD ["/opt/glyph-miner/start-container.sh"]
+EXPOSE 9090
+
+CMD ["uwsgi", "--http", ":9090", "--wsgi-file", "server/web/wsgi.py", "--callable", "app"]
