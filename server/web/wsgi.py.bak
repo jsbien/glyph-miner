@@ -5,11 +5,11 @@ WSGI Utilities
 
 import os, sys
 
-from . import http
-from . import webapi as web
-from .utils import listget
-from .net import validaddr, validip
-from . import httpserver
+import http
+import webapi as web
+from utils import listget
+from net import validaddr, validip
+import httpserver
 
 def runfcgi(func, addr=('localhost', 8000)):
     """Runs a WSGI function as a FastCGI server."""
