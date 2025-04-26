@@ -1,0 +1,103 @@
+jsbien@JSBbookworm:~/git/glyph-miner/docker$ docker build -t glyph-miner-modern .
+Sending build context to Docker daemon  410.6kB
+Step 1/13 : FROM ubuntu:20.04
+ ---> b7bab04fd9aa
+Step 2/13 : LABEL maintainer="benedikt.budig@uni-wuerzburg.de"
+ ---> Using cache
+ ---> ae4f5b8ef88d
+Step 3/13 : LABEL org.opencontainers.image.source="https://github.com/benedikt-budig/glyph-miner"
+ ---> Using cache
+ ---> 4c464a9d8904
+Step 4/13 : ENV DEBIAN_FRONTEND=noninteractive
+ ---> Using cache
+ ---> 4d25da54aa09
+Step 5/13 : RUN apt-get update && apt-get install -y     g++     git     make     mysql-server     nginx     python3     python3-dev     python3-numpy     python3-mysqldb     python3-pil     python3-pip     libpq-dev     libjpeg-dev     libfreetype6-dev     zlib1g-dev     libxml2-dev     libxslt-dev     build-essential     gcc &&     rm -rf /var/lib/apt/lists/*
+ ---> Using cache
+ ---> 90b786252538
+Step 6/13 : RUN pip3 install uwsgi
+ ---> Using cache
+ ---> 8844961534dd
+Step 7/13 : WORKDIR /opt/glyph-miner
+ ---> Using cache
+ ---> c40f1eadce5c
+Step 8/13 : RUN git clone https://github.com/benedikt-budig/glyph-miner .
+ ---> Using cache
+ ---> 71844a163911
+Step 9/13 : COPY wsgi.py /opt/glyph-miner/wsgi.py
+ ---> Using cache
+ ---> dc802c701449
+Step 10/13 : COPY start-container.sh /opt/glyph-miner/start-container.sh
+ ---> Using cache
+ ---> f605996c378c
+Step 11/13 : COPY default /etc/mysql/conf.d/glyphminer.cnf
+ ---> Using cache
+ ---> 2ea7f1e00cbb
+Step 12/13 : EXPOSE 80
+ ---> Using cache
+ ---> acd54471f3f7
+Step 13/13 : CMD ["/opt/glyph-miner/start-container.sh"]
+ ---> Using cache
+ ---> 6ac4887e8bbb
+Successfully built 6ac4887e8bbb
+Successfully tagged glyph-miner-modern:latest
+jsbien@JSBbookworm:~/git/glyph-miner/docker$ docker run -p 8081:9090 -it glyph-miner-modern
+Starting mysql
+ * Starting MySQL database server mysqld        su: warning: cannot change directory to /nonexistent: No such file or directory
+[fail]
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+Starting nginx
+[ OK ]
+Starting the python backend
+*** Starting uWSGI 2.0.29 (64bit) on [Sat Apr 26 12:46:10 2025] ***
+compiled with version: 9.4.0 on 26 April 2025 10:09:12
+os: Linux-6.1.0-27-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.115-1 (2024-11-01)
+nodename: b4aacc2d2467
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /opt/glyph-miner
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /opt
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uWSGI http bound on :9090 fd 4
+uwsgi socket 0 bound to TCP address 127.0.0.1:36517 (port auto-assigned) fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.8.10 (default, Mar 18 2025, 20:04:55)  [GCC 9.4.0]
+Python main interpreter initialized at 0x558edc0cff00
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 250032 bytes (244 KB) for 4 cores
+*** Operational MODE: preforking+threaded ***
+added /opt/glyph-miner/web/ to pythonpath.
+Traceback (most recent call last):
+  File "glyph-miner/wsgi.py", line 1, in <module>
+    from app import app
+ImportError: cannot import name 'app' from 'app' (unknown location)
+unable to load app 0 (mountpoint='') (callable not found or import error)
+*** no app loaded. going in full dynamic mode ***
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 620)
+spawned uWSGI worker 1 (pid: 626, cores: 2)
+spawned uWSGI worker 2 (pid: 627, cores: 2)
+spawned uWSGI http 1 (pid: 628)
+spawned uWSGI http 1 (pid: 628)  C-c C-c^CSIGINT/SIGTERM received...killing workers...
+gateway "uWSGI http 1" has been buried (pid: 628)
+worker 1 buried after 1 seconds
+worker 2 buried after 1 seconds
+goodbye to uWSGI.
+jsbien@JSBbookworm:~/git/glyph-miner/docker$ 
