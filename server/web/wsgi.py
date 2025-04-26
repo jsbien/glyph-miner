@@ -3,13 +3,13 @@ WSGI Utilities
 (from web.py)
 """
 
-import os, sys
+import os
+import sys
 
-from . import http
 from . import webapi as web
 from .utils import listget
 from .net import validaddr, validip
-from . import httpserver
+import httpserver
 
 def runfcgi(func, addr=('localhost', 8000)):
     """Runs a WSGI function as a FastCGI server."""
@@ -26,19 +26,19 @@ def runwsgi(func):
     Runs a WSGI-compatible `func` using FCGI, SCGI, or a simple web server,
     as appropriate based on context and `sys.argv`.
     """
+    from .web_http import runsimple  # <-- Lazy import to avoid circular dependency
 
-    if 'SERVER_SOFTWARE' in os.environ: # cgi
+    if os.environ.get('SERVER_SOFTWARE'): # cgi
         os.environ['FCGI_FORCE_CGI'] = 'Y'
 
-    if ('PHP_FCGI_CHILDREN' in os.environ) or ('SERVER_SOFTWARE' in os.environ):
+    if (os.environ.get('PHP_FCGI_CHILDREN')  # lighttpd fastcgi
+        or os.environ.get('SERVER_SOFTWARE')):
         return runfcgi(func, None)
 
     if 'fcgi' in sys.argv or 'fastcgi' in sys.argv:
         args = sys.argv[1:]
-        if 'fastcgi' in args:
-            args.remove('fastcgi')
-        elif 'fcgi' in args:
-            args.remove('fcgi')
+        if 'fastcgi' in args: args.remove('fastcgi')
+        elif 'fcgi' in args: args.remove('fcgi')
         if args:
             return runfcgi(func, validaddr(args[0]))
         else:
@@ -52,13 +52,13 @@ def runwsgi(func):
         else:
             return runscgi(func)
 
-    return httpserver.runsimple(func, validip(listget(sys.argv, 1, '')))
+    return runsimple(func, validip(listget(sys.argv, 1, '')))
 
 def _is_dev_mode():
     argv = getattr(sys, "argv", [])
 
-    if ('SERVER_SOFTWARE' in os.environ) \
-        or ('PHP_FCGI_CHILDREN' in os.environ) \
+    if os.environ.get('SERVER_SOFTWARE') \
+        or os.environ.get('PHP_FCGI_CHILDREN') \
         or 'fcgi' in argv or 'fastcgi' in argv \
         or 'mod_wsgi' in argv:
             return False
