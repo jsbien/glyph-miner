@@ -9,7 +9,9 @@ import sys
 from . import webapi as webapp
 from .utils import listget
 from .net import validaddr, validip
-import httpserver
+# import httpserver
+from . import httpserver
+
 
 def runfcgi(func, addr=('localhost', 8000)):
     """Runs a WSGI function as a FastCGI server."""
