@@ -8,7 +8,7 @@ sleep 5
 service nginx start
 
 # Set correct PYTHONPATH
-export PYTHONPATH=/opt/glyph-miner/server:/opt/glyph-miner/server/web:$PYTHONPATH
+export PYTHONPATH=/opt/glyph-miner:$PYTHONPATH
 
-# Start uwsgi by module and correct directory
+# Start uwsgi properly
 uwsgi --http :9090 --chdir /opt/glyph-miner --module server.server:app
