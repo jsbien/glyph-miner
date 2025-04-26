@@ -80,7 +80,7 @@ def createLine(text, matches, xMargin, yOffset, line_height, page_dimensions, wo
 
         # dummy image if no glyphs available
         if not char in matches:
-            print "missing glyph: " + char.encode('utf-8')
+            print("missing glyph: " + char.encode('utf-8'))
             im = Image.open('./missing-glyph.png')
             lineImage.paste(im, (cursorX, 0))
             cursorX += 50 + letter_spacing
