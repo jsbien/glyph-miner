@@ -1,11 +1,8 @@
-# Use Ubuntu 20.04 as the base image
 FROM ubuntu:20.04
 
-# Metadata
 LABEL maintainer="benedikt.budig@uni-wuerzburg.de"
 LABEL org.opencontainers.image.source="https://github.com/jsbien/glyph-miner"
 
-# Environment setup to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system packages
@@ -17,21 +14,18 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev libxslt-dev build-essential gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python packages
-RUN pip3 install uwsgi web.py
+# Install Python libraries
+RUN pip3 install uwsgi
 
-# Clean any old glyph-miner data
+# Clone your glyph-miner repository (your fixed version!)
 WORKDIR /opt/
-RUN rm -rf /opt/glyph-miner
-
-# Clone your updated glyph-miner repository
 RUN git clone https://github.com/jsbien/glyph-miner.git glyph-miner
 
-# Set working directory to the app
+# Set working directory
 WORKDIR /opt/glyph-miner
 
-# Expose the HTTP port (uWSGI will serve on this)
+# Expose uwsgi port
 EXPOSE 9090
 
-# Start uWSGI pointing to the correct WSGI app
-CMD ["uwsgi", "--http", ":9090", "--wsgi-file", "server/web/wsgi.py", "--callable", "app"]
+# Start mysql, nginx and uwsgi
+CMD ["/opt/glyph-miner/start-container.sh"]
