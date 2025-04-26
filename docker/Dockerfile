@@ -21,6 +21,12 @@ RUN pip3 install uwsgi
 WORKDIR /opt/
 RUN git clone https://github.com/jsbien/glyph-miner.git glyph-miner
 
+# Copy start script
+COPY docker/start-container.sh /opt/glyph-miner/start-container.sh
+
+# Make script executable
+RUN chmod +x /opt/glyph-miner/start-container.sh    
+
 # Set working directory
 WORKDIR /opt/glyph-miner
 
