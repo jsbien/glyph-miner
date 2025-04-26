@@ -11,4 +11,6 @@ service nginx start
 export PYTHONPATH=/opt/glyph-miner:$PYTHONPATH
 
 # Start uwsgi properly
-uwsgi --http :9090 --chdir /opt/glyph-miner --module server.server:app
+# uwsgi --http :9090 --chdir /opt/glyph-miner --module server.server:app
+uwsgi --http :9090 --chdir /opt/glyph-miner --module server.server:application
+
