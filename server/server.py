@@ -8,7 +8,8 @@ import random
 import numpy as np
 import subprocess
 
-import pagecreator
+# import pagecreator
+from server import pagecreator
 
 from ctypes import *
 from PIL import Image, ImageDraw, ImageOps
