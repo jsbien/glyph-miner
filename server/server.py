@@ -2,7 +2,7 @@
 import web
 import os
 import json
-import StringIO
+import io
 import math
 import random
 import numpy as np
@@ -309,7 +309,7 @@ class image_file:
         form = web.input()
 
         # save files at correct locations for the web tools and the server
-        im = Image.open(StringIO.StringIO(form.file))
+        im = Image.open(io.StringIO(form.file))
         (width, height) = im.size
         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
 
@@ -477,7 +477,7 @@ class matches:
                 im = Image.open('./images/' + image.path)
                 im.load()
                 imageList[image.id] = im
-                print "adding " + str(image.id) + " to dict"
+                print("adding " + str(image.id) + " to dict")
             im = imageList[image.id]
             im.crop((templ.x, templ.y, templ.x + templ.w, templ.y + templ.h)).save("templates/" + str(templ.id) + ".png", "PNG")
 
@@ -553,7 +553,7 @@ class collection_matches:
                 im = Image.open('./images/' + template_image.path)
                 im.load()
                 imageList[template_image.id] = im
-                print "adding " + str(template_image.id) + " to dict"
+                print("adding " + str(template_image.id) + " to dict")
             im = imageList[template_image.id]
             im.crop((templ.x, templ.y, templ.x + templ.w, templ.y + templ.h)).save("templates/" + str(templ.id) + ".png", "PNG")
 
@@ -574,7 +574,7 @@ class collection_matches:
             out, err = process.communicate()
             errcode = process.returncode
             if errcode != 0:
-                print "Error during template matching"
+                print("Error during template matching")
                 continue
             matches = json.loads(out)
             t = db.transaction()
@@ -665,9 +665,9 @@ class crop:
             im = Image.open('./images/' + image.path)
             im.load()
             imageList[imageId] = im
-            print "adding " + imageId + " to dict"
+            print("adding " + imageId + " to dict")
         im = imageList[imageId]
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         im.crop((int(args.x1), int(args.y1), int(
             args.x2), int(args.y2))).save(buf, "PNG")
         contents = buf.getvalue()
@@ -689,7 +689,7 @@ class matchcrop:
             im = Image.open('./images/' + image.path)
             im.load()
             imageList[imageId] = im
-            print "adding " + imageId + " to dict"
+            print("adding " + imageId + " to dict")
         im = imageList[imageId]
 
         # get match from database
@@ -715,7 +715,7 @@ class matchcrop:
                            outline=(255, 0, 0, 200))
 
         # save image to buffer and return
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         im_cropped.save(buf, "PNG")
         contents = buf.getvalue()
         return contents
