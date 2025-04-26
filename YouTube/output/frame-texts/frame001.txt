@@ -1,0 +1,1 @@
+In this video, we showcase a system for extracting glyphs from early typeset prints.

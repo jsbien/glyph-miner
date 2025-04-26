@@ -1,0 +1,62 @@
+In this video, we showcase a system for extracting glyphs from early typeset prints.
+The system helps for training OCR software by rapidly locating sample occurrences of given glyphs.
+Let's have a look at how this works.
+For this demonstration, we use scans of an incunable printed in Basel in 1497,
+containing a Latin translation of Sebastian Brandt's famous Narrenschiff.
+Here you see an overview of the documents that have been uploaded to our system.
+We select the incunable and go to the next screen.
+Now we see the title page.
+On the left, we can navigate to the other pages of this collection.
+Let's pick a page that contains a lot of text.
+In this example, we want to find occurrences of the character E to train an OCR engine on.
+First, we select a decent E somewhere in the text by selecting it with the rectangle tool.
+Note that we crop it generously to include the white space above and below.
+This white space distinguishes it from similar glyphs but with accents, such as the one to the right.
+Next, we tell the system that what we cropped was an E so that we can find it more easily later,
+and then we submit this as a new template.
+In the background, the system now starts a template matching algorithm
+that searches for occurrences over E on all of the pages in the collection.
+We have only uploaded 20 pages for this demonstration,
+but our algorithm could as well search all 320 pages of this incunable.
+This would just take a little longer.
+Once the template matching is done, we are presented with a set of candidate matches.
+They are color-coded according to their similarity to the template we indicated.
+As you can see, our system correctly located some Es.
+There are also a whole lot of false positives.
+At this point, we switch to the classification interface,
+which will help us to get rid of these false positives.
+Here, we are presented with a batch of nine candidates
+and have to tell the system which of them are correct and which are not.
+The system uses this information to iteratively train a logistic regression model
+from which it eventually learns to distinguish between the correct and the incorrect matches.
+For details on the algorithm involved, see the link in the description below.
+After about 10 iterations, the model is sufficiently trained,
+and we go back to the document view.
+Now, only those matches that the system classifies as correct are shown.
+We can see that almost all false positives have been removed,
+while most of the correct matches are still there.
+This is also true for the other pages in the collection.
+We have found thousands of occurrences of this glyphs in mere minutes.
+We now go to the glyph library,
+where the results from the previous step are aggregated.
+All detected Es are displayed in the list on the right, sorted by quality.
+About two-thirds of the way down the list,
+we see that our glyphs have started to show significant variance,
+but almost all of them are still correct.
+We can see that the glyphs have started to show significant variance,
+but almost all of them are still correct.
+All the way to the bottom, there are also some false positives,
+but relative to the number of glyphs found, this is not a significant fraction.
+Here is another glyph we prepared earlier using this process.
+We see much fewer occurrences, because the CT ligature is relatively rare.
+These data can now be downloaded as image files,
+or exported in the page.xml file.
+As an example of what you can do with the output of our system,
+we import the detected glyphs into FrankenPlus.
+This is software for generating synthetic draining data for the Tesseract OCR engine.
+It was developed at the Texas A&M University,
+and is designed to be used in a digitization pipeline for early prints.
+As you can see here, our results are similar to those of the previous step.
+This concludes our video, in which we gave a quick impression of the features of our system.
+We hope you enjoyed it, and say thanks for watching.
+Thank you for watching.

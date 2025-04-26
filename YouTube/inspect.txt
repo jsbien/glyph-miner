@@ -1,0 +1,108 @@
+[
+    {
+        "Id": "sha256:0549947a93239b7f44f85a0585a0abbfbb972dcc2ce6714d92c77094129720db",
+        "RepoTags": [
+            "glyphminer/glyphminer:latest"
+        ],
+        "RepoDigests": [
+            "glyphminer/glyphminer@sha256:90d9cd5223c7451b94c0197d135aa9974afba7527150cee3126e661cc1518af7"
+        ],
+        "Parent": "",
+        "Comment": "",
+        "Created": "2016-09-20T11:48:03.327202094Z",
+        "Container": "58dbee8abe9623256c8d690d628c2570e1cc949c7cd1d12775f3be00d1338e15",
+        "ContainerConfig": {
+            "Hostname": "26cb43ba6817",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) ",
+                "CMD [\"/opt/glyph-miner/start-container.sh\"]"
+            ],
+            "ArgsEscaped": true,
+            "Image": "sha256:04a328903366ddc8aefa5b65844adcc62d2235ba15ec6d9a46b6d79110e12fd1",
+            "Volumes": null,
+            "WorkingDir": "/opt/glyph-miner/server",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {}
+        },
+        "DockerVersion": "1.12.1",
+        "Author": "Benedikt Budig \"glyphminer@benedikt-budig.de\"",
+        "Config": {
+            "Hostname": "26cb43ba6817",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Cmd": [
+                "/opt/glyph-miner/start-container.sh"
+            ],
+            "ArgsEscaped": true,
+            "Image": "sha256:04a328903366ddc8aefa5b65844adcc62d2235ba15ec6d9a46b6d79110e12fd1",
+            "Volumes": null,
+            "WorkingDir": "/opt/glyph-miner/server",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {}
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 575859038,
+        "VirtualSize": 575859038,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/bd2ddd96aef5b921927e3abbf331a7dc93b0a7688b7dba3c2908806944a0f5f5/diff:/var/lib/docker/overlay2/ca6997308baa4f512e31cf85e3b8b9a86058d9f1dff06f18b0531f4cae186e1a/diff:/var/lib/docker/overlay2/12766e8dc8c5ef0a11bbe635298d74e87f65dfc4755a2ea34dfcd6a0567aac3e/diff:/var/lib/docker/overlay2/1b5bf8de102475376d9367a51728d7f7c80b801661c2ac19a58a1cdfc2838394/diff:/var/lib/docker/overlay2/0fd3bcffdcb2036c4374b7971e0cd8f9bd62f0e5ea0d343b2364e4bf29de827f/diff:/var/lib/docker/overlay2/eb286e442fcad86b7921833b109d2300f49dbc92844cb72454a4eef3a8d65576/diff:/var/lib/docker/overlay2/e54bcf234b95b7ec5f5b28a177086977d415b7bd4bbf4cbf316bd4e5ab095abc/diff:/var/lib/docker/overlay2/1b1122be1496dff07904a36fb34aefec05daf60838f8306a90fa3026f03c6d2f/diff:/var/lib/docker/overlay2/ca8dfa1a38369ac49bcdda9dc5c163db8ab962b2c943ca97e95c8f54a932eecb/diff:/var/lib/docker/overlay2/c98b202646b369e4e6f642e20aaaf510f1ab58ce62a7bc8d417e61228d6abe2f/diff",
+                "MergedDir": "/var/lib/docker/overlay2/875a9966889076cadc21f8425ef2a94fa7ffb27d972455245c60c11062f735a6/merged",
+                "UpperDir": "/var/lib/docker/overlay2/875a9966889076cadc21f8425ef2a94fa7ffb27d972455245c60c11062f735a6/diff",
+                "WorkDir": "/var/lib/docker/overlay2/875a9966889076cadc21f8425ef2a94fa7ffb27d972455245c60c11062f735a6/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:8a14f84e58378f5982f4e1ac39bebda2ac9025349026fc0adb8444385051c958",
+                "sha256:dbaa8ea1faf96b94cd08a124ffe622a13e6d67ec70026f01264b1e302095ef2e",
+                "sha256:df9a135a69491b787653269e3a228480063abd4a3ca3a74218f8a04f69da9c87",
+                "sha256:447f88c8358fbd8211f0f48c6afd38901e1dfb9ebd5ca6ab748613978acfa114",
+                "sha256:3c5ad19bc67a0cda935377fb8a142f7eecb9d74acab91aaf1f4385cecd016d0a",
+                "sha256:18a723b5765b64f3ec5a679f2de5884a11cea71bb8a7b788325a17746423ed34",
+                "sha256:66ba50caa6f05282d021df0f89b4f2dac6bafe8c6f31e1b884861625d6ade9f9",
+                "sha256:d2fb1d96dcbc2339e16d91ddde39a7b72246bc07f856d832db60be974a292118",
+                "sha256:67bbff602542bf610fdb7539d8a11f01236137766168b83932e58380723ea4ed",
+                "sha256:fd2e882e475236c50261a1a59e76b6efb6555921420b05abf04231046c7f2554",
+                "sha256:a11ead51ec1b5a438620b50a251dce1f92a4829e96d0572b26e858e406f377d5"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "0001-01-01T00:00:00Z"
+        }
+    }
+]

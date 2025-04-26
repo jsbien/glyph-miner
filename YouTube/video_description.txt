@@ -1,0 +1,27 @@
+n this video, we showcase Glyph Miner, our system for extracting
+glyphs from early typeset prints. While off-the-shelf OCR systems work
+well on many modern documents, they need to be specifically "trained"
+to achive good results on particular early prints. Employing efficient
+user interactions, our system helps in this process by rapidly
+locating sample occurrences of glyphs (which can be used for the
+training). The system is based on our earlier system for historical
+maps ( • An Interactive System for Metadata Ex...  ), which we
+extended to be applicable in the context of digitizing early typeset
+prints.
+
+This software was created in a cooperation with the Würzburg
+University Library and was partially supported by the BMBF project
+"KALLIMACHOS" (http://www.kallimachos.de/project/dok....
+
+http://www.kallimachos.de/project/doku.php%29&v=T-p_kIdsn6k
+http://www.kallimachos.de/project/doku.php
+https://kallimachos.de/Hauptseite
+
+Benedikt Budig:
+http://www1.informatik.uni-wuerzburg....
+https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbjBRdF9UTmpJeTdWQ3Z1WF9xdG85c2lGNF81QXxBQ3Jtc0ttYmRSX1NQNm5rd1VGZkJyd25LUEhRZUhhdXRRUGctSXlYdGdJS0ZFN3pvd0VRWWFGVzd5bjFkTHFJU09rNVRnaDFhQ2d4UlVWLWVwcE4yWHJvaWxfSXZjMW9NZ3RQclI1SHNubDcxaGh6Tko3M2pTUQ&q=http%3A%2F%2Fwww1.informatik.uni-wuerzburg.de%2Fen%2Fstaff%2Fbudig_benedikt%2F&v=T-p_kIdsn6k
+
+
+Thomas van Dijk:
+https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbDZyTmZnNHlaUkJRcWtBWW1zUlJ3SWFWYklpZ3xBQ3Jtc0tuZGoyNjN3TTNodnNnTEVnbkNzQVFJMFlkZnlRVTNVTUYwWDZWTUNFay1IaXU2MkNsRmtTc2xqQk5jM0I1Q28tcXd0OGotemNPZW02Ukt4MlBIQWh0WkhNeWRSaS0yVmdaYWVtZjJBcVJoMGdLWVFDdw&q=http%3A%2F%2Fwww1.informatik.uni-wuerzburg.de%2Fen%2Fstaff%2Fdijk_thomas_van%2F&v=T-p_kIdsn6k
+https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbDZyTmZnNHlaUkJRcWtBWW1zUlJ3SWFWYklpZ3xBQ3Jtc0tuZGoyNjN3TTNodnNnTEVnbkNzQVFJMFlkZnlRVTNVTUYwWDZWTUNFay1IaXU2MkNsRmtTc2xqQk5jM0I1Q28tcXd0OGotemNPZW02Ukt4MlBIQWh0WkhNeWRSaS0yVmdaYWVtZjJBcVJoMGdLWVFDdw&q=http%3A%2F%2Fwww1.informatik.uni-wuerzburg.de%2Fen%2Fstaff%2Fdijk_thomas_van%2F&v=T-p_kIdsn6k

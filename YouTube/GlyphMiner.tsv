@@ -1,0 +1,63 @@
+start	end	text
+0	8000	In this video, we showcase a system for extracting glyphs from early typeset prints.
+8000	14000	The system helps for training OCR software by rapidly locating sample occurrences of given glyphs.
+14000	17000	Let's have a look at how this works.
+17000	22000	For this demonstration, we use scans of an incunable printed in Basel in 1497,
+22000	29000	containing a Latin translation of Sebastian Brandt's famous Narrenschiff.
+30000	34000	Here you see an overview of the documents that have been uploaded to our system.
+34000	38000	We select the incunable and go to the next screen.
+38000	40000	Now we see the title page.
+40000	44000	On the left, we can navigate to the other pages of this collection.
+44000	49000	Let's pick a page that contains a lot of text.
+49000	55000	In this example, we want to find occurrences of the character E to train an OCR engine on.
+55000	61000	First, we select a decent E somewhere in the text by selecting it with the rectangle tool.
+61000	65000	Note that we crop it generously to include the white space above and below.
+65000	72000	This white space distinguishes it from similar glyphs but with accents, such as the one to the right.
+72000	77000	Next, we tell the system that what we cropped was an E so that we can find it more easily later,
+77000	82000	and then we submit this as a new template.
+82000	85000	In the background, the system now starts a template matching algorithm
+85000	91000	that searches for occurrences over E on all of the pages in the collection.
+91000	94000	We have only uploaded 20 pages for this demonstration,
+94000	99000	but our algorithm could as well search all 320 pages of this incunable.
+99000	104000	This would just take a little longer.
+104000	108000	Once the template matching is done, we are presented with a set of candidate matches.
+108000	114000	They are color-coded according to their similarity to the template we indicated.
+114000	118000	As you can see, our system correctly located some Es.
+118000	122000	There are also a whole lot of false positives.
+122000	125000	At this point, we switch to the classification interface,
+125000	130000	which will help us to get rid of these false positives.
+130000	133000	Here, we are presented with a batch of nine candidates
+133000	137000	and have to tell the system which of them are correct and which are not.
+137000	142000	The system uses this information to iteratively train a logistic regression model
+142000	147000	from which it eventually learns to distinguish between the correct and the incorrect matches.
+147000	152000	For details on the algorithm involved, see the link in the description below.
+152000	155000	After about 10 iterations, the model is sufficiently trained,
+155000	158000	and we go back to the document view.
+167000	172000	Now, only those matches that the system classifies as correct are shown.
+172000	176000	We can see that almost all false positives have been removed,
+176000	179000	while most of the correct matches are still there.
+179000	183000	This is also true for the other pages in the collection.
+183000	188000	We have found thousands of occurrences of this glyphs in mere minutes.
+188000	191000	We now go to the glyph library,
+191000	194000	where the results from the previous step are aggregated.
+194000	200000	All detected Es are displayed in the list on the right, sorted by quality.
+200000	203000	About two-thirds of the way down the list,
+203000	206000	we see that our glyphs have started to show significant variance,
+206000	209000	but almost all of them are still correct.
+209000	212000	We can see that the glyphs have started to show significant variance,
+212000	215000	but almost all of them are still correct.
+215000	219000	All the way to the bottom, there are also some false positives,
+219000	225000	but relative to the number of glyphs found, this is not a significant fraction.
+225000	229000	Here is another glyph we prepared earlier using this process.
+229000	235000	We see much fewer occurrences, because the CT ligature is relatively rare.
+235000	238000	These data can now be downloaded as image files,
+238000	241000	or exported in the page.xml file.
+241000	244000	As an example of what you can do with the output of our system,
+244000	248000	we import the detected glyphs into FrankenPlus.
+248000	253000	This is software for generating synthetic draining data for the Tesseract OCR engine.
+253000	256000	It was developed at the Texas A&M University,
+256000	261000	and is designed to be used in a digitization pipeline for early prints.
+261000	266000	As you can see here, our results are similar to those of the previous step.
+266000	271000	This concludes our video, in which we gave a quick impression of the features of our system.
+271000	274000	We hope you enjoyed it, and say thanks for watching.
+296000	298000	Thank you for watching.

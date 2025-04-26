@@ -1,0 +1,3 @@
+but relative to the number of glyphs found, this is not a significant fraction.
+
+Here is another glyph we prepared earlier using this process.

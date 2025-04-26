@@ -1,0 +1,818 @@
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ yt-dlp https://www.youtube.com/watch?v=T-p_kIdsn6k
+[youtube] Extracting URL: https://www.youtube.com/watch?v=T-p_kIdsn6k
+[youtube] T-p_kIdsn6k: Downloading webpage
+[youtube] T-p_kIdsn6k: Downloading tv client config
+[youtube] T-p_kIdsn6k: Downloading player 22f02d3d-main
+[youtube] T-p_kIdsn6k: Downloading tv player API JSON
+[youtube] T-p_kIdsn6k: Downloading ios player API JSON
+[youtube] T-p_kIdsn6k: Downloading m3u8 information
+[info] T-p_kIdsn6k: Downloading 1 format(s): 137+251
+[download] Destination: Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].f137.mp4
+[download] 100% of   49.99MiB in 00:00:02 at 18.26MiB/s  
+[download] Destination: Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].f251.webm
+[download] 100% of    3.49MiB in 00:00:00 at 9.77MiB/s   
+[Merger] Merging formats into "Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].mkv"
+Deleting original file Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].f137.mp4 (pass -k to keep)
+Deleting original file Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].f251.webm (pass -k to keep)
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ffplay
+ffplay version 4.4.4 Copyright (c) 2003-2023 the FFmpeg developers
+  built with gcc 10 (Debian 10.2.1-6)
+  configuration: --disable-decoder=amrnb --disable-decoder=libopenjpeg --disable-gnutls --disable-liblensfun --disable-libopencv --disable-podpages --disable-sndio --disable-stripping --enable-avfilter --enable-avresample --enable-chromaprint --enable-frei0r --enable-gcrypt --enable-gpl --enable-ladspa --enable-libaom --enable-libaribb24 --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libdavs2 --enable-libdc1394 --enable-libdrm --enable-libfdk-aac --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libiec61883 --enable-libjack --enable-libkvazaar --enable-libmp3lame --enable-libmysofa --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librist --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-nonfree --enable-openal --enable-opencl --enable-opengl --enable-openssl --enable-postproc --enable-pthreads --enable-shared --enable-version3 --enable-vulkan --incdir=/usr/include/x86_64-linux-gnu --libdir=/usr/lib/x86_64-linux-gnu --prefix=/usr --toolchain=hardened --enable-vaapi --enable-libmfx --enable-libvmaf --enable-libilbc --disable-altivec --shlibdir=/usr/lib/x86_64-linux-gnu
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Simple media player
+usage: ffplay [options] input_file
+
+An input file must be specified
+Use -h to get full help or, even better, run 'man ffplay'
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ffplay -ss 0 -t 18 Glyph\ Miner：\ A\ System\ for\ Efficiently\ Extracting\ Glyphs\ from\ Early\ Prints\ in\ the\ Context\ of\ OCR\ [T-p_kIdsn6k].mkv 
+ffplay version 4.4.4 Copyright (c) 2003-2023 the FFmpeg developers
+  built with gcc 10 (Debian 10.2.1-6)
+  configuration: --disable-decoder=amrnb --disable-decoder=libopenjpeg --disable-gnutls --disable-liblensfun --disable-libopencv --disable-podpages --disable-sndio --disable-stripping --enable-avfilter --enable-avresample --enable-chromaprint --enable-frei0r --enable-gcrypt --enable-gpl --enable-ladspa --enable-libaom --enable-libaribb24 --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libdavs2 --enable-libdc1394 --enable-libdrm --enable-libfdk-aac --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libiec61883 --enable-libjack --enable-libkvazaar --enable-libmp3lame --enable-libmysofa --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librist --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-nonfree --enable-openal --enable-opencl --enable-opengl --enable-openssl --enable-postproc --enable-pthreads --enable-shared --enable-version3 --enable-vulkan --incdir=/usr/include/x86_64-linux-gnu --libdir=/usr/lib/x86_64-linux-gnu --prefix=/usr --toolchain=hardened --enable-vaapi --enable-libmfx --enable-libvmaf --enable-libilbc --disable-altivec --shlibdir=/usr/lib/x86_64-linux-gnu
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, matroska,webm, from 'Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].mkv':
+  Metadata:
+    COMPATIBLE_BRANDS: iso6avc1mp41
+    MAJOR_BRAND     : dash
+    MINOR_VERSION   : 0
+    ENCODER         : Lavf58.76.100
+  Duration: 00:05:03.98, start: -0.007000, bitrate: 1474 kb/s
+  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x1080 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 1k tbn, 59.94 tbc (default)
+    Metadata:
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:05:03.937000000
+  Stream #0:1(eng): Audio: opus, 48000 Hz, stereo, fltp (default)
+    Metadata:
+      DURATION        : 00:05:03.981000000
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ffplay -ss 0 -t 18 Glyph\ Miner：\ A\ System\ for\ Efficiently\ Extracting\ Glyphs\ from\ Early\ Prints\ in\ the\ Context\ of\ OCR\ [T-p_kIdsn6k].mkv 
+ffplay version 4.4.4 Copyright (c) 2003-2023 the FFmpeg developers
+  built with gcc 10 (Debian 10.2.1-6)
+  configuration: --disable-decoder=amrnb --disable-decoder=libopenjpeg --disable-gnutls --disable-liblensfun --disable-libopencv --disable-podpages --disable-sndio --disable-stripping --enable-avfilter --enable-avresample --enable-chromaprint --enable-frei0r --enable-gcrypt --enable-gpl --enable-ladspa --enable-libaom --enable-libaribb24 --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libdavs2 --enable-libdc1394 --enable-libdrm --enable-libfdk-aac --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libiec61883 --enable-libjack --enable-libkvazaar --enable-libmp3lame --enable-libmysofa --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librist --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-nonfree --enable-openal --enable-opencl --enable-opengl --enable-openssl --enable-postproc --enable-pthreads --enable-shared --enable-version3 --enable-vulkan --incdir=/usr/include/x86_64-linux-gnu --libdir=/usr/lib/x86_64-linux-gnu --prefix=/usr --toolchain=hardened --enable-vaapi --enable-libmfx --enable-libvmaf --enable-libilbc --disable-altivec --shlibdir=/usr/lib/x86_64-linux-gnu
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, matroska,webm, from 'Glyph Miner： A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR [T-p_kIdsn6k].mkv':
+  Metadata:
+    COMPATIBLE_BRANDS: iso6avc1mp41
+    MAJOR_BRAND     : dash
+    MINOR_VERSION   : 0
+    ENCODER         : Lavf58.76.100
+  Duration: 00:05:03.98, start: -0.007000, bitrate: 1474 kb/s
+  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x1080 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 1k tbn, 59.94 tbc (default)
+    Metadata:
+      HANDLER_NAME    : ISO Media file produced by Google Inc.
+      VENDOR_ID       : [0][0][0][0]
+      DURATION        : 00:05:03.937000000
+  Stream #0:1(eng): Audio: opus, 48000 Hz, stereo, fltp (default)
+    Metadata:
+      DURATION        : 00:05:03.981000000
+  34.75 A-V:  6.789 fd= 374 aq=    0KB vq=    0KB sq=    0B f=0/0   
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ lscpu && free -h > lscpu.txt
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+  Address sizes:          39 bits physical, 48 bits virtual
+  Byte Order:             Little Endian
+CPU(s):                   12
+  On-line CPU(s) list:    0-11
+Vendor ID:                GenuineIntel
+  Model name:             Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+    CPU family:           6
+    Model:                158
+    Thread(s) per core:   2
+    Core(s) per socket:   6
+    Socket(s):            1
+    Stepping:             10
+    CPU(s) scaling MHz:   27%
+    CPU max MHz:          4600.0000
+    CPU min MHz:          800.0000
+    BogoMIPS:             6399.96
+    Flags:                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht
+                           tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc 
+                          cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 s
+                          se4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb
+                           invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 a
+                          vx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida ara
+                          t pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities
+Virtualization features:  
+  Virtualization:         VT-x
+Caches (sum of all):      
+  L1d:                    192 KiB (6 instances)
+  L1i:                    192 KiB (6 instances)
+  L2:                     1.5 MiB (6 instances)
+  L3:                     12 MiB (1 instance)
+NUMA:                     
+  NUMA node(s):           1
+  NUMA node0 CPU(s):      0-11
+Vulnerabilities:          
+  Gather data sampling:   Mitigation; Microcode
+  Itlb multihit:          KVM: Mitigation: VMX disabled
+  L1tf:                   Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable
+  Mds:                    Mitigation; Clear CPU buffers; SMT vulnerable
+  Meltdown:               Mitigation; PTI
+  Mmio stale data:        Mitigation; Clear CPU buffers; SMT vulnerable
+  Reg file data sampling: Not affected
+  Retbleed:               Mitigation; IBRS
+  Spec rstack overflow:   Not affected
+  Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl
+  Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+  Spectre v2:             Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+  Srbds:                  Mitigation; Microcode
+  Tsx async abort:        Mitigation; TSX disabled
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ lspci | grep -i vga
+00:02.0 VGA compatible controller: Intel Corporation CoffeeLake-S GT2 [UHD Graphics 630]
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ mem
+bash: mem: command not found
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi        10Gi       1.5Gi       907Mi       4.7Gi       5.0Gi
+Swap:           15Gi        10Gi       5.5Gi
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ time whisper GlyphMiner.mkv --model medium --language English
+bash: whisper: command not found
+
+real	0m0.002s
+user	0m0.002s
+sys	0m0.001s
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ pip install -U openai-whisper
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+    
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+    
+    If you wish to install a non-Debian packaged Python application,
+    it may be easiest to use pipx install xyz, which will manage a
+    virtual environment for you. Make sure you have pipx installed.
+    
+    See /usr/share/doc/python3.11/README.venv for more information.
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ source /home/jsbien/work/gamera4didjvu/gamera-4/venv/bin/activate
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ pip install -U openai-whisper
+Collecting openai-whisper
+  Downloading openai-whisper-20240930.tar.gz (800 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 800.5/800.5 kB 4.5 MB/s eta 0:00:00
+
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting numba
+  Downloading numba-0.61.2-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.8/3.8 MB 7.6 MB/s eta 0:00:00
+
+Requirement already satisfied: numpy in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from openai-whisper) (2.0.2)
+Requirement already satisfied: torch in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from openai-whisper) (2.4.1)
+Requirement already satisfied: tqdm in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from openai-whisper) (4.67.1)
+Collecting more-itertools
+  Downloading more_itertools-10.7.0-py3-none-any.whl (65 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.3/65.3 kB 28.2 MB/s eta 0:00:00
+
+Collecting tiktoken
+  Downloading tiktoken-0.9.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 82.0 MB/s eta 0:00:00
+
+Requirement already satisfied: triton>=2.0.0 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from openai-whisper) (3.0.0)
+Requirement already satisfied: filelock in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from triton>=2.0.0->openai-whisper) (3.18.0)
+Collecting llvmlite<0.45,>=0.44.0dev0
+  Downloading llvmlite-0.44.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (42.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.4/42.4 MB 24.7 MB/s eta 0:00:00
+
+Requirement already satisfied: regex>=2022.1.18 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from tiktoken->openai-whisper) (2024.11.6)
+Requirement already satisfied: requests>=2.26.0 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from tiktoken->openai-whisper) (2.32.3)
+Requirement already satisfied: typing-extensions>=4.8.0 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (4.13.2)
+Requirement already satisfied: sympy in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (1.13.3)
+Requirement already satisfied: networkx in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (3.4.2)
+Requirement already satisfied: jinja2 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (3.1.6)
+Requirement already satisfied: fsspec in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (2025.3.2)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.20.5 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (2.20.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from torch->openai-whisper) (12.1.105)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch->openai-whisper) (12.8.93)
+Requirement already satisfied: charset-normalizer<4,>=2 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from requests>=2.26.0->tiktoken->openai-whisper) (3.4.0)
+Requirement already satisfied: idna<4,>=2.5 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from requests>=2.26.0->tiktoken->openai-whisper) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from requests>=2.26.0->tiktoken->openai-whisper) (2.2.3)
+Requirement already satisfied: certifi>=2017.4.17 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from requests>=2.26.0->tiktoken->openai-whisper) (2024.8.30)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from jinja2->torch->openai-whisper) (3.0.2)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages (from sympy->torch->openai-whisper) (1.3.0)
+Building wheels for collected packages: openai-whisper
+  Building wheel for openai-whisper (pyproject.toml) ... done
+  Created wheel for openai-whisper: filename=openai_whisper-20240930-py3-none-any.whl size=803406 sha256=3501c162362cfae9896df93da81d94d08c8117086779a051ce3a87c9d76a679d
+  Stored in directory: /home/jsbien/.cache/pip/wheels/2f/f2/ce/6eb23db4091d026238ce76703bd66da60b969d70bcc81d5d3a
+Successfully built openai-whisper
+Installing collected packages: more-itertools, llvmlite, tiktoken, numba, openai-whisper
+Successfully installed llvmlite-0.44.0 more-itertools-10.7.0 numba-0.61.2 openai-whisper-20240930 tiktoken-0.9.0
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ time whisper GlyphMiner.mkv --model medium --language English
+100%|█████████████████████████████████████| 1.42G/1.42G [00:46<00:00, 32.7MiB/s]
+/home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages/whisper/__init__.py:150: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(fp, map_location=device)
+/home/jsbien/work/gamera4didjvu/gamera-4/venv/lib/python3.11/site-packages/whisper/transcribe.py:126: UserWarning: FP16 is not supported on CPU; using FP32 instead
+  warnings.warn("FP16 is not supported on CPU; using FP32 instead")
+[00:00.000 --> 00:08.000]  In this video, we showcase a system for extracting glyphs from early typeset prints.
+[00:08.000 --> 00:14.000]  The system helps for training OCR software by rapidly locating sample occurrences of given glyphs.
+[00:14.000 --> 00:17.000]  Let's have a look at how this works.
+[00:17.000 --> 00:22.000]  For this demonstration, we use scans of an incunable printed in Basel in 1497,
+[00:22.000 --> 00:29.000]  containing a Latin translation of Sebastian Brandt's famous Narrenschiff.
+[00:30.000 --> 00:34.000]  Here you see an overview of the documents that have been uploaded to our system.
+[00:34.000 --> 00:38.000]  We select the incunable and go to the next screen.
+[00:38.000 --> 00:40.000]  Now we see the title page.
+[00:40.000 --> 00:44.000]  On the left, we can navigate to the other pages of this collection.
+[00:44.000 --> 00:49.000]  Let's pick a page that contains a lot of text.
+[00:49.000 --> 00:55.000]  In this example, we want to find occurrences of the character E to train an OCR engine on.
+[00:55.000 --> 01:01.000]  First, we select a decent E somewhere in the text by selecting it with the rectangle tool.
+[01:01.000 --> 01:05.000]  Note that we crop it generously to include the white space above and below.
+[01:05.000 --> 01:12.000]  This white space distinguishes it from similar glyphs but with accents, such as the one to the right.
+[01:12.000 --> 01:17.000]  Next, we tell the system that what we cropped was an E so that we can find it more easily later,
+[01:17.000 --> 01:22.000]  and then we submit this as a new template.
+[01:22.000 --> 01:25.000]  In the background, the system now starts a template matching algorithm
+[01:25.000 --> 01:31.000]  that searches for occurrences over E on all of the pages in the collection.
+[01:31.000 --> 01:34.000]  We have only uploaded 20 pages for this demonstration,
+[01:34.000 --> 01:39.000]  but our algorithm could as well search all 320 pages of this incunable.
+[01:39.000 --> 01:44.000]  This would just take a little longer.
+[01:44.000 --> 01:48.000]  Once the template matching is done, we are presented with a set of candidate matches.
+[01:48.000 --> 01:54.000]  They are color-coded according to their similarity to the template we indicated.
+[01:54.000 --> 01:58.000]  As you can see, our system correctly located some Es.
+[01:58.000 --> 02:02.000]  There are also a whole lot of false positives.
+[02:02.000 --> 02:05.000]  At this point, we switch to the classification interface,
+[02:05.000 --> 02:10.000]  which will help us to get rid of these false positives.
+[02:10.000 --> 02:13.000]  Here, we are presented with a batch of nine candidates
+[02:13.000 --> 02:17.000]  and have to tell the system which of them are correct and which are not.
+[02:17.000 --> 02:22.000]  The system uses this information to iteratively train a logistic regression model
+[02:22.000 --> 02:27.000]  from which it eventually learns to distinguish between the correct and the incorrect matches.
+[02:27.000 --> 02:32.000]  For details on the algorithm involved, see the link in the description below.
+[02:32.000 --> 02:35.000]  After about 10 iterations, the model is sufficiently trained,
+[02:35.000 --> 02:38.000]  and we go back to the document view.
+[02:47.000 --> 02:52.000]  Now, only those matches that the system classifies as correct are shown.
+[02:52.000 --> 02:56.000]  We can see that almost all false positives have been removed,
+[02:56.000 --> 02:59.000]  while most of the correct matches are still there.
+[02:59.000 --> 03:03.000]  This is also true for the other pages in the collection.
+[03:03.000 --> 03:08.000]  We have found thousands of occurrences of this glyphs in mere minutes.
+[03:08.000 --> 03:11.000]  We now go to the glyph library,
+[03:11.000 --> 03:14.000]  where the results from the previous step are aggregated.
+[03:14.000 --> 03:20.000]  All detected Es are displayed in the list on the right, sorted by quality.
+[03:20.000 --> 03:23.000]  About two-thirds of the way down the list,
+[03:23.000 --> 03:26.000]  we see that our glyphs have started to show significant variance,
+[03:26.000 --> 03:29.000]  but almost all of them are still correct.
+[03:29.000 --> 03:32.000]  We can see that the glyphs have started to show significant variance,
+[03:32.000 --> 03:35.000]  but almost all of them are still correct.
+[03:35.000 --> 03:39.000]  All the way to the bottom, there are also some false positives,
+[03:39.000 --> 03:45.000]  but relative to the number of glyphs found, this is not a significant fraction.
+[03:45.000 --> 03:49.000]  Here is another glyph we prepared earlier using this process.
+[03:49.000 --> 03:55.000]  We see much fewer occurrences, because the CT ligature is relatively rare.
+[03:55.000 --> 03:58.000]  These data can now be downloaded as image files,
+[03:58.000 --> 04:01.000]  or exported in the page.xml file.
+[04:01.000 --> 04:04.000]  As an example of what you can do with the output of our system,
+[04:04.000 --> 04:08.000]  we import the detected glyphs into FrankenPlus.
+[04:08.000 --> 04:13.000]  This is software for generating synthetic draining data for the Tesseract OCR engine.
+[04:13.000 --> 04:16.000]  It was developed at the Texas A&M University,
+[04:16.000 --> 04:21.000]  and is designed to be used in a digitization pipeline for early prints.
+[04:21.000 --> 04:26.000]  As you can see here, our results are similar to those of the previous step.
+[04:26.000 --> 04:31.000]  This concludes our video, in which we gave a quick impression of the features of our system.
+[04:31.000 --> 04:34.000]  We hope you enjoyed it, and say thanks for watching.
+[04:56.000 --> 04:58.000]  Thank you for watching.
+
+real	10m17.382s
+user	55m31.489s
+sys	0m36.159s
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ mpv GlyphMiner.mp4 --sub-file GlyphMiner.srt
+bash: mpv: command not found
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ sudo apt install mpv
+[sudo] password for jsbien: 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libsixel1 libxpresent1
+Suggested packages:
+  libcuda1
+The following NEW packages will be installed:
+  libsixel1 libxpresent1 mpv
+0 upgraded, 3 newly installed, 0 to remove and 51 not upgraded.
+Need to get 1,313 kB of archives.
+After this operation, 3,859 kB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://deb.debian.org/debian bookworm/main amd64 libsixel1 amd64 1.10.3-3 [97.6 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 libxpresent1 amd64 1.0.0-2+b10 [8,046 B]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 mpv amd64 0.35.1-4 [1,207 kB]
+Fetched 1,313 kB in 0s (4,183 kB/s)
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+
+78Selecting previously unselected package libsixel1:amd64.
+(Reading database ... 790135 files and directories currently installed.)
+Preparing to unpack .../libsixel1_1.10.3-3_amd64.deb ...
+7Progress: [  0%] [....................................................................................................................] 87Progress: [  8%] [########............................................................................................................] 8Unpacking libsixel1:amd64 (1.10.3-3) ...
+7Progress: [ 15%] [#################...................................................................................................] 8Selecting previously unselected package libxpresent1:amd64.
+Preparing to unpack .../libxpresent1_1.0.0-2+b10_amd64.deb ...
+7Progress: [ 23%] [##########################..........................................................................................] 8Unpacking libxpresent1:amd64 (1.0.0-2+b10) ...
+7Progress: [ 31%] [###################################.................................................................................] 8Selecting previously unselected package mpv.
+Preparing to unpack .../mpv_0.35.1-4_amd64.deb ...
+7Progress: [ 38%] [############################################........................................................................] 8Unpacking mpv (0.35.1-4) ...
+7Progress: [ 46%] [#####################################################...............................................................] 8Setting up libxpresent1:amd64 (1.0.0-2+b10) ...
+7Progress: [ 54%] [##############################################################......................................................] 87Progress: [ 62%] [#######################################################################.............................................] 8Setting up libsixel1:amd64 (1.10.3-3) ...
+7Progress: [ 69%] [################################################################################....................................] 87Progress: [ 77%] [#########################################################################################...........................] 8Setting up mpv (0.35.1-4) ...
+7Progress: [ 85%] [##################################################################################################..................] 87Progress: [ 92%] [###########################################################################################################.........] 8Processing triggers for desktop-file-utils (0.26-1) ...
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for gnome-menus (3.36.0-1.1) ...
+Processing triggers for libc-bin (2.36-9+deb12u10) ...
+Processing triggers for man-db (2.11.2-2) ...
+Processing triggers for mailcap (3.70+nmu1) ...
+
+78debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+Scanning processes...                                                                                                                     
+Scanning candidates...                                                                                                                    
+Scanning processor microcode...                                                                                                           
+Scanning linux images...                                                                                                                  
+Pending kernel upgrade
+----------------------
+
+Newer kernel available
+
+The currently running kernel version is 6.1.0-27-amd64 which is not the expected kernel version 6.1.0-32-amd64.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+Outdated processor microcode
+----------------------------
+
+Processor microcode update
+
+The currently running processor microcode revision is 0x00f8 which is not the expected microcode revision 0x00fa.
+
+Restarting the system to load the new processor microcode will not be handled automatically, so you should consider rebooting.
+
+
+Restarting services...
+Daemons using outdated libraries
+--------------------------------
+
+
+  1. accounts-daemon.service  9. gdm.service              17. postgresql@13-main.service  25. systemd-logind.service
+  2. apache2.service          10. gpd.service             18. pwrstatd.service            26. teamviewerd.service
+  3. avahi-daemon.service     11. lxcfs.service           19. qipc.service                27. udisks2.service
+[More]  
+
+  4. bluetooth.service        12. lxc-monitord.service    20. rpcbind.service             28. upower.service
+  5. colord.service           13. lxc-net.service         21. rtkit-daemon.service        29. wpa_supplicant.service
+  6. cron.service             14. ModemManager.service    22. smartmontools.service       30. wsdd.service
+  7. dbus.service             15. NetworkManager.service  23. snapd.service               31. none of the above
+  8. exim4.service            16. polkit.service          24. switcheroo-control.service
+
+(Enter the items or ranges you want to select, separated by spaces.)
+
+Which services should be restarted? 1 31
+
+Which services should be restarted? 1-31
+
+Which services should be restarted?   C-c C-c
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ mpv GlyphMiner.mp4 --sub-file GlyphMiner.srt
+Error parsing commandline option sub-file: option requires parameter
+Make sure you're using e.g. '--sub-file=value' instead of '--sub-file value'.
+Exiting... (Fatal error)
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ mpv GlyphMiner.mp4 --sub-file=GlyphMiner.srt
+=[file] Cannot open file 'GlyphMiner.mp4': No such file or directory
+Failed to open GlyphMiner.mp4.
+
+Exiting... (Errors when loading file)
+>(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ mpv GlyphMiner.mkv --sub-file=GlyphMiner.srt
+= (+) Video --vid=1 (*) (h264 1920x1080 29.970fps)
+ (+) Audio --aid=1 --alang=eng (*) (opus 2ch 48000Hz)
+ (+) Subs  --sid=1 'GlyphMiner.srt' (subrip) (external)
+     Subs  --sid=2 'GlyphMiner.vtt' (webvtt) (external)
+[vo/gpu/wayland] GNOME's wayland compositor lacks support for the idle inhibit protocol. This means the screen can blank during playback.
+AO: [pipewire] 48000Hz stereo 2ch floatp
+VO: [gpu] 1920x1080 yuv420p
+
+
+Exiting... (Quit)
+>(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ mpv GlyphMiner.mkv --sub-file=GlyphMiner.vtt
+= (+) Video --vid=1 (*) (h264 1920x1080 29.970fps)
+ (+) Audio --aid=1 --alang=eng (*) (opus 2ch 48000Hz)
+ (+) Subs  --sid=1 'GlyphMiner.vtt' (webvtt) (external)
+     Subs  --sid=2 'GlyphMiner.srt' (subrip) (external)
+[vo/gpu/wayland] GNOME's wayland compositor lacks support for the idle inhibit protocol. This means the screen can blank during playback.
+AO: [pipewire] 48000Hz stereo 2ch floatp
+VO: [gpu] 1920x1080 yuv420p
+
+
+Exiting... (End of file)
+>(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ chmod +x extract-frames-from-srt.sh
+chmod: cannot access 'extract-frames-from-srt.sh': No such file or directory
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ chmod +x extract-frames-from-srt.sh
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./extract-frames-from-srt.sh
+Invalid duration specification for ss: :00:17.000
+Invalid duration specification for ss: :01:31.000
+Invalid duration specification for ss: :02:05.000
+Invalid duration specification for ss: :02:17.000
+Invalid duration specification for ss: :03:14.000
+Invalid duration specification for ss: :03:26.000
+Invalid duration specification for ss: :03:35.000
+Invalid duration specification for ss: :03:45.000
+Invalid duration specification for ss: :03:55.000
+Invalid duration specification for ss: :04:08.000
+Invalid duration specification for ss: :04:21.000
+Invalid duration specification for ss: :04:56.000
+ geeqie✅ Done! Extracted 0 frames to 'frames/'
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie&
+[1] 2744465
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./extract-frames-from-srt.sh
+grep: glyph-miner.srt: No such file or directory
+✅ Done! Extracted 0 frames. Mapping saved to 'frame_map.txt'.
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./extract-frames-from-srt.sh
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+GlyphMiner.mvk: No such file or directory
+✅ Done! Extracted 0 frames. Mapping saved to 'frame_map.txt'.
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./extract-frames-from-srt.sh
+Invalid duration specification for ss: :00:17.000
+Invalid duration specification for ss: :01:31.000
+Invalid duration specification for ss: :02:05.000
+Invalid duration specification for ss: :02:17.000
+Invalid duration specification for ss: :03:14.000
+Invalid duration specification for ss: :03:26.000
+Invalid duration specification for ss: :03:35.000
+Invalid duration specification for ss: :03:45.000
+Invalid duration specification for ss: :03:55.000
+Invalid duration specification for ss: :04:08.000
+Invalid duration specification for ss: :04:21.000
+Invalid duration specification for ss: :04:56.000
+✅ Done! Extracted 0 frames. Mapping saved to 'frame_map.txt'.
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie&
+[2] 2749714
+[1]   Done                    geeqie
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie&
+[3] 2755190
+[2]   Done                    geeqie
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie&
+[4] 2759462
+[3]   Done                    geeqie
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ chmod +x export_frames_and_transcripts.sh
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./export_frames_and_transcripts.sh
+📂 Copying selected frames...
+cp: cannot stat '#Geeqie collection': No such file or directory
+cp: cannot stat '#created with Geeqie version 2.5+git20250117-4161e76d': No such file or directory
+cp: cannot stat '#geometry: 0 0 602 723': No such file or directory
+cp: cannot stat '"/home/jsbien/git/glyph-miner/YouTube/frames/frame002.png"': No such file or directory
+cp: cannot stat '"/home/jsbien/git/glyph-miner/YouTube/frames/frame005.png"': No such file or directory
+cp: cannot stat '"/home/jsbien/git/glyph-miner/YouTube/frames/frame006.png"': No such file or directory
+cp: cannot stat '#end': No such file or directory
+📝 Extracting transcripts from glyph-miner.srt...
+./export_frames_and_transcripts.sh: line 49: syntax error in conditional expression
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./export_frames_and_transcripts.sh
+📂 Copying selected frames...
+cp: cannot stat '#Geeqie collection': No such file or directory
+cp: cannot stat '#created with Geeqie version 2.5+git20250117-4161e76d': No such file or directory
+cp: cannot stat '#geometry: 0 0 602 723': No such file or directory
+cp: cannot stat '"/home/jsbien/git/glyph-miner/YouTube/frames/frame002.png"': No such file or directory
+cp: cannot stat '"/home/jsbien/git/glyph-miner/YouTube/frames/frame005.png"': No such file or directory
+cp: cannot stat '"/home/jsbien/git/glyph-miner/YouTube/frames/frame006.png"': No such file or directory
+cp: cannot stat '#end': No such file or directory
+📝 Extracting transcripts from glyph-miner.srt...
+./export_frames_and_transcripts.sh: line 49: syntax error in conditional expression
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ chmod +x export_frames_and_transcripts.py
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ python3 export_frames_and_transcripts.py \
+  selected-frames.gqv frame_map.txt glyph-miner.srt \
+  frames/ output/ frames.tex
+
+
+> > ✅ Done! LaTeX file written to frames.tex
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ 
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ python3 export_frames_and_transcripts.py \
+  selected-frames.gqv frame_map.txt glyph-miner.srt \
+  frames/ output/ frames.tex
+
+
+> > ✅ Done! LaTeX file written to frames.tex
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ python3 export_frames_and_transcripts.py \
+  selected-frames.gqv frame_map.txt glyph-miner.srt \
+  frames/ output/ frames.tex
+
+
+> > ✅ Done! LaTeX file written to frames.tex
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie 
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie 
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./extract-frames-from-srt.sh
+
+File 'frames/frame002.png' already exists. Overwrite? [y/N] Not overwriting - exiting
+✅ Done! Extracted 0 frames. Mapping saved to 'frame_map.txt'.
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ ./extract-frames-from-srt.sh
+
+Invalid duration specification for ss: :00:17.000
+Invalid duration specification for ss: :01:31.000
+Invalid duration specification for ss: :02:05.000
+Invalid duration specification for ss: :02:17.000
+Invalid duration specification for ss: :03:14.000
+Invalid duration specification for ss: :03:26.000
+Invalid duration specification for ss: :03:35.000
+Invalid duration specification for ss: :03:45.000
+Invalid duration specification for ss: :03:55.000
+Invalid duration specification for ss: :04:08.000
+Invalid duration specification for ss: :04:21.000
+Invalid duration specification for ss: :04:56.000
+✅ Done! Extracted 0 frames. Mapping saved to 'frame_map.txt'.
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+udev            7.7G     0  7.7G   0% /dev
+tmpfs           1.6G  1.9M  1.6G   1% /run
+/dev/nvme0n1p1  923G  707G  170G  81% /
+tmpfs           7.7G  1.3M  7.7G   1% /dev/shm
+tmpfs           5.0M   16K  5.0M   1% /run/lock
+/dev/loop1      128K  128K     0 100% /snap/bare/5
+/dev/loop2      104M  104M     0 100% /snap/core/16928
+/dev/loop5       56M   56M     0 100% /snap/core18/2846
+/dev/loop0      374M  374M     0 100% /snap/anbox/186
+/dev/loop3      105M  105M     0 100% /snap/core/17200
+/dev/loop8       53M   53M     0 100% /snap/fontvuer/18
+/dev/loop9      165M  165M     0 100% /snap/gnome-3-28-1804/194
+/dev/loop10     165M  165M     0 100% /snap/gnome-3-28-1804/198
+/dev/loop11     256K  256K     0 100% /snap/gtk2-common-themes/13
+/dev/loop12      82M   82M     0 100% /snap/gtk-common-themes/1534
+/dev/loop13      92M   92M     0 100% /snap/gtk-common-themes/1535
+/dev/loop14     261M  261M     0 100% /snap/kde-frameworks-5-core18/32
+/dev/loop15     290M  290M     0 100% /snap/kde-frameworks-5-core18/35
+/dev/loop16     4.8M  4.8M     0 100% /snap/ksnip/443
+/dev/loop17     5.4M  5.4M     0 100% /snap/ksnip/488
+/dev/loop18     139M  139M     0 100% /snap/losslesscut/132
+/dev/loop19     139M  139M     0 100% /snap/losslesscut/134
+/dev/loop20     112M  112M     0 100% /snap/shutter/27
+tmpfs           1.6G   24M  1.6G   2% /run/user/1000
+/dev/loop22      64M   64M     0 100% /snap/core20/2496
+/dev/loop6       56M   56M     0 100% /snap/core18/2855
+/dev/loop4       64M   64M     0 100% /snap/core20/2501
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ python3 accepted.py 
+frames/frame002.png: user.xdg.rating: No such attribute
+frames/frame013.png: user.xdg.rating: No such attribute
+frames/frame020.png: user.xdg.rating: No such attribute
+frames/frame018.png: user.xdg.rating: No such attribute
+frames/frame031.png: user.xdg.rating: No such attribute
+frames/frame054.png: user.xdg.rating: No such attribute
+frames/frame023.png: user.xdg.rating: No such attribute
+frames/frame044.png: user.xdg.rating: No such attribute
+frames/frame040.png: user.xdg.rating: No such attribute
+frames/frame037.png: user.xdg.rating: No such attribute
+frames/frame029.png: user.xdg.rating: No such attribute
+frames/frame061.png: user.xdg.rating: No such attribute
+frames/frame021.png: user.xdg.rating: No such attribute
+frames/frame012.png: user.xdg.rating: No such attribute
+frames/frame025.png: user.xdg.rating: No such attribute
+frames/frame001.png: user.xdg.rating: No such attribute
+frames/frame016.png: user.xdg.rating: No such attribute
+frames/frame014.png: user.xdg.rating: No such attribute
+frames/frame039.png: user.xdg.rating: No such attribute
+frames/frame051.png: user.xdg.rating: No such attribute
+frames/frame047.png: user.xdg.rating: No such attribute
+frames/frame005.png: user.xdg.rating: No such attribute
+frames/frame009.png: user.xdg.rating: No such attribute
+frames/frame055.png: user.xdg.rating: No such attribute
+frames/frame046.png: user.xdg.rating: No such attribute
+frames/frame033.png: user.xdg.rating: No such attribute
+frames/frame022.png: user.xdg.rating: No such attribute
+frames/frame034.png: user.xdg.rating: No such attribute
+frames/frame028.png: user.xdg.rating: No such attribute
+frames/frame041.png: user.xdg.rating: No such attribute
+frames/frame060.png: user.xdg.rating: No such attribute
+frames/frame058.png: user.xdg.rating: No such attribute
+frames/frame015.png: user.xdg.rating: No such attribute
+frames/frame032.png: user.xdg.rating: No such attribute
+frames/frame043.png: user.xdg.rating: No such attribute
+frames/frame024.png: user.xdg.rating: No such attribute
+frames/frame036.png: user.xdg.rating: No such attribute
+frames/frame038.png: user.xdg.rating: No such attribute
+frames/frame008.png: user.xdg.rating: No such attribute
+frames/frame003.png: user.xdg.rating: No such attribute
+frames/frame026.png: user.xdg.rating: No such attribute
+frames/frame007.png: user.xdg.rating: No such attribute
+frames/frame053.png: user.xdg.rating: No such attribute
+frames/frame049.png: user.xdg.rating: No such attribute
+frames/frame057.png: user.xdg.rating: No such attribute
+frames/frame011.png: user.xdg.rating: No such attribute
+frames/frame010.png: user.xdg.rating: No such attribute
+frames/frame006.png: user.xdg.rating: No such attribute
+frames/frame017.png: user.xdg.rating: No such attribute
+frames/frame035.png: user.xdg.rating: No such attribute
+[4]+  Done                    geeqie
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ getfattr -d frames/frame001.png 
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ getfattr -d frames/frame002.png 
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ geeqie &
+[1] 2838922
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ python3 export_frames_and_transcripts.py \
+  frame_map.txt glyph-miner.srt \
+  frames/ output/ frames.tex
+
+> > ✅ Done! LaTeX file written to frames.tex
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ (venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ 
+[1]+  Done                    geeqie
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ docker inspect glyph-miner | grep -i revision
+Error: No such object: glyph-miner
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ docker inspect glyphminer | grep -i revision
+Error: No such object: glyphminer
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ docker inspect glyphminer/glyphminer | grep -i revision
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ docker inspect glyphminer/glyphminer
+[
+    {
+        "Id": "sha256:0549947a93239b7f44f85a0585a0abbfbb972dcc2ce6714d92c77094129720db",
+        "RepoTags": [
+            "glyphminer/glyphminer:latest"
+        ],
+        "RepoDigests": [
+            "glyphminer/glyphminer@sha256:90d9cd5223c7451b94c0197d135aa9974afba7527150cee3126e661cc1518af7"
+        ],
+        "Parent": "",
+        "Comment": "",
+        "Created": "2016-09-20T11:48:03.327202094Z",
+        "Container": "58dbee8abe9623256c8d690d628c2570e1cc949c7cd1d12775f3be00d1338e15",
+        "ContainerConfig": {
+            "Hostname": "26cb43ba6817",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) ",
+                "CMD [\"/opt/glyph-miner/start-container.sh\"]"
+            ],
+            "ArgsEscaped": true,
+            "Image": "sha256:04a328903366ddc8aefa5b65844adcc62d2235ba15ec6d9a46b6d79110e12fd1",
+            "Volumes": null,
+            "WorkingDir": "/opt/glyph-miner/server",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {}
+        },
+        "DockerVersion": "1.12.1",
+        "Author": "Benedikt Budig \"glyphminer@benedikt-budig.de\"",
+        "Config": {
+            "Hostname": "26cb43ba6817",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Cmd": [
+                "/opt/glyph-miner/start-container.sh"
+            ],
+            "ArgsEscaped": true,
+            "Image": "sha256:04a328903366ddc8aefa5b65844adcc62d2235ba15ec6d9a46b6d79110e12fd1",
+            "Volumes": null,
+            "WorkingDir": "/opt/glyph-miner/server",
+            "Entrypoint": null,
+            "OnBuild": [],
+            "Labels": {}
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 575859038,
+        "VirtualSize": 575859038,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/bd2ddd96aef5b921927e3abbf331a7dc93b0a7688b7dba3c2908806944a0f5f5/diff:/var/lib/docker/overlay2/ca6997308baa4f512e31cf85e3b8b9a86058d9f1dff06f18b0531f4cae186e1a/diff:/var/lib/docker/overlay2/12766e8dc8c5ef0a11bbe635298d74e87f65dfc4755a2ea34dfcd6a0567aac3e/diff:/var/lib/docker/overlay2/1b5bf8de102475376d9367a51728d7f7c80b801661c2ac19a58a1cdfc2838394/diff:/var/lib/docker/overlay2/0fd3bcffdcb2036c4374b7971e0cd8f9bd62f0e5ea0d343b2364e4bf29de827f/diff:/var/lib/docker/overlay2/eb286e442fcad86b7921833b109d2300f49dbc92844cb72454a4eef3a8d65576/diff:/var/lib/docker/overlay2/e54bcf234b95b7ec5f5b28a177086977d415b7bd4bbf4cbf316bd4e5ab095abc/diff:/var/lib/docker/overlay2/1b1122be1496dff07904a36fb34aefec05daf60838f8306a90fa3026f03c6d2f/diff:/var/lib/docker/overlay2/ca8dfa1a38369ac49bcdda9dc5c163db8ab962b2c943ca97e95c8f54a932eecb/diff:/var/lib/docker/overlay2/c98b202646b369e4e6f642e20aaaf510f1ab58ce62a7bc8d417e61228d6abe2f/diff",
+                "MergedDir": "/var/lib/docker/overlay2/875a9966889076cadc21f8425ef2a94fa7ffb27d972455245c60c11062f735a6/merged",
+                "UpperDir": "/var/lib/docker/overlay2/875a9966889076cadc21f8425ef2a94fa7ffb27d972455245c60c11062f735a6/diff",
+                "WorkDir": "/var/lib/docker/overlay2/875a9966889076cadc21f8425ef2a94fa7ffb27d972455245c60c11062f735a6/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:8a14f84e58378f5982f4e1ac39bebda2ac9025349026fc0adb8444385051c958",
+                "sha256:dbaa8ea1faf96b94cd08a124ffe622a13e6d67ec70026f01264b1e302095ef2e",
+                "sha256:df9a135a69491b787653269e3a228480063abd4a3ca3a74218f8a04f69da9c87",
+                "sha256:447f88c8358fbd8211f0f48c6afd38901e1dfb9ebd5ca6ab748613978acfa114",
+                "sha256:3c5ad19bc67a0cda935377fb8a142f7eecb9d74acab91aaf1f4385cecd016d0a",
+                "sha256:18a723b5765b64f3ec5a679f2de5884a11cea71bb8a7b788325a17746423ed34",
+                "sha256:66ba50caa6f05282d021df0f89b4f2dac6bafe8c6f31e1b884861625d6ade9f9",
+                "sha256:d2fb1d96dcbc2339e16d91ddde39a7b72246bc07f856d832db60be974a292118",
+                "sha256:67bbff602542bf610fdb7539d8a11f01236137766168b83932e58380723ea4ed",
+                "sha256:fd2e882e475236c50261a1a59e76b6efb6555921420b05abf04231046c7f2554",
+                "sha256:a11ead51ec1b5a438620b50a251dce1f92a4829e96d0572b26e858e406f377d5"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "0001-01-01T00:00:00Z"
+        }
+    }
+]
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ docker inspect glyphminer/glyphminer > inspect.txt
+(venv) jsbien@JSBbookworm:~/git/glyph-miner/YouTube$ 

@@ -1,0 +1,3 @@
+where the results from the previous step are aggregated.
+
+All detected Es are displayed in the list on the right, sorted by quality.

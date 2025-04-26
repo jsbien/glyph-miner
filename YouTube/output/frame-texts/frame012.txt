@@ -1,0 +1,1 @@
+First, we select a decent E somewhere in the text by selecting it with the rectangle tool.

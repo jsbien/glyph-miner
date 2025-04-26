@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import web
+import webapp
 import os
 import json
 import io
@@ -44,10 +44,10 @@ urls = (
 
 imageList = {}
 
-web.config.debug = False
+webapp.config.debug = False
 
 # connect to database
-db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
+db = webapp.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
 
 class index:
 
@@ -58,23 +58,23 @@ class index:
 class collection:
 
     def GET(self, collectionId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         return json.dumps(db.select('collections', dict(cid=collectionId), where="id = $cid")[0], cls=DateTimeEncoder)
 
 
 class collections:
 
     def GET(self):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         collections = db.select('collections')
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
     def POST(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         if not "title" in data or data["title"] == "":
-            return web.badrequest("No title given.")
+            return webapp.badrequest("No title given.")
         if not "subtitle" in data:
             data["subtitle"] = None
         if not "author" in data:
@@ -93,19 +93,19 @@ class collections:
         return json.dumps(db.select('collections', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class synthetic_pages:
 
     def POST(self, imageId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
-        args = web.input()
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
+        args = webapp.input()
 
         # get relevant templates and their matches
         matches = {}
@@ -131,22 +131,22 @@ class synthetic_pages:
                                     data["margin"], data["letter_spacing"], data["word_spacing"],
                                     data["baseline_skip"], db, imageList)
 
-        web.header('Location', './synthetic_pages/page.zip')
+        webapp.header('Location', './synthetic_pages/page.zip')
         return "Successfully created synthetic page"
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 class collection_synthetic_pages:
 
     def POST(self, collectionId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
-        args = web.input()
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
+        args = webapp.input()
 
         text = data["text"]
         dimensions = data["dimensions"]
@@ -179,21 +179,21 @@ class collection_synthetic_pages:
                                     data["margin"], data["letter_spacing"], data["word_spacing"],
                                     data["baseline_skip"], db, imageList)
 
-        web.header('Location', './synthetic_pages/page.zip')
+        webapp.header('Location', './synthetic_pages/page.zip')
         return "Successfully created synthetic page"
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class collection_images:
 
     def GET(self, collectionId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         images = [image for image in db.query(
                   "SELECT i.* FROM images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid",
                   vars=dict(cid=collectionId))]
@@ -203,7 +203,7 @@ class collection_images:
 class collection_templates:
 
     def GET(self, collectionId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         templates = [template for template in db.query(
                      "SELECT t.* FROM templates t, collections_images ci WHERE t.image_id = ci.image_id AND ci.collection_id = $cid AND t.visible = 1",
                      vars=dict(cid=collectionId))]
@@ -213,7 +213,7 @@ class collection_templates:
 class collection_template:
 
     def GET(self, collectionId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         # TODO: do something sensible with collectionId?
         return json.dumps(db.select('templates', dict(tid=templateId), where="id = $tid AND visible = 1")[0], cls=DateTimeEncoder)
 
@@ -221,8 +221,8 @@ class collection_template:
 class memberships:
 
     def GET(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        args = web.input()
+        webapp.header('Access-Control-Allow-Origin', '*')
+        args = webapp.input()
 
         where = ""
         if len(args) > 0 and hasattr(args, 'image_id'):
@@ -241,42 +241,42 @@ class memberships:
         return json.dumps(output, cls=DateTimeEncoder)
 
     def POST(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         if not "image_id" in data:
-            return web.badrequest("No image given.")
+            return webapp.badrequest("No image given.")
         if not "collection_id" in data:
-            return web.badrequest("No collection given.")
+            return webapp.badrequest("No collection given.")
 
         dbId = db.insert('collections_images', image_id=data["image_id"], collection_id=data["collection_id"])
         return json.dumps(db.select('collections_images', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class image:
 
     def GET(self, imageId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0], cls=DateTimeEncoder)
 
 
 class images:
 
     def GET(self):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         images = db.query('SELECT i.*, COUNT(ci.collection_id) AS collection_count FROM images i LEFT OUTER JOIN collections_images ci ON i.id = ci.image_id GROUP BY i.id')
         output = [image for image in images]
         return json.dumps(output, cls=DateTimeEncoder)
 
     def POST(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         if not "title" in data:
             data["title"] = None
         if not "subtitle" in data:
@@ -296,20 +296,20 @@ class images:
         return json.dumps(db.select('images', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class image_file:
 
     def POST(self, imageId, imageType):
-        web.header('Access-Control-Allow-Origin', '*')
-        form = web.input()
+        webapp.header('Access-Control-Allow-Origin', '*')
+        form = webapp.input()
 
-        # save files at correct locations for the web tools and the server
+        # save files at correct locations for the webapp tools and the server
         im = Image.open(io.StringIO(form.file))
         (width, height) = im.size
         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
@@ -322,12 +322,12 @@ class image_file:
                 im.convert('RGB').save(f)
 
             # dispatch tile creation
-            subprocess.Popen(["./img2tiles.py", "./images/" + imageId + "-color.png", "../web/tiles/" +
+            subprocess.Popen(["./img2tiles.py", "./images/" + imageId + "-color.png", "../webapp/tiles/" +
                               imageId + "-color.png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
 
             # create thumbnail
             thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
-            with open("../web/thumbnails/thumb-" + imageId + "-color.png", 'wb') as f:
+            with open("../webapp/thumbnails/thumb-" + imageId + "-color.png", 'wb') as f:
                 thumb.convert('RGB').save(f)
         else:
             db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path=(imageId + ".png"))
@@ -337,61 +337,61 @@ class image_file:
                 im.save(f)
 
             # dispatch tile creation
-            subprocess.Popen(["./img2tiles.py", "./images/" + imageId + ".png", "../web/tiles/" +
+            subprocess.Popen(["./img2tiles.py", "./images/" + imageId + ".png", "../webapp/tiles/" +
                               imageId + ".png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
 
             db.update('images', vars=dict(iid=imageId), where="id = $iid", path=(imageId + ".png"))
         return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class templates:
 
     def GET(self, imageId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         templates = db.select('templates', dict(imageId=imageId), where="image_id = $imageId and visible = 1")
         output = [template for template in templates]
         return json.dumps(output, cls=DateTimeEncoder)
 
     def POST(self, imageId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         if (int(data["w"]) == 0 or int(data["h"]) == 0):
-            return web.badrequest("Template has no width or height.")
+            return webapp.badrequest("Template has no width or height.")
         imageId = imageId
         dbId = db.insert('templates', image_id=imageId, x=data["x"], y=data["y"], w=data["w"], h=data["h"], glyph=data["glyph"], visible=1)
         return json.dumps(db.select('templates', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class template:
 
     def GET(self, imageId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         return json.dumps(db.select('templates', dict(iid=imageId, tid=templateId), where="id = $tid AND image_id = $iid AND visible = 1")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId, templateId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Methods', 'GET, DELETE')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Methods', 'GET, DELETE')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
     def DELETE(self, imageId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         db.update('templates', where="id = $tid AND image_id = $iid",
                   vars=dict(tid=templateId, iid=imageId), visible=0)
         return
@@ -400,8 +400,8 @@ class template:
 class model:
 
     def PUT(self, imageId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         iid = imageId
         tid = templateId
         if "thresh_score" in data:
@@ -413,19 +413,19 @@ class model:
         return
 
     def OPTIONS(self, imageId, templateId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Methods', 'PUT')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Methods', 'PUT')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class typography:
 
     def PUT(self, imageId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         iid = imageId
         tid = templateId
         db.update('templates', where="id = $tid AND image_id = $iid", vars=locals(),
@@ -433,20 +433,20 @@ class typography:
         return
 
     def OPTIONS(self, imageId, templateId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Methods', 'PUT')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Methods', 'PUT')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class matches:
 
     def GET(self, imageId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         maxResults = 1000  # TODO: make this a request parameter
-        args = web.input()
+        args = webapp.input()
         # check for existing matches and return them
         matchesData = db.select('matches', dict(iid=imageId, tid=templateId),
                                 where="image_id = $iid AND template_id = $tid")
@@ -493,7 +493,7 @@ class matches:
         out, err = process.communicate()
         errcode = process.returncode
         if errcode != 0:
-            return web.internalerror("Error during template matching")
+            return webapp.internalerror("Error during template matching")
         matchesJson = out
 
         # store matches in database
@@ -521,9 +521,9 @@ class matches:
 class collection_matches:
 
     def GET(self, collectionId, templateId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         maxResults = 300  # TODO: make this a request parameter
-        args = web.input()
+        args = webapp.input()
 
         # check if we have to predict labels
         if (hasattr(args, "predict") and args.predict == "true"):
@@ -601,7 +601,7 @@ class collection_matches:
 class match:
 
     def GET(self, imageId, templateId, matchId):
-        web.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Origin', '*')
         return json.dumps(db.select('matches',dict(iid=imageId, tid=templateId, mid=matchId),
                                     where="id = matchId AND template_id = $tid AND image_id = $iid")[0], cls=DateTimeEncoder)
 
@@ -609,8 +609,8 @@ class match:
 class matchlabel:
 
     def POST(self, imageId, templateId, matchId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         tid = templateId
         mid = matchId
         dbId = db.insert('labels', match_id=matchId,
@@ -621,42 +621,42 @@ class matchlabel:
         return json.dumps(db.select('labels', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId, templateId, matchId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Methods', 'POST')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Methods', 'POST')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class matchselect:
 
     def PUT(self, imageId, templateId, matchId):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        webapp.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(webapp.data())
         disable = 1 if data["disable"] == True else 0
 
         db.update('matches', vars=dict(id=matchId), where="id = $id", disabled=disable)
         return json.dumps(db.select('matches', vars=dict(id=matchId), where="id = $id")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId, templateId, matchId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Methods', 'PUT')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
+        webapp.header('Content-Type', 'application/json')
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Access-Control-Allow-Methods', 'PUT')
+        webapp.header('Access-Control-Allow-Credentials', 'true')
+        webapp.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
 
 class crop:
 
     def GET(self, imageId):
-        args = web.input()
-        web.header('Access-Control-Allow-Origin', '*')
+        args = webapp.input()
+        webapp.header('Access-Control-Allow-Origin', '*')
         if (int(args.x2) - int(args.x1) <= 0 or int(args.y2) - int(args.y1) <= 0):
-            return web.badrequest("Requested crop has no width or height.")
+            return webapp.badrequest("Requested crop has no width or height.")
 
-        web.header('Content-type', 'image/png')
+        webapp.header('Content-type', 'image/png')
 
         # get image from database
         image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
@@ -678,9 +678,9 @@ class crop:
 class matchcrop:
 
     def GET(self, imageId, templateId, matchId):
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Content-type', 'image/png')
-        args = web.input()
+        webapp.header('Access-Control-Allow-Origin', '*')
+        webapp.header('Content-type', 'image/png')
+        args = webapp.input()
 
         # get image from database
         image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
@@ -729,7 +729,7 @@ class DateTimeEncoder(json.JSONEncoder):
             return o.isoformat()
         return json.JSONEncoder.default(self, o)
 
-app = web.application(urls, globals())
+app = webapp.application(urls, globals())
 application = app.wsgifunc()
 #if __name__ == "__main__":
 #    app.run()

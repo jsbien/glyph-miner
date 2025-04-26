@@ -1,0 +1,248 @@
+1
+00:00:00,000 --> 00:00:08,000
+In this video, we showcase a system for extracting glyphs from early typeset prints.
+
+2
+00:00:08,000 --> 00:00:14,000
+The system helps for training OCR software by rapidly locating sample occurrences of given glyphs.
+
+3
+00:00:14,000 --> 00:00:17,000
+Let's have a look at how this works.
+
+4
+00:00:17,000 --> 00:00:22,000
+For this demonstration, we use scans of an incunable printed in Basel in 1497,
+
+5
+00:00:22,000 --> 00:00:29,000
+containing a Latin translation of Sebastian Brandt's famous Narrenschiff.
+
+6
+00:00:30,000 --> 00:00:34,000
+Here you see an overview of the documents that have been uploaded to our system.
+
+7
+00:00:34,000 --> 00:00:38,000
+We select the incunable and go to the next screen.
+
+8
+00:00:38,000 --> 00:00:40,000
+Now we see the title page.
+
+9
+00:00:40,000 --> 00:00:44,000
+On the left, we can navigate to the other pages of this collection.
+
+10
+00:00:44,000 --> 00:00:49,000
+Let's pick a page that contains a lot of text.
+
+11
+00:00:49,000 --> 00:00:55,000
+In this example, we want to find occurrences of the character E to train an OCR engine on.
+
+12
+00:00:55,000 --> 00:01:01,000
+First, we select a decent E somewhere in the text by selecting it with the rectangle tool.
+
+13
+00:01:01,000 --> 00:01:05,000
+Note that we crop it generously to include the white space above and below.
+
+14
+00:01:05,000 --> 00:01:12,000
+This white space distinguishes it from similar glyphs but with accents, such as the one to the right.
+
+15
+00:01:12,000 --> 00:01:17,000
+Next, we tell the system that what we cropped was an E so that we can find it more easily later,
+
+16
+00:01:17,000 --> 00:01:22,000
+and then we submit this as a new template.
+
+17
+00:01:22,000 --> 00:01:25,000
+In the background, the system now starts a template matching algorithm
+
+18
+00:01:25,000 --> 00:01:31,000
+that searches for occurrences over E on all of the pages in the collection.
+
+19
+00:01:31,000 --> 00:01:34,000
+We have only uploaded 20 pages for this demonstration,
+
+20
+00:01:34,000 --> 00:01:39,000
+but our algorithm could as well search all 320 pages of this incunable.
+
+21
+00:01:39,000 --> 00:01:44,000
+This would just take a little longer.
+
+22
+00:01:44,000 --> 00:01:48,000
+Once the template matching is done, we are presented with a set of candidate matches.
+
+23
+00:01:48,000 --> 00:01:54,000
+They are color-coded according to their similarity to the template we indicated.
+
+24
+00:01:54,000 --> 00:01:58,000
+As you can see, our system correctly located some Es.
+
+25
+00:01:58,000 --> 00:02:02,000
+There are also a whole lot of false positives.
+
+26
+00:02:02,000 --> 00:02:05,000
+At this point, we switch to the classification interface,
+
+27
+00:02:05,000 --> 00:02:10,000
+which will help us to get rid of these false positives.
+
+28
+00:02:10,000 --> 00:02:13,000
+Here, we are presented with a batch of nine candidates
+
+29
+00:02:13,000 --> 00:02:17,000
+and have to tell the system which of them are correct and which are not.
+
+30
+00:02:17,000 --> 00:02:22,000
+The system uses this information to iteratively train a logistic regression model
+
+31
+00:02:22,000 --> 00:02:27,000
+from which it eventually learns to distinguish between the correct and the incorrect matches.
+
+32
+00:02:27,000 --> 00:02:32,000
+For details on the algorithm involved, see the link in the description below.
+
+33
+00:02:32,000 --> 00:02:35,000
+After about 10 iterations, the model is sufficiently trained,
+
+34
+00:02:35,000 --> 00:02:38,000
+and we go back to the document view.
+
+35
+00:02:47,000 --> 00:02:52,000
+Now, only those matches that the system classifies as correct are shown.
+
+36
+00:02:52,000 --> 00:02:56,000
+We can see that almost all false positives have been removed,
+
+37
+00:02:56,000 --> 00:02:59,000
+while most of the correct matches are still there.
+
+38
+00:02:59,000 --> 00:03:03,000
+This is also true for the other pages in the collection.
+
+39
+00:03:03,000 --> 00:03:08,000
+We have found thousands of occurrences of this glyphs in mere minutes.
+
+40
+00:03:08,000 --> 00:03:11,000
+We now go to the glyph library,
+
+41
+00:03:11,000 --> 00:03:14,000
+where the results from the previous step are aggregated.
+
+42
+00:03:14,000 --> 00:03:20,000
+All detected Es are displayed in the list on the right, sorted by quality.
+
+43
+00:03:20,000 --> 00:03:23,000
+About two-thirds of the way down the list,
+
+44
+00:03:23,000 --> 00:03:26,000
+we see that our glyphs have started to show significant variance,
+
+45
+00:03:26,000 --> 00:03:29,000
+but almost all of them are still correct.
+
+46
+00:03:29,000 --> 00:03:32,000
+We can see that the glyphs have started to show significant variance,
+
+47
+00:03:32,000 --> 00:03:35,000
+but almost all of them are still correct.
+
+48
+00:03:35,000 --> 00:03:39,000
+All the way to the bottom, there are also some false positives,
+
+49
+00:03:39,000 --> 00:03:45,000
+but relative to the number of glyphs found, this is not a significant fraction.
+
+50
+00:03:45,000 --> 00:03:49,000
+Here is another glyph we prepared earlier using this process.
+
+51
+00:03:49,000 --> 00:03:55,000
+We see much fewer occurrences, because the CT ligature is relatively rare.
+
+52
+00:03:55,000 --> 00:03:58,000
+These data can now be downloaded as image files,
+
+53
+00:03:58,000 --> 00:04:01,000
+or exported in the page.xml file.
+
+54
+00:04:01,000 --> 00:04:04,000
+As an example of what you can do with the output of our system,
+
+55
+00:04:04,000 --> 00:04:08,000
+we import the detected glyphs into FrankenPlus.
+
+56
+00:04:08,000 --> 00:04:13,000
+This is software for generating synthetic draining data for the Tesseract OCR engine.
+
+57
+00:04:13,000 --> 00:04:16,000
+It was developed at the Texas A&M University,
+
+58
+00:04:16,000 --> 00:04:21,000
+and is designed to be used in a digitization pipeline for early prints.
+
+59
+00:04:21,000 --> 00:04:26,000
+As you can see here, our results are similar to those of the previous step.
+
+60
+00:04:26,000 --> 00:04:31,000
+This concludes our video, in which we gave a quick impression of the features of our system.
+
+61
+00:04:31,000 --> 00:04:34,000
+We hope you enjoyed it, and say thanks for watching.
+
+62
+00:04:56,000 --> 00:04:58,000
+Thank you for watching.
+

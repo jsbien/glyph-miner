@@ -1,0 +1,3 @@
+and is designed to be used in a digitization pipeline for early prints.
+
+As you can see here, our results are similar to those of the previous step.

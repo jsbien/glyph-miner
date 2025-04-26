@@ -1,0 +1,42 @@
+yt-dlp https://www.youtube.com/watch?v=T-p_kIdsn6k
+source /home/jsbien/work/gamera4didjvu/gamera-4/venv/bin/activate
+time whisper GlyphMiner.mkv --model medium --language English
+mpv GlyphMiner.mkv --sub-file=GlyphMiner.srt
+mpv GlyphMiner.mkv --sub-file=GlyphMiner.vtt
+./extract-frames-from-srt.sh
+python3 export_frames_and_transcripts.py \
+  selected-frames.gqv frame_map.txt glyph-miner.srt \
+  frames/ output/ frames.tex
+
+nowe:
+python3 export_frames_and_transcripts.py \
+  frame_map.txt glyph-miner.srt \
+  frames/ output/ frames.tex
+
+----------------------------------------------------------
+----------------------------------------------------------
+./extract-frames-from-srt.sh
+
+Invalid duration specification for ss: :00:17.000
+Invalid duration specification for ss: :01:31.000
+Invalid duration specification for ss: :02:05.000
+Invalid duration specification for ss: :02:17.000
+Invalid duration specification for ss: :03:14.000
+Invalid duration specification for ss: :03:26.000
+Invalid duration specification for ss: :03:35.000
+Invalid duration specification for ss: :03:45.000
+Invalid duration specification for ss: :03:55.000
+Invalid duration specification for ss: :04:08.000
+Invalid duration specification for ss: :04:21.000
+Invalid duration specification for ss: :04:56.000
+✅ Done! Extracted 0 frames. Mapping saved to 'frame_map.txt'.
+
+===============================================================================
+
+
+
+    Immediately specify again: we work only with https://github.com/benedikt-budig/glyph-miner
+
+    Mention you want a modernized Docker setup, preserving original structure
+
+    Mention you want help preparing a valid wsgi.py (if needed)

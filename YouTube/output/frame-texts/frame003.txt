@@ -1,0 +1,3 @@
+Let's have a look at how this works.
+
+For this demonstration, we use scans of an incunable printed in Basel in 1497,

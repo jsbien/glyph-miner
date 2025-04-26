@@ -1,0 +1,13 @@
+From 1234567890abcdef1234567890abcdef12345678 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Sat, 27 Apr 2025 12:00:00 +0000
+Subject: Add missing server/__init__.py to make server a Python package
+
+---
+ server/__init__.py | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 server/__init__.py
+
+diff --git a/server/__init__.py b/server/__init__.py
+new file mode 100644
+index 0000000..e69de29

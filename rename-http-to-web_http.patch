@@ -1,0 +1,21 @@
+From 1234567890abcdef1234567890abcdef12345678 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Sat, 27 Apr 2025 14:00:00 +0000
+Subject: Rename server/web/http.py to web_http.py to avoid conflict with Python stdlib http package
+
+---
+ server/web/__init__.py        | 2 +-
+ server/web/http.py            | 0
+ server/web/web_http.py        | 0
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+ rename server/web/{http.py => web_http.py} (100%)
+
+diff --git a/server/web/__init__.py b/server/web/__init__.py
+index 234e3e5..9bf6f72 100644
+--- a/server/web/__init__.py
++++ b/server/web/__init__.py
+@@ -14,7 +14,7 @@
+ from . import utils, db, net, wsgi, http, webapi, httpserver, debugerror
+-from . import utils, db, net, wsgi, web_http as http, webapi, httpserver, debugerror
++
+ from . import template, form

@@ -1,0 +1,3 @@
+we import the detected glyphs into FrankenPlus.
+
+This is software for generating synthetic draining data for the Tesseract OCR engine.

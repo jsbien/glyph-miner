@@ -1,0 +1,3 @@
+and have to tell the system which of them are correct and which are not.
+
+The system uses this information to iteratively train a logistic regression model

@@ -1,0 +1,1 @@
+In this example, we want to find occurrences of the character E to train an OCR engine on.

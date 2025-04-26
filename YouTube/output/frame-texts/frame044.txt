@@ -1,0 +1,3 @@
+we see that our glyphs have started to show significant variance,
+
+but almost all of them are still correct.

@@ -102,8 +102,8 @@ def createLine(text, matches, xMargin, yOffset, line_height, page_dimensions, wo
 
 def savePage(pageIndex, pageImage, boxes, workDir):
     """ Saves a page, including image and metadata, to the disk """
-    pageImage.save('../web/synthetic_pages/' + workDir + str(pageIndex) + '.tiff', "TIFF")
-    with open('../web/synthetic_pages/' + workDir + str(pageIndex) + '.box', 'w') as box_file:
+    pageImage.save('../webapp/synthetic_pages/' + workDir + str(pageIndex) + '.tiff', "TIFF")
+    with open('../webapp/synthetic_pages/' + workDir + str(pageIndex) + '.box', 'w') as box_file:
         for box in boxes:
             box_file.write("{} {} {} {} {}\n".format(box[0].encode('utf-8'), box[1], box[2], box[3], box[4]))
     return
@@ -113,7 +113,7 @@ def createLines(matches, line_height, text, dimensions, margin, letter_spacing, 
 
     # generate random prefix for temporary working directory
     workDir = str(uuid.uuid4()) + '/'
-    os.mkdir('../web/synthetic_pages/' + workDir)
+    os.mkdir('../webapp/synthetic_pages/' + workDir)
 
     # keep track of the lines
     lineCount = 0
@@ -131,22 +131,22 @@ def createLines(matches, line_height, text, dimensions, margin, letter_spacing, 
         lineImage = lineImage.crop((0, 0, right_end, line_height))
 
         # save line image and line text
-        lineImage.save('../web/synthetic_pages/' + workDir + str(lineCount) + '.png', "PNG")
-        with open('../web/synthetic_pages/' + workDir + str(lineCount) + '.gt.txt', 'w') as gt_text_file:
+        lineImage.save('../webapp/synthetic_pages/' + workDir + str(lineCount) + '.png', "PNG")
+        with open('../webapp/synthetic_pages/' + workDir + str(lineCount) + '.gt.txt', 'w') as gt_text_file:
             gt_text_file.write(line.encode('utf-8'))
 
         # increase line index
         lineCount += 1
 
     # put everything into a zip file
-    zf = zipfile.ZipFile('../web/synthetic_pages/page.zip', 'w')
+    zf = zipfile.ZipFile('../webapp/synthetic_pages/page.zip', 'w')
     for i in range(0, lineCount):
-        zf.write('../web/synthetic_pages/' + workDir + str(i) + '.png',    'lines/' + str(i) + '.png')
-        zf.write('../web/synthetic_pages/' + workDir + str(i) + '.gt.txt', 'lines/' + str(i) + '.gt.txt')
+        zf.write('../webapp/synthetic_pages/' + workDir + str(i) + '.png',    'lines/' + str(i) + '.png')
+        zf.write('../webapp/synthetic_pages/' + workDir + str(i) + '.gt.txt', 'lines/' + str(i) + '.gt.txt')
     zf.close()
 
     # clean up temporary directory
-    shutil.rmtree('../web/synthetic_pages/' + workDir)
+    shutil.rmtree('../webapp/synthetic_pages/' + workDir)
 
 
 def createPages(matches, line_height, text, dimensions, margin, letter_spacing, word_spacing, baseline_skip, db, imageList):
@@ -154,7 +154,7 @@ def createPages(matches, line_height, text, dimensions, margin, letter_spacing, 
 
     # generate random prefix for temporary working directory
     workDir = str(uuid.uuid4()) + '/'
-    os.mkdir('../web/synthetic_pages/' + workDir)
+    os.mkdir('../webapp/synthetic_pages/' + workDir)
 
     # construct synthetic pages and keep track of the glyphs
     page = Image.new("RGB", (dimensions[0], dimensions[1]), "white")
@@ -174,8 +174,8 @@ def createPages(matches, line_height, text, dimensions, margin, letter_spacing, 
         boxes += lineBoxes
 
         # save line image and line text, and copy line into page
-        lineImage.save('../web/synthetic_pages/' + workDir + str(pageIndex) + "-" + str(lineIndex) + '.png', "PNG")
-        with open('../web/synthetic_pages/' + workDir + str(pageIndex) + "-" + str(lineIndex) + '.gt.txt', 'w') as gt_text_file:
+        lineImage.save('../webapp/synthetic_pages/' + workDir + str(pageIndex) + "-" + str(lineIndex) + '.png', "PNG")
+        with open('../webapp/synthetic_pages/' + workDir + str(pageIndex) + "-" + str(lineIndex) + '.gt.txt', 'w') as gt_text_file:
             gt_text_file.write(line.encode('utf-8'))
         page.paste(lineImage, (0, cursorY))
 
@@ -201,14 +201,14 @@ def createPages(matches, line_height, text, dimensions, margin, letter_spacing, 
     pageLines[pageIndex] = lineIndex
 
     # put everything into a zip file
-    zf = zipfile.ZipFile('../web/synthetic_pages/page.zip', 'w')
+    zf = zipfile.ZipFile('../webapp/synthetic_pages/page.zip', 'w')
     for i in range(0, pageIndex + 1):
-        zf.write('../web/synthetic_pages/' + workDir + str(i) + '.tiff', 'tiff_box/page' + str(i) + '.tiff')
-        zf.write('../web/synthetic_pages/' + workDir + str(i) + '.box', 'tiff_box/page' + str(i) + '.box')
+        zf.write('../webapp/synthetic_pages/' + workDir + str(i) + '.tiff', 'tiff_box/page' + str(i) + '.tiff')
+        zf.write('../webapp/synthetic_pages/' + workDir + str(i) + '.box', 'tiff_box/page' + str(i) + '.box')
         for j in range(0, pageLines[i]):
-            zf.write('../web/synthetic_pages/' + workDir + str(i) + "-" + str(j) + '.png', 'lines/' + str(i) + '/' + str(j) + '.png')
-            zf.write('../web/synthetic_pages/' + workDir + str(i) + "-" + str(j) + '.gt.txt', 'lines/' + str(i) + '/' + str(j) + '.gt.txt')
+            zf.write('../webapp/synthetic_pages/' + workDir + str(i) + "-" + str(j) + '.png', 'lines/' + str(i) + '/' + str(j) + '.png')
+            zf.write('../webapp/synthetic_pages/' + workDir + str(i) + "-" + str(j) + '.gt.txt', 'lines/' + str(i) + '/' + str(j) + '.gt.txt')
     zf.close()
 
     # clean up temporary directory
-    shutil.rmtree('../web/synthetic_pages/' + workDir)
+    shutil.rmtree('../webapp/synthetic_pages/' + workDir)

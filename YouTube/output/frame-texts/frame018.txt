@@ -1,0 +1,3 @@
+that searches for occurrences over E on all of the pages in the collection.
+
+We have only uploaded 20 pages for this demonstration,

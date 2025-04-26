@@ -1,0 +1,188 @@
+WEBVTT
+
+00:00.000 --> 00:08.000
+In this video, we showcase a system for extracting glyphs from early typeset prints.
+
+00:08.000 --> 00:14.000
+The system helps for training OCR software by rapidly locating sample occurrences of given glyphs.
+
+00:14.000 --> 00:17.000
+Let's have a look at how this works.
+
+00:17.000 --> 00:22.000
+For this demonstration, we use scans of an incunable printed in Basel in 1497,
+
+00:22.000 --> 00:29.000
+containing a Latin translation of Sebastian Brandt's famous Narrenschiff.
+
+00:30.000 --> 00:34.000
+Here you see an overview of the documents that have been uploaded to our system.
+
+00:34.000 --> 00:38.000
+We select the incunable and go to the next screen.
+
+00:38.000 --> 00:40.000
+Now we see the title page.
+
+00:40.000 --> 00:44.000
+On the left, we can navigate to the other pages of this collection.
+
+00:44.000 --> 00:49.000
+Let's pick a page that contains a lot of text.
+
+00:49.000 --> 00:55.000
+In this example, we want to find occurrences of the character E to train an OCR engine on.
+
+00:55.000 --> 01:01.000
+First, we select a decent E somewhere in the text by selecting it with the rectangle tool.
+
+01:01.000 --> 01:05.000
+Note that we crop it generously to include the white space above and below.
+
+01:05.000 --> 01:12.000
+This white space distinguishes it from similar glyphs but with accents, such as the one to the right.
+
+01:12.000 --> 01:17.000
+Next, we tell the system that what we cropped was an E so that we can find it more easily later,
+
+01:17.000 --> 01:22.000
+and then we submit this as a new template.
+
+01:22.000 --> 01:25.000
+In the background, the system now starts a template matching algorithm
+
+01:25.000 --> 01:31.000
+that searches for occurrences over E on all of the pages in the collection.
+
+01:31.000 --> 01:34.000
+We have only uploaded 20 pages for this demonstration,
+
+01:34.000 --> 01:39.000
+but our algorithm could as well search all 320 pages of this incunable.
+
+01:39.000 --> 01:44.000
+This would just take a little longer.
+
+01:44.000 --> 01:48.000
+Once the template matching is done, we are presented with a set of candidate matches.
+
+01:48.000 --> 01:54.000
+They are color-coded according to their similarity to the template we indicated.
+
+01:54.000 --> 01:58.000
+As you can see, our system correctly located some Es.
+
+01:58.000 --> 02:02.000
+There are also a whole lot of false positives.
+
+02:02.000 --> 02:05.000
+At this point, we switch to the classification interface,
+
+02:05.000 --> 02:10.000
+which will help us to get rid of these false positives.
+
+02:10.000 --> 02:13.000
+Here, we are presented with a batch of nine candidates
+
+02:13.000 --> 02:17.000
+and have to tell the system which of them are correct and which are not.
+
+02:17.000 --> 02:22.000
+The system uses this information to iteratively train a logistic regression model
+
+02:22.000 --> 02:27.000
+from which it eventually learns to distinguish between the correct and the incorrect matches.
+
+02:27.000 --> 02:32.000
+For details on the algorithm involved, see the link in the description below.
+
+02:32.000 --> 02:35.000
+After about 10 iterations, the model is sufficiently trained,
+
+02:35.000 --> 02:38.000
+and we go back to the document view.
+
+02:47.000 --> 02:52.000
+Now, only those matches that the system classifies as correct are shown.
+
+02:52.000 --> 02:56.000
+We can see that almost all false positives have been removed,
+
+02:56.000 --> 02:59.000
+while most of the correct matches are still there.
+
+02:59.000 --> 03:03.000
+This is also true for the other pages in the collection.
+
+03:03.000 --> 03:08.000
+We have found thousands of occurrences of this glyphs in mere minutes.
+
+03:08.000 --> 03:11.000
+We now go to the glyph library,
+
+03:11.000 --> 03:14.000
+where the results from the previous step are aggregated.
+
+03:14.000 --> 03:20.000
+All detected Es are displayed in the list on the right, sorted by quality.
+
+03:20.000 --> 03:23.000
+About two-thirds of the way down the list,
+
+03:23.000 --> 03:26.000
+we see that our glyphs have started to show significant variance,
+
+03:26.000 --> 03:29.000
+but almost all of them are still correct.
+
+03:29.000 --> 03:32.000
+We can see that the glyphs have started to show significant variance,
+
+03:32.000 --> 03:35.000
+but almost all of them are still correct.
+
+03:35.000 --> 03:39.000
+All the way to the bottom, there are also some false positives,
+
+03:39.000 --> 03:45.000
+but relative to the number of glyphs found, this is not a significant fraction.
+
+03:45.000 --> 03:49.000
+Here is another glyph we prepared earlier using this process.
+
+03:49.000 --> 03:55.000
+We see much fewer occurrences, because the CT ligature is relatively rare.
+
+03:55.000 --> 03:58.000
+These data can now be downloaded as image files,
+
+03:58.000 --> 04:01.000
+or exported in the page.xml file.
+
+04:01.000 --> 04:04.000
+As an example of what you can do with the output of our system,
+
+04:04.000 --> 04:08.000
+we import the detected glyphs into FrankenPlus.
+
+04:08.000 --> 04:13.000
+This is software for generating synthetic draining data for the Tesseract OCR engine.
+
+04:13.000 --> 04:16.000
+It was developed at the Texas A&M University,
+
+04:16.000 --> 04:21.000
+and is designed to be used in a digitization pipeline for early prints.
+
+04:21.000 --> 04:26.000
+As you can see here, our results are similar to those of the previous step.
+
+04:26.000 --> 04:31.000
+This concludes our video, in which we gave a quick impression of the features of our system.
+
+04:31.000 --> 04:34.000
+We hope you enjoyed it, and say thanks for watching.
+
+04:56.000 --> 04:58.000
+Thank you for watching.
+

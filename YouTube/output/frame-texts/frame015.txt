@@ -1,0 +1,1 @@
+Next, we tell the system that what we cropped was an E so that we can find it more easily later,

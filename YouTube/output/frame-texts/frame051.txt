@@ -1,0 +1,3 @@
+We see much fewer occurrences, because the CT ligature is relatively rare.
+
+These data can now be downloaded as image files,
