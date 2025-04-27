@@ -10,6 +10,19 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from server import webapp
 from server import pagecreator
 
+class server:
+    def GET(self):
+        print("[DEBUG] server.GET() called")
+        try:
+            with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
+                content = f.read()
+            print("[DEBUG] index.html loaded successfully, length:", len(content))
+            return [content.encode('utf-8')]  # WSGI expects iterable of bytes
+        except Exception as e:
+            print("[ERROR] Failed to load index.html:", e)
+            return [("Error loading index.html: " + str(e)).encode('utf-8')]
+
+
 # --- URL mappings ---
 urls = (
     '/', 'server',
@@ -24,18 +37,6 @@ app = webapp.application(urls, globals())
 application = app.wsgifunc() 
 
 # --- Handlers ---
-class server:
-    def GET(self):
-        print("[DEBUG] server.GET() called")
-        try:
-            with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
-                content = f.read()
-            print("[DEBUG] index.html loaded successfully, length:", len(content))
-            return [content.encode('utf-8')]  # WSGI expects iterable of bytes
-        except Exception as e:
-            print("[ERROR] Failed to load index.html:", e)
-            return [("Error loading index.html: " + str(e)).encode('utf-8')]
-
 class loader:
     def POST(self):
         # (Dummy placeholder)
