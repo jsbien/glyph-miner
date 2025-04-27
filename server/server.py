@@ -21,7 +21,7 @@ urls = (
 )
 
 app = webapp.application(urls, globals())
-application = app  # <-- ADD THIS!!
+application = app.wsgifunc() 
 
 # --- Handlers ---
 class server:
