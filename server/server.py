@@ -1,57 +1,49 @@
-#!/usr/bin/env python3
-# server/server.py
-
-import os
-import sys
-
-# setup the correct path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
-from server import webapp
-from server import pagecreator
+# coding: utf-8
+from server.webapp import webapp
 
 class server:
     def GET(self):
-        print("[DEBUG] server.GET() called")
-        try:
-            with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
-                content = f.read()
-            print("[DEBUG] index.html loaded successfully, length:", len(content))
-            return [content.encode('utf-8')]  # WSGI expects iterable of bytes
-        except Exception as e:
-            print("[ERROR] Failed to load index.html:", e)
-            return [("Error loading index.html: " + str(e)).encode('utf-8')]
+        return "Main page loaded."
 
+    def __call__(self):
+        return self.GET()
 
-
-
-# --- Handlers ---
 class loader:
     def POST(self):
-        # (Dummy placeholder)
         return "Loader not implemented yet."
+
+    def __call__(self):
+        return self.POST()
 
 class saver:
     def POST(self):
-        # (Dummy placeholder)
         return "Saver not implemented yet."
+
+    def __call__(self):
+        return self.POST()
 
 class uploader:
     def POST(self):
-        # (Dummy placeholder)
         return "Uploader not implemented yet."
+
+    def __call__(self):
+        return self.POST()
 
 class adder:
     def POST(self):
-        # (Dummy placeholder)
         return "Adder not implemented yet."
+
+    def __call__(self):
+        return self.POST()
 
 class remover:
     def POST(self):
-        # (Dummy placeholder)
         return "Remover not implemented yet."
 
-# --- URL mappings ---
+    def __call__(self):
+        return self.POST()
+
+# URL mapping
 urls = [
     ('/', server()),
     ('/load', loader()),
@@ -60,18 +52,6 @@ urls = [
     ('/add', adder()),
     ('/remove', remover()),
 ]
-    
+
+# Create WSGI app
 app = webapp.application(urls, globals())
-application = app.wsgifunc()
-print("[DEBUG] Type of application:", type(application))
-print("[DEBUG] Application callable?", callable(application))
-
-print("[DEBUG] server.py loaded, application created")
-    
-# --- Manual WSGI server ---
-if __name__ == "__main__":
-    from wsgiref.simple_server import make_server
-
-    print("Serving Glyph Miner on http://0.0.0.0:8081")
-    httpd = make_server('', 8081, app)
-    httpd.serve_forever()
