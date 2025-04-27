@@ -10,7 +10,7 @@ from . import webapi as webapp
 from .utils import listget
 from .net import validaddr, validip
 # import httpserver
-from . import httpserver
+from . import web_http as httpserver
 
 
 def runfcgi(func, addr=('localhost', 8000)):
