@@ -661,28 +661,16 @@ def tryall(functions, *args, **keywords):
 class ThreadedDict:
     """
     A thread-safe dictionary where each thread sees a different value.
-
-        >>> d = threadeddict()
-        >>> d.x = 1
-        >>> d.x
-        1
     """
-    def clear(self):
-        """Clear all thread-specific keys."""
-        self._threadlocal.__dict__.clear()
-
-    @classmethod
-    def clear_all(cls):
-        """Clear all thread-local storages (not implemented)."""
-        # In real code, clearing ALL threads' locals is almost impossible safely.
-        # So we leave this as a no-op for compatibility.
-        pass
 
     def __init__(self):
         self._threadlocal = threading.local()
 
     def __getattr__(self, key):
-        return getattr(self._threadlocal, key)
+        try:
+            return getattr(self._threadlocal, key)
+        except AttributeError:
+            raise KeyError(key)
 
     def __setattr__(self, key, value):
         if key == '_threadlocal':
@@ -690,37 +678,30 @@ class ThreadedDict:
         else:
             setattr(self._threadlocal, key, value)
 
-    def __delattr__(self, key):
-        delattr(self._threadlocal, key)
-
     def __getitem__(self, key):
-        if hasattr(self._threadlocal, str(key)):
-            return getattr(self._threadlocal, str(key))
-        else:
-            raise KeyError(key)
+        return self.__getattr__(key)
 
     def __setitem__(self, key, value):
-        setattr(self._threadlocal, key, value)
+        self.__setattr__(key, value)
 
     def __delitem__(self, key):
-        delattr(self._threadlocal, key)
-
-
-    def items(self):
-        """Return thread-specific items() like a dict."""
-        return self._threadlocal.__dict__.items()
-
-    def keys(self):
-        """Return thread-specific keys() like a dict."""
-        return self._threadlocal.__dict__.keys()
-
-    def values(self):
-        """Return thread-specific values() like a dict."""
-        return self._threadlocal.__dict__.values()
+        try:
+            delattr(self._threadlocal, key)
+        except AttributeError:
+            raise KeyError(key)
 
     def get(self, key, default=None):
-        """Return thread-specific get() like a dict."""
-        return self._threadlocal.__dict__.get(key, default)
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def items(self):
+        # Return items of all current attributes
+        return self._threadlocal.__dict__.items()
+
+    def clear(self):
+        self._threadlocal.__dict__.clear()
 
 threadeddict = ThreadedDict
 
