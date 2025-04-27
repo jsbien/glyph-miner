@@ -266,7 +266,7 @@ def header(hdr, value, unique=False):
     If `unique` is True and a header with that name already exists,
     it doesn't add a new one. 
     """
-    print("DEBUG header(): hdr =", repr(hdr), "value =", repr(value))
+    print(f"DEBUG header(): hdr=({hdr}) type={type(hdr)}, value=({value}) type={type(value)}")
 
     if isinstance(hdr, bytes):
         hdr = hdr.decode('utf-8', 'replace')
