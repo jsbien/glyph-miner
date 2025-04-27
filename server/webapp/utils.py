@@ -745,13 +745,13 @@ def safewrite(filename, text, mode='w', encoding='utf-8'):
     with open(filename, mode, encoding=encoding) as f:
         f.write(text)
 
-def re_subm(pat, repl, string):
-    """Regex search that returns (match, substituted string) or (None, None)."""
-    regex = re.compile(pat)
-    m = regex.search(string)
-    if not m:
-        return None, None
-    return m, regex.sub(repl, string)
+def re_subm(pat, s, repl=None):
+    r = re.compile(pat)
+    match = r.match(s)
+    if match and repl is not None:
+        # optional replace if needed
+        s = r.sub(repl, s)
+    return match
 
         
 # Final doctest trigger
