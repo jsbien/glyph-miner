@@ -479,7 +479,8 @@ class application:
         if parent:
             return parent.internalerror()
         elif webapp.config.get('debug'):
-            from . import debugerror
+#            from . import debugerror
+#            return debugerror.debugerror()
             return debugerror.debugerror()
         else:
             return webapp._InternalError()
