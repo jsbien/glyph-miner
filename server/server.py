@@ -29,8 +29,10 @@ class server:
         try:
             with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
                 content = f.read()
+            print("[DEBUG] index.html loaded successfully, length:", len(content))
             return [content.encode('utf-8')]  # WSGI expects iterable of bytes
         except Exception as e:
+            print("[ERROR] Failed to load index.html:", e)
             return [("Error loading index.html: " + str(e)).encode('utf-8')]
 
 class loader:
