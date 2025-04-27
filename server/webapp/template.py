@@ -380,7 +380,7 @@ class Parser:
         """
         readline = iter([text]).__next__
         tokens = tokenize.generate_tokens(readline)
-        return tokens.next()[1]
+        return next(tokens)[1]
         
     def python_tokens(self, text):
         readline = iter([text]).__next__
