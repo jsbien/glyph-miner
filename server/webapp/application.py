@@ -378,8 +378,12 @@ class application:
         for k, v in ctx.items():
             # convert all string values to unicode values and replace 
             # malformed data with a suitable replacement marker.
-            if isinstance(v, str):
-                ctx[k] = v.decode('utf-8', 'replace') 
+            if isinstance(v, bytes):
+                ctx[k] = v.decode('utf-8', 'replace')
+            else:
+                ctx[k] = v
+#            if isinstance(v, str):
+#                ctx[k] = v.decode('utf-8', 'replace') 
 
         # status must always be str
         ctx.status = '200 OK'
