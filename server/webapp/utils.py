@@ -693,6 +693,22 @@ class ThreadedDict:
     def __delattr__(self, key):
         delattr(self._threadlocal, key)
 
+    def items(self):
+        """Return thread-specific items() like a dict."""
+        return self._threadlocal.__dict__.items()
+
+    def keys(self):
+        """Return thread-specific keys() like a dict."""
+        return self._threadlocal.__dict__.keys()
+
+    def values(self):
+        """Return thread-specific values() like a dict."""
+        return self._threadlocal.__dict__.values()
+
+    def get(self, key, default=None):
+        """Return thread-specific get() like a dict."""
+        return self._threadlocal.__dict__.get(key, default)
+
 threadeddict = ThreadedDict
 
 def safeiter(it):
