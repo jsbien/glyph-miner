@@ -546,17 +546,21 @@ class subdomain_application(application):
         fn, args = self._match(self.mapping, host)
         return self._delegate(fn, self.fvars, args)
         
-    def _match(self, mapping, value):
-        for pat, what in mapping:
-            if isinstance(what, str):
-                what, result = utils.re_subm('^' + pat + '$', what, value)
-            else:
-                result = utils.re_compile('^' + pat + '$').match(value)
+def _match(self, mapping, value):
+    for pat, what in mapping:
+        if isinstance(what, str):
+            res = utils.re_subm('^' + pat + '$', what, value)
+            if res is None:
+                continue
+            what, result = res
+        else:
+            result = utils.re_compile('^' + pat + '$').match(value)
 
-            if result: # it's a match
-                return what, [x for x in result.groups()]
-        return None, None
-        
+        if result: # it's a match
+            return what, [x for x in result.groups()]
+    return None, None
+
+
 def loadhook(h):
     """
     Converts a load hook into an application processor.
