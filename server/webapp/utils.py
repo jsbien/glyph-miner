@@ -1,48 +1,22 @@
 try:
     TimeoutError
-__all__ = ["TimeoutError"]
-
 except NameError:
     class TimeoutError(Exception):
         """Custom TimeoutError for older compatibility."""
         pass
 
-#!/usr/bin/env python
-"""
-General Utilities
-(part of webapp.py)
-"""
+__all__ = ["TimeoutError"]
 
-__all__ = [
-  "Storage", "storage", "storify", 
-  "Counter", "counter",
-  "iters", 
-  "rstrips", "lstrips", "strips", 
-  "safeunicode", "safestr", "utf8",
-  "TimeoutError", "timelimit",
-  "Memoize", "memoize",
-  "re_compile", "re_subm",
-  "group", "uniq", "iterview",
-  "IterBetter", "iterbetter",
-  "safeiter", "safewrite",
-  "dictreverse", "dictfind", "dictfindall", "dictincr", "dictadd",
-  "requeue", "restack",
-  "listget", "intget", "datestr",
-  "numify", "denumify", "commify", "dateify",
-  "nthstr", "cond",
-  "CaptureStdout", "capturestdout", "Profile", "profile",
-  "tryall",
-  "ThreadedDict", "threadeddict",
-  "autoassign",
-  "to36",
-  "safemarkdown",
-  "sendmail"
-]
-
-import re, sys, time, threading, itertools, traceback, os
+import types
+import copy
+from . import webapi as web
+import re
 
 def re_compile(pattern, flags=0):
+    """Safe wrapper around re.compile."""
     return re.compile(pattern, flags)
+
+# --- rest of your utils.py code follows ---
 
 try:
     import subprocess
