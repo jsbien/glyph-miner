@@ -1209,7 +1209,7 @@ class SafeVisitor(object):
         e = SecurityError("%s:%d - execution of '%s' statements is denied" % (self.filename, lineno, nodename))
         self.errors.append(e)
 
-class TemplateResult(object, DictMixin):
+class TemplateResult(UserDict):
     """Dictionary like object for storing template output.
     
     The result of a template execution is usally a string, but sometimes it
