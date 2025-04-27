@@ -10,6 +10,7 @@ __all__ = ["TimeoutError"]
 import types
 import copy
 import re
+import threading
 
 def re_compile(pattern, flags=0):
     """Safe wrapper around re.compile."""
