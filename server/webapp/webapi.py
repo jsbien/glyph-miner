@@ -132,7 +132,7 @@ class BadRequest(HTTPError):
     message = "bad request"
     def __init__(self, message=None):
         status = "400 Bad Request"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, message or self.message)
 
 badrequest = BadRequest
@@ -142,7 +142,7 @@ class Unauthorized(HTTPError):
     message = "unauthorized"
     def __init__(self):
         status = "401 Unauthorized"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 unauthorized = Unauthorized
@@ -152,7 +152,7 @@ class Forbidden(HTTPError):
     message = "forbidden"
     def __init__(self):
         status = "403 Forbidden"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 forbidden = Forbidden
@@ -162,7 +162,7 @@ class _NotFound(HTTPError):
     message = "not found"
     def __init__(self, message=None):
         status = '404 Not Found'
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, message or self.message)
 
 def NotFound(message=None):
@@ -199,7 +199,7 @@ class NotAcceptable(HTTPError):
     message = "not acceptable"
     def __init__(self):
         status = "406 Not Acceptable"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 notacceptable = NotAcceptable
@@ -209,7 +209,7 @@ class Conflict(HTTPError):
     message = "conflict"
     def __init__(self):
         status = "409 Conflict"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 conflict = Conflict
@@ -219,7 +219,7 @@ class Gone(HTTPError):
     message = "gone"
     def __init__(self):
         status = '410 Gone'
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 gone = Gone
@@ -229,7 +229,7 @@ class PreconditionFailed(HTTPError):
     message = "precondition failed"
     def __init__(self):
         status = "412 Precondition Failed"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 preconditionfailed = PreconditionFailed
@@ -239,7 +239,7 @@ class UnsupportedMediaType(HTTPError):
     message = "unsupported media type"
     def __init__(self):
         status = "415 Unsupported Media Type"
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, self.message)
 
 unsupportedmediatype = UnsupportedMediaType
@@ -250,7 +250,7 @@ class _InternalError(HTTPError):
     
     def __init__(self, message=None):
         status = '500 Internal Server Error'
-        headers = {'Content-Type': 'text/html'}
+        headers = ['Content-Type': 'text/html']
         HTTPError.__init__(self, status, headers, message or self.message)
 
 def InternalError(message=None):
