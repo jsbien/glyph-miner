@@ -285,7 +285,7 @@ class Parser:
                 extended_expr()
         
         def paren_expr():
-            begin = tokens.next().value
+            begin = next(tokens).value
             end = parens[begin]
             while True:
                 if tokens.lookahead().value in parens:
