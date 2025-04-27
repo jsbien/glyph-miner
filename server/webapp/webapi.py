@@ -284,7 +284,8 @@ def header(hdr, value, unique=False):
         for h, v in ctx.headers:
             if h.lower() == hdr.lower(): return
     
-    ctx.headers.append((hdr, value))
+    ctx.headers.append((str(hdr), str(value)))
+#    ctx.headers.append((hdr, value))
     
 def rawinput(method=None):
     """Returns storage object with GET or POST arguments.
