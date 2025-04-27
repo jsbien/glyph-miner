@@ -264,36 +264,18 @@ def InternalError(message=None):
 
 internalerror = InternalError
 
+
 def header(hdr, value, unique=False):
-    """
-    Adds the header `hdr: value` with the response.
-    
-    If `unique` is True and a header with that name already exists,
-    it doesn't add a new one. 
-    """
-    print(f"DEBUG header(): hdr=({hdr}) type={type(hdr)}, value=({value}) type={type(value)}")
+    # Encode headers to bytes if they are str
+    hdr = hdr.encode('utf-8') if isinstance(hdr, str) else hdr
+    value = value.encode('utf-8') if isinstance(value, str) else value
 
-    if isinstance(hdr, bytes):
-        hdr = hdr.decode('utf-8', 'replace')
-    if isinstance(value, bytes):
-        value = value.decode('utf-8', 'replace')
+    # Check for invalid characters
+    if b'\n' in hdr or b'\r' in hdr or b'\n' in value or b'\r' in value:
+        raise ValueError("Invalid header")
 
-    if '\n' in hdr or '\r' in hdr or '\n' in value or '\r' in value:
-        raise ValueError("Invalid characters in header.")
-
-    # (rest of the header handling logic...)
-
-    hdr, value = safestr(hdr), safestr(value)
-    # protection against HTTP response splitting attack
-    if '\n' in hdr or '\r' in hdr or '\n' in value or '\r' in value:
-        raise ValueError('invalid characters in header')
-        
-    if unique is True:
-        for h, v in ctx.headers:
-            if h.lower() == hdr.lower(): return
-    
-    ctx.headers.append((str(hdr), str(value)))
-#    ctx.headers.append((hdr, value))
+    # Append header
+    ctx.headers.append((hdr, value))
     
 def rawinput(method=None):
     """Returns storage object with GET or POST arguments.
