@@ -264,6 +264,17 @@ def header(hdr, value, unique=False):
     If `unique` is True and a header with that name already exists,
     it doesn't add a new one. 
     """
+
+    if isinstance(hdr, bytes):
+        hdr = hdr.decode('utf-8', 'replace')
+    if isinstance(value, bytes):
+        value = value.decode('utf-8', 'replace')
+
+    if '\n' in hdr or '\r' in hdr or '\n' in value or '\r' in value:
+        raise ValueError("Invalid characters in header.")
+
+    # (rest of the header handling logic...)
+
     hdr, value = safestr(hdr), safestr(value)
     # protection against HTTP response splitting attack
     if '\n' in hdr or '\r' in hdr or '\n' in value or '\r' in value:
