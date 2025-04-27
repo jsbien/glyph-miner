@@ -273,7 +273,7 @@ class application:
             web.ctx = web.storage()
             web.ctx.env = env
             web.ctx.path = env.get('PATH_INFO', '/')
-           self._cleanup()
+            self._cleanup()
 
             self.load(env)
             try:
