@@ -667,6 +667,17 @@ class ThreadedDict:
         >>> d.x
         1
     """
+    def clear(self):
+        """Clear all thread-specific keys."""
+        self._threadlocal.__dict__.clear()
+
+    @classmethod
+    def clear_all(cls):
+        """Clear all thread-local storages (not implemented)."""
+        # In real code, clearing ALL threads' locals is almost impossible safely.
+        # So we leave this as a no-op for compatibility.
+        pass
+
     def __init__(self):
         self._threadlocal = threading.local()
 
