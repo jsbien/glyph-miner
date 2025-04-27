@@ -54,7 +54,7 @@ class application:
             else:
                 cls = fvars[f]
             return self._delegate(cls, fvars, args)
-        if isinstance(f, tuple):
+        if isinstance(f, (tuple,list)):
             path = webapi.ctx.path
             print("[DEBUG] Matching path:", webapi.ctx.path)
             for pattern, what in f:
