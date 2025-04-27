@@ -1,3 +1,10 @@
+try:
+    TimeoutError
+except NameError:
+    class TimeoutError(Exception):
+        """Custom TimeoutError for older compatibility."""
+        pass
+
 #!/usr/bin/env python
 """
 General Utilities
