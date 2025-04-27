@@ -91,11 +91,9 @@ class Redirect(HTTPError):
                 home = ctx.home
             newloc = home + newloc
 
-        headers = {
-            'Content-Type', 'text/html',
-            headers = [('Location', newloc)]
-        }
-        HTTPError.__init__(self, status, headers, "")
+            headers = [('Content-Type', 'text/html'), ('Location', newloc)]
+
+            HTTPError.__init__(self, status, headers, "")
 
 redirect = Redirect
 
