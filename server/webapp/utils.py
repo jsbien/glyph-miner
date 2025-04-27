@@ -1,5 +1,7 @@
 try:
     TimeoutError
+__all__ = ["TimeoutError"]
+
 except NameError:
     class TimeoutError(Exception):
         """Custom TimeoutError for older compatibility."""
