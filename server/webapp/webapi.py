@@ -150,7 +150,7 @@ class Forbidden(HTTPError):
     message = "forbidden"
     def __init__(self):
         status = "403 Forbidden"
-        headers = [('Content-Type', 'text/html)']
+        headers = [('Content-Type', 'text/html')]
         HTTPError.__init__(self, status, headers, self.message)
 
 forbidden = Forbidden
