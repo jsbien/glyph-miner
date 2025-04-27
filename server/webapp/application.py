@@ -56,6 +56,7 @@ class application:
             return self._delegate(cls, fvars, args)
         if isinstance(f, tuple):
             path = webapi.ctx.path
+            print("[DEBUG] Matching path:", webapi.ctx.path)
             for pattern, what in f:
                 if hasattr(pattern, 'match'):
                     match = pattern.match(path)
