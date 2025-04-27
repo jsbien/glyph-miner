@@ -23,9 +23,12 @@ class application:
                     start_resp(status, headers)
                     return body
                 else:
+#                    start_resp('200 OK', [('Content-Type', 'text/html')])
+#                    return result
                     start_resp('200 OK', [('Content-Type', 'text/html')])
-                    return result
-            except:
+                    return [result.encode('utf-8')]
+
+           except:
                 import traceback
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
