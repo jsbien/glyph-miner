@@ -266,15 +266,15 @@ internalerror = InternalError
 
 
 def header(hdr, value, unique=False):
-    # Encode headers to bytes if they are str
-    hdr = hdr.encode('utf-8') if isinstance(hdr, str) else hdr
-    value = value.encode('utf-8') if isinstance(value, str) else value
+    # Ensure both header key and value are strings
+    if not isinstance(hdr, str) or not isinstance(value, str):
+        raise TypeError("HTTP header key and value must be strings")
 
-    # Check for invalid characters
-    if b'\n' in hdr or b'\r' in hdr or b'\n' in value or b'\r' in value:
-        raise ValueError("Invalid header")
+    # Ensure headers do not contain forbidden characters
+    if '\n' in hdr or '\r' in hdr or '\n' in value or '\r' in value:
+        raise ValueError("Invalid characters in HTTP header")
 
-    # Append header
+    # Append safely to headers
     ctx.headers.append((hdr, value))
     
 def rawinput(method=None):
