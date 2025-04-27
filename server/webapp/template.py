@@ -1295,8 +1295,12 @@ class TemplateResult(UserDict):
     
     def __str__(self):
         self._prepare_body()
-        return self["__body__"].encode('utf-8')
-        
+#        return self["__body__"].encode('utf-8')
+        body = self["__body__"]
+        if isinstance(body, str):
+            return body.encode('utf-8')
+        return body
+       
     def __repr__(self):
         self._prepare_body()
         return "<TemplateResult: %s>" % self._d
