@@ -746,8 +746,12 @@ def safewrite(filename, text, mode='w', encoding='utf-8'):
         f.write(text)
 
 def re_subm(pat, repl, string):
+    """Regex search that returns (match, substituted string) or (None, None)."""
     regex = re.compile(pat)
-    return regex.search(string)
+    m = regex.search(string)
+    if not m:
+        return None, None
+    return m, regex.sub(repl, string)
 
         
 # Final doctest trigger
