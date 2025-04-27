@@ -269,7 +269,11 @@ class application:
         
         def wsgi(env, start_resp):
             # clear threadlocal to avoid inteference of previous requests
-            self._cleanup()
+            import webapi
+            web.ctx = web.storage()
+            web.ctx.env = env
+            web.ctx.path = env.get('PATH_INFO', '/')
+           self._cleanup()
 
             self.load(env)
             try:
