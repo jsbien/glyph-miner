@@ -16,6 +16,15 @@ from ctypes import *
 from PIL import Image, ImageDraw, ImageOps
 from datetime import datetime
 
+class server:
+    def GET(self):
+        try:
+            with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
+                return f.read()
+        except Exception as e:
+            return "Error loading index.html: " + str(e)
+
+
 # define ressource paths
 urls = (
     '/api/', 'index',
