@@ -693,6 +693,16 @@ class ThreadedDict:
     def __delattr__(self, key):
         delattr(self._threadlocal, key)
 
+    def __getitem__(self, key):
+        return getattr(self._threadlocal, key)
+
+    def __setitem__(self, key, value):
+        setattr(self._threadlocal, key, value)
+
+    def __delitem__(self, key):
+        delattr(self._threadlocal, key)
+
+
     def items(self):
         """Return thread-specific items() like a dict."""
         return self._threadlocal.__dict__.items()
