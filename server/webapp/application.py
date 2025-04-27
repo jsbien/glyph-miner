@@ -1,6 +1,8 @@
 # coding: utf-8
 from server.webapp import webapi
 
+
+
 class application:
     def __init__(self, mapping=(), fvars=None):
         self.mapping = mapping
@@ -41,7 +43,7 @@ class application:
             return f()
         if isinstance(f, str):
             if f.startswith('redirect '):
-                import webapi
+#                import webapi
                 webapi.ctx.status = '301 Moved Permanently'
                 webapi.ctx.headers = [('Location', f[9:])]
                 return []
