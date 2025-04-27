@@ -21,6 +21,7 @@ urls = (
 )
 
 app = webapp.application(urls, globals())
+application = app  # <-- ADD THIS!!
 
 # --- Handlers ---
 class server:
