@@ -54,4 +54,5 @@ urls = [
 ]
 
 # Create WSGI app
-app = application(urls, globals())
+# app = application(urls, globals())
+app = application(urls, globals()).wsgifunc()
