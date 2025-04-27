@@ -430,20 +430,18 @@ class application:
 
     def _match(self, mapping, value):
         for pat, what in mapping:
-            if isinstance(what, application):
-                if value.startswith(pat):
-                    f = lambda: self._delegate_sub_application(pat, what)
-                    return f, None
+            if isinstance(what, str):
+                match_result = utils.re_subm('^' + pat + '$', what, value)
+                if match_result:
+                    what, result = match_result
                 else:
                     continue
-            elif isinstance(what, str):
-                what, result = utils.re_subm('^' + pat + '$', what, value)
             else:
                 result = utils.re_compile('^' + pat + '$').match(value)
-                
-            if result: # it's a match
+
+            if result:
                 return what, [x for x in result.groups()]
-        return None, None
+        return None, []
         
     def _delegate_sub_application(self, dir, app):
         """Deletes request to sub application `app` rooted at the directory `dir`.
