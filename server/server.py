@@ -23,15 +23,6 @@ class server:
             return [("Error loading index.html: " + str(e)).encode('utf-8')]
 
 
-# --- URL mappings ---
-urls = [
-    ('/', server),
-    ('/load', loader),
-    ('/save', saver),
-    ('/upload', uploader),
-    ('/add', adder),
-    ('/remove', remover),
-]
 
 app = webapp.application(urls, globals())
 application = app.wsgifunc()
@@ -66,6 +57,17 @@ class remover:
         # (Dummy placeholder)
         return "Remover not implemented yet."
 
+# --- URL mappings ---
+urls = [
+    ('/', server),
+    ('/load', loader),
+    ('/save', saver),
+    ('/upload', uploader),
+    ('/add', adder),
+    ('/remove', remover),
+]
+    
+    
 # --- Manual WSGI server ---
 if __name__ == "__main__":
     from wsgiref.simple_server import make_server
