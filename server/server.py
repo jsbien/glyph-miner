@@ -24,14 +24,14 @@ class server:
 
 
 # --- URL mappings ---
-urls = (
-    '/', 'server',
-    '/load', 'loader',
-    '/save', 'saver',
-    '/upload', 'uploader',
-    '/add', 'adder',
-    '/remove', 'remover',
-)
+urls = [
+    ('/', 'server'),
+    ('/load', 'loader'),
+    ('/save', 'saver'),
+    ('/upload', 'uploader'),
+    ('/add', 'adder'),
+    ('/remove', 'remover'),
+]
 
 app = webapp.application(urls, globals())
 application = app.wsgifunc()
