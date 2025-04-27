@@ -294,8 +294,8 @@ class application:
             
             def cleanup():
                 self._cleanup()
-                yield '' # force this function to be a generator
-                            
+#                yield '' # force this function to be a generator
+                yield b''  # <-- CORRECT: empty bytes, not empty string                           
             return itertools.chain(result, cleanup())
 
         for m in middleware: 
