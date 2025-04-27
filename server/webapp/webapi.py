@@ -40,15 +40,21 @@ A configuration object for various aspects of webapp.py.
 """
 
 class HTTPError(Exception):
-    def __init__(self, status, headers={}, data=""):
+    def __init__(self, status, headers=None, data=""):
         if headers is None:
             headers = []
-        ctx.status = status
-        for k, v in list(headers.items()):
-            header(k, v)
+        self.status = status
+        self.headers = headers
         self.data = data
-        Exception.__init__(self, status)
-        
+
+        # 📢 Add this debug BEFORE looping
+        print("DEBUG FULL HEADERS LIST:", headers)
+        print("DEBUG FULL HEADERS TYPES:", [(type(k), type(v)) for k, v in headers])
+
+        for k, v in headers:
+            header(k, v)
+
+
 def _status_code(status, data=None, classname=None, docstring=None):
     if data is None:
         data = status.split(" ", 1)[1]
