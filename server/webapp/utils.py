@@ -5,12 +5,17 @@ except NameError:
         """Custom TimeoutError for older compatibility."""
         pass
 
+# Force binding to make sure TimeoutError is globally available
+TimeoutError = TimeoutError
+
 __all__ = ["TimeoutError"]
 
 import types
 import copy
 import re
 import threading
+
+# (Other imports and code follow...)
 
 def re_compile(pattern, flags=0):
     """Safe wrapper around re.compile."""
