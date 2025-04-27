@@ -262,7 +262,7 @@ class application:
                 firstchunk = next(iterator)
             except StopIteration:
                 firstchunk = ''
-
+                
             return itertools.chain([firstchunk], iterator)    
                                 
         def is_generator(x): return x and hasattr(x, 'next')
@@ -271,9 +271,9 @@ class application:
             # clear threadlocal to avoid inteference of previous requests
             from server.webapp import webapi
 #            import webapi
-            web.ctx = web.storage()
-            web.ctx.env = env
-            web.ctx.path = env.get('PATH_INFO', '/')
+            webapi.ctx = web.storage()
+            webapi.ctx.env = env
+            webapi.ctx.path = env.get('PATH_INFO', '/')
             self._cleanup()
 
             self.load(env)
