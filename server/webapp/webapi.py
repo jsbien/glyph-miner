@@ -93,9 +93,7 @@ class Redirect(HTTPError):
 
         headers = {
             'Content-Type', 'text/html',
-#             'Location': newloc
             headers = [('Location', newloc)]
-
         }
         HTTPError.__init__(self, status, headers, "")
 
