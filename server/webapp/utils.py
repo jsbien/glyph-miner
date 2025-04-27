@@ -32,6 +32,9 @@ __all__ = [
 
 import re, sys, time, threading, itertools, traceback, os
 
+def re_compile(pattern, flags=0):
+    return re.compile(pattern, flags)
+
 try:
     import subprocess
 except ImportError:
