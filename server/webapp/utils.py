@@ -703,6 +703,11 @@ class ThreadedDict:
     def clear(self):
         self._threadlocal.__dict__.clear()
 
+    @classmethod
+    def clear_all(cls):
+        pass  # no-op for now, as we only store local thread data
+        
+
 threadeddict = ThreadedDict
 
 def safeiter(it):
