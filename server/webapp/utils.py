@@ -694,7 +694,10 @@ class ThreadedDict:
         delattr(self._threadlocal, key)
 
     def __getitem__(self, key):
-        return getattr(self._threadlocal, str(key))
+        if hasattr(self._threadlocal, str(key)):
+            return getattr(self._threadlocal, str(key))
+        else:
+            raise KeyError(key)
 
     def __setitem__(self, key, value):
         setattr(self._threadlocal, key, value)
