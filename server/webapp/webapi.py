@@ -41,6 +41,8 @@ A configuration object for various aspects of webapp.py.
 
 class HTTPError(Exception):
     def __init__(self, status, headers={}, data=""):
+        if headers is None:
+            headers = []
         ctx.status = status
         for k, v in list(headers.items()):
             header(k, v)
