@@ -21,7 +21,7 @@ from .utils import *
 from .db import *
 from .net import *
 from .wsgi import *
-from .http import *
+from .web_http import *
 from .webapi import *
 from .httpserver import *
 from .debugerror import *
