@@ -3,7 +3,9 @@ from server.webapp.application import application  # <-- fixed import!
 
 class server:
     def GET(self):
-        return "Main page loaded."
+        with open("web/index.html", "r", encoding="utf-8") as f:
+            html = f.read()
+        return html
 
     def __call__(self):
         return self.GET()
