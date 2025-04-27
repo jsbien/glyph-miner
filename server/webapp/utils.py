@@ -694,7 +694,7 @@ class ThreadedDict:
         delattr(self._threadlocal, key)
 
     def __getitem__(self, key):
-        return getattr(self._threadlocal, key)
+        return getattr(self._threadlocal, str(key))
 
     def __setitem__(self, key, value):
         setattr(self._threadlocal, key, value)
