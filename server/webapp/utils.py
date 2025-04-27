@@ -659,16 +659,12 @@ def tryall(functions, *args, **keywords):
     return args and args[0]
 
 class ThreadedDict:
-    """
-    A thread-safe dictionary where each thread sees a different value.
-    """
-
     def __init__(self):
         self._threadlocal = threading.local()
 
     def __getattr__(self, key):
         try:
-            return getattr(self._threadlocal, key)
+            return getattr(self._threadlocal, str(key))
         except AttributeError:
             raise KeyError(key)
 
@@ -676,7 +672,7 @@ class ThreadedDict:
         if key == '_threadlocal':
             object.__setattr__(self, key, value)
         else:
-            setattr(self._threadlocal, key, value)
+            setattr(self._threadlocal, str(key), value)
 
     def __getitem__(self, key):
         return self.__getattr__(key)
@@ -686,7 +682,7 @@ class ThreadedDict:
 
     def __delitem__(self, key):
         try:
-            delattr(self._threadlocal, key)
+            delattr(self._threadlocal, str(key))
         except AttributeError:
             raise KeyError(key)
 
@@ -697,7 +693,6 @@ class ThreadedDict:
             return default
 
     def items(self):
-        # Return items of all current attributes
         return self._threadlocal.__dict__.items()
 
     def clear(self):
@@ -705,8 +700,7 @@ class ThreadedDict:
 
     @classmethod
     def clear_all(cls):
-        pass  # no-op for now, as we only store local thread data
-        
+        pass  # no-op for now
 
 threadeddict = ThreadedDict
 
