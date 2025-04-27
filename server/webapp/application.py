@@ -271,7 +271,7 @@ class application:
             # clear threadlocal to avoid inteference of previous requests
             from server.webapp import webapi
 #            import webapi
-            webapi.ctx = web.storage()
+            webapi.ctx = webapi.storage()
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
             self._cleanup()
