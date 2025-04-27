@@ -20,9 +20,10 @@ class server:
     def GET(self):
         try:
             with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
-                return f.read()
+                content = f.read()
+            return [content.encode('utf-8')]  # ✅ IMPORTANT: return bytes in a list!
         except Exception as e:
-            return "Error loading index.html: " + str(e)
+            return [("Error loading index.html: " + str(e)).encode('utf-8')]
 
 
 # define ressource paths
