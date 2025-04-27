@@ -34,7 +34,8 @@ urls = (
 )
 
 app = webapp.application(urls, globals())
-application = app.wsgifunc() 
+application = app.wsgifunc()
+print("[DEBUG] server.py loaded, application created")
 
 # --- Handlers ---
 class loader:
