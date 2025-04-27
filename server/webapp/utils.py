@@ -746,12 +746,8 @@ def safewrite(filename, text, mode='w', encoding='utf-8'):
         f.write(text)
 
 def re_subm(pat, repl, string):
-    """Like re.sub, but returns a match object."""
     regex = re.compile(pat)
-    m = regex.search(string)
-    if not m:
-        return None, string
-    return m, regex.sub(repl, string)
+    return regex.search(string)
 
         
 # Final doctest trigger
