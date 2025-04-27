@@ -1,5 +1,5 @@
 # coding: utf-8
-from server.webapp import webapp
+from server.webapp.application import application  # <-- fixed import!
 
 class server:
     def GET(self):
@@ -54,4 +54,4 @@ urls = [
 ]
 
 # Create WSGI app
-app = webapp.application(urls, globals())
+app = application(urls, globals())
