@@ -285,7 +285,9 @@ class application:
             except webapp.HTTPError as e:
                 result = [e.data]
 
-            result = webapp.safestr(iter(result))
+            result = [webapp.safestr(x) for x in result]
+
+#            result = webapp.safestr(iter(result))
 
             status, headers = webapp.ctx.status, webapp.ctx.headers
             start_resp(status, headers)
