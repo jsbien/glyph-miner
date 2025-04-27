@@ -24,12 +24,6 @@ class server:
 
 
 
-app = webapp.application(urls, globals())
-application = app.wsgifunc()
-print("[DEBUG] Type of application:", type(application))
-print("[DEBUG] Application callable?", callable(application))
-
-print("[DEBUG] server.py loaded, application created")
 
 # --- Handlers ---
 class loader:
@@ -67,6 +61,12 @@ urls = [
     ('/remove', remover),
 ]
     
+app = webapp.application(urls, globals())
+application = app.wsgifunc()
+print("[DEBUG] Type of application:", type(application))
+print("[DEBUG] Application callable?", callable(application))
+
+print("[DEBUG] server.py loaded, application created")
     
 # --- Manual WSGI server ---
 if __name__ == "__main__":
