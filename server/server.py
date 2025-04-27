@@ -26,6 +26,7 @@ application = app.wsgifunc()
 # --- Handlers ---
 class server:
     def GET(self):
+        print("[DEBUG] server.GET() called")
         try:
             with open('/opt/glyph-miner/web/index.html', 'r', encoding='utf-8') as f:
                 content = f.read()
