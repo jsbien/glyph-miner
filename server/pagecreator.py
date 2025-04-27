@@ -105,7 +105,12 @@ def savePage(pageIndex, pageImage, boxes, workDir):
     pageImage.save('../webapp/synthetic_pages/' + workDir + str(pageIndex) + '.tiff', "TIFF")
     with open('../webapp/synthetic_pages/' + workDir + str(pageIndex) + '.box', 'w') as box_file:
         for box in boxes:
-            box_file.write("{} {} {} {} {}\n".format(box[0].encode('utf-8'), box[1], box[2], box[3], box[4]))
+#            box_file.write("{} {} {} {} {}\n".format(box[0].encode('utf-8'), box[1], box[2], box[3], box[4]))
+            box0 = box[0]
+            if isinstance(box0, str):
+                box0 = box0.encode('utf-8')
+            box_file.write("{} {} {} {} {}\n".format(box0, box[1], box[2], box[3], box[4]))
+
     return
 
 def createLines(matches, line_height, text, dimensions, margin, letter_spacing, word_spacing, baseline_skip, db, imageList):
