@@ -28,7 +28,7 @@ class application:
                     start_resp('200 OK', [('Content-Type', 'text/html')])
                     return [result.encode('utf-8')]
 
-           except:
+            except:
                 import traceback
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
