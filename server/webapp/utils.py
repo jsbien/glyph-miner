@@ -9,7 +9,6 @@ __all__ = ["TimeoutError"]
 
 import types
 import copy
-from . import webapi as web
 import re
 
 def re_compile(pattern, flags=0):
@@ -81,6 +80,7 @@ class Storage(dict):
 storage = Storage
 # 2
 def storify(mapping, *requireds, **defaults):
+    from . import webapi as web
     """
     Creates a storage object from a mapping object with required and default keys.
     
@@ -250,6 +250,7 @@ def strips(text, remove):
     return lstrips(rstrips(text, remove), remove)
 # 4
 def safeunicode(obj, encoding='utf-8'):
+    from . import webapi as web
     """
     Converts any object to a unicode string safely.
 
@@ -263,6 +264,7 @@ def safeunicode(obj, encoding='utf-8'):
     return str(obj)
 
 def safestr(obj, encoding='utf-8'):
+    from . import webapi as web
     """
     Converts any object to a byte string safely.
 
@@ -385,6 +387,7 @@ def listget(lst, ind, default=None):
         return default
 
 def intget(d, key, default=None):
+    from . import webapi as web
     """
     Returns int(d[key]) if it exists, otherwise returns default.
 
