@@ -53,12 +53,12 @@ class remover:
 
 # --- URL mappings ---
 urls = [
-    ('/', server),
-    ('/load', loader),
-    ('/save', saver),
-    ('/upload', uploader),
-    ('/add', adder),
-    ('/remove', remover),
+    ('/', server()),
+    ('/load', loader()),
+    ('/save', saver()),
+    ('/upload', uploader()),
+    ('/add', adder()),
+    ('/remove', remover()),
 ]
     
 app = webapp.application(urls, globals())
