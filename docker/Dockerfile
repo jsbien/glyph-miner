@@ -21,26 +21,20 @@ RUN pip3 install uwsgi
 COPY docker/default /etc/nginx/sites-enabled/default
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
-# Clone your glyph-miner repository (your fixed version!)
-WORKDIR /opt/
-# RUN git clone https://github.com/jsbien/glyph-miner.git glyph-miner
-
-# Copy start script
+# Start script
 COPY docker/start-container.sh /opt/glyph-miner/start-container.sh
+RUN chmod +x /opt/glyph-miner/start-container.sh
 
-# Make script executable
-RUN chmod +x /opt/glyph-miner/start-container.sh    
-
-# Set working directory
+# Working dir
 WORKDIR /opt/glyph-miner
 
-# 🧹 Clean old files before copying fresh code
+# Cleaning old files
 RUN rm -rf /opt/glyph-miner/*
 
-COPY docker/start-container.sh /opt/glyph-miner/start-container.sh
+# Copy application
 COPY . /opt/glyph-miner
-# Expose uwsgi port
+
 EXPOSE 9090
 
-# Start mysql, nginx and uwsgi
+# Start services
 CMD ["/opt/glyph-miner/start-container.sh"]
