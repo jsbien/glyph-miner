@@ -11,7 +11,7 @@ echo CREATE DATABASE IF NOT EXISTS glyphminer | mysql --default-character-set=ut
 #echo "GRANT USAGE ON *.* TO glyphminer@localhost IDENTIFIED BY 'glyphminer'" | mysql --default-character-set=utf8
 mysql --default-character-set=utf8 -e "CREATE USER IF NOT EXISTS 'glyphminer'@'localhost' IDENTIFIED WITH mysql_native_password BY 'glyphminer';"
 #echo "GRANT ALL PRIVILEGES ON glyphminer.* TO glyphminer@localhost" | mysql --default-character-set=utf8
-mysql --default-character-set=utf8 -e "GRANT ALL PRIVILEGES ON glyphminer.* TO 'glyphminer'@'localhost';
+mysql --default-character-set=utf8 -e "GRANT ALL PRIVILEGES ON glyphminer.* TO 'glyphminer'@'localhost'";
 echo FLUSH PRIVILEGES | mysql --default-character-set=utf8
 
 mysql --user=glyphminer --password=glyphminer --default-character-set=utf8 glyphminer < /opt/glyph-miner/server/schema.sql
