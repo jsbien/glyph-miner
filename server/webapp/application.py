@@ -10,6 +10,7 @@ class application:
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
+            print("DEBUG: Request PATH_INFO:", env.get('PATH_INFO'))
             webapi.ctx = webapi.storage()
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
