@@ -68,4 +68,5 @@ class application:
                 else:
                     if path == pattern:
                         return self._delegate(what, fvars, ())
+        print("DEBUG: No match found for path:", self.env.get('PATH_INFO'))
         raise Exception('No match found')
