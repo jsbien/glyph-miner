@@ -69,5 +69,9 @@ class application:
                 else:
                     if path == pattern:
                         return self._delegate(what, fvars, ())
+
+        # Graceful 404 instead of crash
         print("DEBUG: No match found for path:", webapi.ctx.path)
-        raise Exception('No match found')
+        webapi.ctx.status = '404 Not Found'
+        webapi.ctx.headers = [('Content-Type', 'text/plain')]
+        return ["Not Found: {}".format(webapi.ctx.path)]
