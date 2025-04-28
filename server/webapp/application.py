@@ -50,7 +50,11 @@ class application:
             if f.startswith('redirect '):
                 webapi.ctx.status = '301 Moved Permanently'
                 webapi.ctx.headers = [('Location', f[9:])]
-                return []
+                return [
+                    '301 Moved Permanently',
+                    [('Location', f[9:])],
+                    [b"Redirecting..."]
+                ]
             elif '.' in f:
                 mod, cls = f.rsplit('.', 1)
                 mod = __import__(mod, None, None, [''])
@@ -70,8 +74,10 @@ class application:
                     if path == pattern:
                         return self._delegate(what, fvars, ())
 
-        # Graceful 404 instead of crash
+        # Graceful 404 Not Found response
         print("DEBUG: No match found for path:", webapi.ctx.path)
-        webapi.ctx.status = '404 Not Found'
-        webapi.ctx.headers = [('Content-Type', 'text/plain')]
-        return ["Not Found: {}".format(webapi.ctx.path)]
+        return [
+            '404 Not Found',
+            [('Content-Type', 'text/plain')],
+            ["Not Found: {}".format(webapi.ctx.path).encode('utf-8')]
+        ]
