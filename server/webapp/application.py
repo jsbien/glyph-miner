@@ -1,8 +1,6 @@
 # coding: utf-8
 from server.webapp import webapi
 
-
-
 class application:
     def __init__(self, mapping=(), fvars=None):
         self.mapping = mapping
@@ -10,7 +8,6 @@ class application:
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
-            print("DEBUG: Request PATH_INFO:", env.get('PATH_INFO'))
             webapi.ctx = webapi.storage()
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
@@ -23,13 +20,17 @@ class application:
                     status, headers, body = result
                     start_resp(status, headers)
                     return body
-                else:
-#                    start_resp('200 OK', [('Content-Type', 'text/html')])
-#                    return result
+                elif isinstance(result, (str, bytes)):
                     start_resp('200 OK', [('Content-Type', 'text/html')])
-                    return [result.encode('utf-8')]
+                    if isinstance(result, str):
+                        return [result.encode('utf-8')]
+                    else:
+                        return [result]
+                else:
+                    start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
+                    return [b"Internal Server Error (Bad result type)"]
 
-            except:
+            except Exception as e:
                 import traceback
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
@@ -47,7 +48,6 @@ class application:
             return f()
         if isinstance(f, str):
             if f.startswith('redirect '):
-#                import webapi
                 webapi.ctx.status = '301 Moved Permanently'
                 webapi.ctx.headers = [('Location', f[9:])]
                 return []
@@ -58,9 +58,9 @@ class application:
             else:
                 cls = fvars[f]
             return self._delegate(cls, fvars, args)
-        if isinstance(f, (tuple,list)):
+        if isinstance(f, (tuple, list)):
             path = webapi.ctx.path
-            print("[DEBUG] Matching path:", webapi.ctx.path)
+            print("[DEBUG] Matching path:", path)
             for pattern, what in f:
                 if hasattr(pattern, 'match'):
                     match = pattern.match(path)
@@ -69,5 +69,5 @@ class application:
                 else:
                     if path == pattern:
                         return self._delegate(what, fvars, ())
-        print("DEBUG: No match found for path:", self.env.get('PATH_INFO'))
+        print("DEBUG: No match found for path:", webapi.ctx.path)
         raise Exception('No match found')
