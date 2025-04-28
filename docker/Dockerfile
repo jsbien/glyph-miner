@@ -17,6 +17,10 @@ RUN apt-get update && apt-get install -y \
 # Install Python libraries
 RUN pip3 install uwsgi
 
+# Fix nginx config
+COPY docker/default /etc/nginx/sites-enabled/default
+RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
+
 # Clone your glyph-miner repository (your fixed version!)
 WORKDIR /opt/
 # RUN git clone https://github.com/jsbien/glyph-miner.git glyph-miner
