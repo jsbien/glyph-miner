@@ -1,10 +1,16 @@
 #!/bin/bash
 set -e
 
-# Start MySQL
-echo "[INFO] Starting MySQL..."
-service mysql start
-sleep 5
+
+# start mysqld and set up database
+echo "Starting mysql"
+/usr/sbin/mysqld &
+sleep 10
+echo "CREATE DATABASE glyphminer" | mysql --default-character-set=utf8
+echo "GRANT USAGE ON *.* TO glyphminer@localhost IDENTIFIED BY 'glyphminer'" | mysql --default-character-set=utf8
+echo "GRANT ALL PRIVILEGES ON glyphminer.* TO glyphminer@localhost" | mysql --default-character-set=utf8
+mysql --user=glyphminer --password=glyphminer --default-character-set=utf8 glyphminer < /opt/glyph-miner/server/schema.sql
+
 
 # Start nginx
 echo "[INFO] Starting nginx..."
