@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -ex
 
 
 # start mysqld and set up database
