@@ -20,7 +20,8 @@ mysql --user=glyphminer --password=glyphminer --default-character-set=utf8 glyph
 # Start nginx
 echo "[INFO] Starting nginx..."
 #service nginx start
-nginx -g 'daemon off;' &
+# nginx -g 'daemon off;' &
+nginx &
 echo "[INFO] Started nginx"
 
 # Set correct PYTHONPATH
