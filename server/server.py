@@ -39,13 +39,13 @@ def get_documents():
     ]
 
 # URL routing
-urls = (
-    '/collections', get_collections,
-    '/images', get_images,
-    '/glyphs', get_glyphs,
-    '/pages', get_pages,
-    '/documents', get_documents,
-)
+urls = [
+    ('/collections', get_collections),
+    ('/images', get_images),
+    ('/glyphs', get_glyphs),
+    ('/pages', get_pages),
+    ('/documents', get_documents),
+]
 
 # Build WSGI app
 app = application(urls, globals()).wsgifunc()
