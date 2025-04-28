@@ -2,50 +2,34 @@
 from server.webapp.application import application
 import json
 
-# Dummy handlers
-def get_collections():
-    return [
-        '200 OK',
-        [('Content-Type', 'application/json')],
-        [json.dumps([]).encode('utf-8')]
-    ]
+# Handler class for /collections
+class CollectionsHandler:
+    def GET(self):
+        # Return an empty list of collections (initial state)
+        return [
+            '200 OK',
+            [('Content-Type', 'application/json')],
+            [json.dumps([]).encode('utf-8')]
+        ]
 
-def get_images():
-    return [
-        '200 OK',
-        [('Content-Type', 'application/json')],
-        [json.dumps([]).encode('utf-8')]
-    ]
+    def POST(self):
+        # Dummy collection created, normally you would process posted data
+        dummy_collection = {
+            "id": 1,
+            "name": "New Collection",
+            "description": "",
+            "documents": []
+        }
+        return [
+            '201 Created',
+            [('Content-Type', 'application/json')],
+            [json.dumps(dummy_collection).encode('utf-8')]
+        ]
 
-def get_glyphs():
-    return [
-        '200 OK',
-        [('Content-Type', 'application/json')],
-        [json.dumps([]).encode('utf-8')]
-    ]
-
-def get_pages():
-    return [
-        '200 OK',
-        [('Content-Type', 'application/json')],
-        [json.dumps([]).encode('utf-8')]
-    ]
-
-def get_documents():
-    return [
-        '200 OK',
-        [('Content-Type', 'application/json')],
-        [json.dumps([]).encode('utf-8')]
-    ]
-
-# URL routing
+# Define the URL mappings
 urls = [
-    ('/collections', get_collections),
-    ('/images', get_images),
-    ('/glyphs', get_glyphs),
-    ('/pages', get_pages),
-    ('/documents', get_documents),
+    ('/collections', CollectionsHandler),
 ]
 
-# Build WSGI app
+# Build the WSGI application
 app = application(urls, globals()).wsgifunc()
