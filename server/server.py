@@ -3,7 +3,7 @@ import sys
 import server.webapp as web
 import os
 import time
-import web
+# import web
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
