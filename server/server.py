@@ -1,35 +1,21 @@
-# coding: utf-8
-from server.webapp.application import application
-import json
+import web
 
-# Handler class for /collections
-class CollectionsHandler:
-    def GET(self):
-        # Return an empty list of collections (initial state)
-        return [
-            '200 OK',
-            [('Content-Type', 'application/json')],
-            [json.dumps([]).encode('utf-8')]
-        ]
+# Dummy implementations for now — replace with real logic later
+def server(): return lambda: "Main server root"
+def loader(): return lambda: "Loading..."
+def saver(): return lambda: "Saving..."
+def uploader(): return lambda: "Uploading..."
+def adder(): return lambda: "Adding..."
+def remover(): return lambda: "Removing..."
 
-    def POST(self):
-        # Dummy collection created, normally you would process posted data
-        dummy_collection = {
-            "id": 1,
-            "name": "New Collection",
-            "description": "",
-            "documents": []
-        }
-        return [
-            '201 Created',
-            [('Content-Type', 'application/json')],
-            [json.dumps(dummy_collection).encode('utf-8')]
-        ]
-
-# Define the URL mappings
 urls = [
-    ('/collections', CollectionsHandler),
+    ('/api/', server()),
+    ('/api/load', loader()),
+    ('/api/save', saver()),
+    ('/api/upload', uploader()),
+    ('/api/add', adder()),
+    ('/api/remove', remover()),
 ]
 
-# Build the WSGI application
-app = application(urls, globals()).wsgifunc()
+app = web.application(urls, globals())
+application = app.wsgifunc()
