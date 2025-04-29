@@ -1,18 +1,14 @@
-import webapp  # Import your bundled local web framework (renamed web.py)
+from server import webapp  # <- Correct import!
 
-# Import your backend handlers
-from glyphs import Glyphs
-from collections import Collections
+from server.glyphs import Glyphs
+from server.collections import Collections
 
 # URL mapping
 urls = [
     ('/glyphs', Glyphs),
     ('/collections', Collections),
-    # (You can later add more routes if needed)
 ]
 
-# Create the webapp application
+# Create the application
 app = webapp.application(urls, globals())
-
-# Create the WSGI application for uwsgi
 application = app.wsgifunc()
