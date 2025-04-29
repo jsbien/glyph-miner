@@ -1,6 +1,6 @@
 # The Glyph Miner software package
 
-[This the original README.md of Sep 29, 2016
+[This is the original README.md of Sep 29, 2016
 (https://github.com/benedikt-budig/glyph-miner)]
 
 Glyph Miner is a software for rapidly extracting glyph occurrences from early
