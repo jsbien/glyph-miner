@@ -751,8 +751,17 @@ class matchcrop:
         return contents
 
     
+import datetime
+
 class PingHandler:
     def GET(self):
+        try:
+            timestamp = datetime.datetime.now().isoformat()
+            with open("/tmp/debug-ping.log", "a") as f:
+                f.write(f"[{timestamp}] /api/ping accessed\n")
+        except Exception as e:
+            # Don't crash on logging failure
+            pass
         return "PONG"
     
 
