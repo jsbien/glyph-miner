@@ -31,4 +31,6 @@ try:
     from . import webopenid as openid
 except ImportError:
     pass # requires openid module
+from .webapi import config
+
 
