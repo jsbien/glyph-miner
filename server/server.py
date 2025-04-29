@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import web
 
-mport web
 print("Using web module from:", web.__file__)
 
 import os
