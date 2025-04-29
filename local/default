@@ -13,8 +13,8 @@ server {
     # Forward only /api/ requests to uwsgi (dynamic)
     location /api/ {
         include uwsgi_params;
-        uwsgi_pass 127.0.0.1:9090;
+        uwsgi_pass 127.0.0.1:9091;
         uwsgi_read_timeout 300;
         client_max_body_size 100M;
-    }
+    }	
 }
