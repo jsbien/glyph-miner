@@ -749,6 +749,11 @@ class matchcrop:
         contents = buf.getvalue()
         return contents
 
+    
+class PingHandler:
+    def GET(self):
+        return "PONG"
+    
 
 class DateTimeEncoder(json.JSONEncoder):
 
