@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import sys
-import web
-
+import server.webapp as web
 import os
 import time
 import web
