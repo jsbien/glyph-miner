@@ -32,5 +32,6 @@ try:
 except ImportError:
     pass # requires openid module
 from .webapi import config
-
+from . import db
+database = db.database
 
