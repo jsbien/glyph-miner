@@ -7,4 +7,5 @@ uwsgi --socket 127.0.0.1:9091 \
       --protocol uwsgi \
       --chdir "$(dirname "$0")/.." \
       --module server.server:app \
-      --master --processes 1 --threads 2
+      --master --processes 1 --threads 2 \
+      --logto /tmp/uwsgi.log
