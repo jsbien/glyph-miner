@@ -1,4 +1,8 @@
 # The Glyph Miner software package
+
+[This the original README.md of Sep 29, 2016
+(https://github.com/benedikt-budig/glyph-miner)]
+
 Glyph Miner is a software for rapidly extracting glyph occurrences from early
 typeset prints.
 
@@ -25,7 +29,14 @@ Glyph Miner is available through Docker for easy deployment and testing. Make su
 you have installed a recent version of [Docker](https://www.docker.com/).
 
 
-> **Note:** Some badges that appeared here are no longer available because the original Microbadger service used by the project is no longer operational.
+> **Note:** Some badges that appeared here are no longer available
+> because the original Microbadger service used by the project is no
+> longer operational. Instead the badges from Shields.io are used.
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/glyphminer/glyphminer)](https://hub.docker.com/r/glyphminer/glyphminer)
+[![Docker Image Size](https://img.shields.io/docker/image-size/glyphminer/glyphminer/latest)](https://hub.docker.com/r/glyphminer/glyphminer)
+[![Docker Version](https://img.shields.io/docker/v/glyphminer/glyphminer?sort=semver)](https://hub.docker.com/r/glyphminer/glyphminer)
+
 
 ### Recommended: Using Docker Hub
 This is the fastest way to get the system running on your machine. Just pull our
