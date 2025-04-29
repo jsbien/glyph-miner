@@ -1,21 +1,18 @@
-import web
+import webapp  # Import your bundled local web framework (renamed web.py)
 
-# Dummy implementations for now — replace with real logic later
-def server(): return lambda: "Main server root"
-def loader(): return lambda: "Loading..."
-def saver(): return lambda: "Saving..."
-def uploader(): return lambda: "Uploading..."
-def adder(): return lambda: "Adding..."
-def remover(): return lambda: "Removing..."
+# Import your backend handlers
+from glyphs import Glyphs
+from collections import Collections
 
+# URL mapping
 urls = [
-    ('/api/', server()),
-    ('/api/load', loader()),
-    ('/api/save', saver()),
-    ('/api/upload', uploader()),
-    ('/api/add', adder()),
-    ('/api/remove', remover()),
+    ('/glyphs', Glyphs),
+    ('/collections', Collections),
+    # (You can later add more routes if needed)
 ]
 
-app = web.application(urls, globals())
+# Create the webapp application
+app = webapp.application(urls, globals())
+
+# Create the WSGI application for uwsgi
 application = app.wsgifunc()
