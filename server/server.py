@@ -2,9 +2,21 @@
 import sys
 import web
 
-with open("/tmp/web-module-check.log", "w") as f:
-    import web
-    f.write(f"web.__file__ = {web.__file__}\n")
+import os
+import time
+import web
+
+timestamp = time.strftime("%Y%m%d-%H%M%S")
+debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
+
+try:
+    with open(debug_path, "w") as f:
+        f.write(f"web.__file__ = {web.__file__}\n")
+        f.write(f"dir(web) = {dir(web)}\n")
+        f.flush()  # ensure it writes immediately
+    print(f"✅ Debug log written to {debug_path}")
+except Exception as e:
+    print(f"❌ Failed to write debug log: {e}")
 
 import os
 import json
@@ -49,6 +61,9 @@ urls = (
 
 imageList = {}
 
+with open("/tmp/debug-web.txt", "w") as f:
+    f.write(f"web.__file__ = {web.__file__}\n")
+    f.write(f"dir(web) = {dir(web)}\n")
 
 
 # web.config.debug = False
