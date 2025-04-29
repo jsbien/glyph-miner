@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+import sys
 import web
-
-print("Using web module from:", web.__file__)
+sys.stdout.write(f"Using web module from: {web.__file__}\n")
+sys.stdout.flush()
 
 import os
 import json
