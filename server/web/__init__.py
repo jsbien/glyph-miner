@@ -32,5 +32,5 @@ try:
 except ImportError:
     pass # requires openid module
 from .webapi import config
-
+config = webapi.config
 
