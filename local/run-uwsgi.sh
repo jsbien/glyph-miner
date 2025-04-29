@@ -10,7 +10,9 @@ echo "Ctrl+C to stop."
 # Run uwsgi with timestamped log and show print() output
 uwsgi --socket 127.0.0.1:9091 \
       --protocol uwsgi \
-      --chdir "$(dirname "$0")/.." \
+      --chdir /home/jsbien/git/glyph-miner \
+      --pythonpath /home/jsbien/git/glyph-miner/server \
       --module server.server:app \
       --master --processes 1 --threads 2 \
-      --logto "$logfile"
+      --py-autoreload 1 \
+      --logto uwsgi-$(date +%Y%m%d-%H%M%S).log
