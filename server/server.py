@@ -55,8 +55,8 @@ urls = (
     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
     '/api/collections/(.*)', 'collection',
     '/api/collections', 'collections',
-    '/api/memberships', 'memberships'
-    '/api/ping', 'PingHandler',
+    '/api/memberships', 'memberships',
+    '/api/ping', 'PingHandler'
 )
 
 imageList = {}
