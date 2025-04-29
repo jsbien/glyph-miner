@@ -56,6 +56,7 @@ urls = (
     '/api/collections/(.*)', 'collection',
     '/api/collections', 'collections',
     '/api/memberships', 'memberships'
+    '/api/ping', 'PingHandler',
 )
 
 imageList = {}
