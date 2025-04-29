@@ -31,7 +31,8 @@ you have installed a recent version of [Docker](https://www.docker.com/).
 
 > **Note:** Some badges that appeared here are no longer available
 > because the original Microbadger service used by the project is no
-> longer operational. Instead the badges from Shields.io are used.
+> longer operational. Instead the badges from [*Shields.io*](Shields.io)
+> are used.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/glyphminer/glyphminer)](https://hub.docker.com/r/glyphminer/glyphminer)
 [![Docker Image Size](https://img.shields.io/docker/image-size/glyphminer/glyphminer/latest)](https://hub.docker.com/r/glyphminer/glyphminer)
