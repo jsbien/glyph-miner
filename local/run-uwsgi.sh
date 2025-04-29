@@ -11,7 +11,7 @@ echo "Ctrl+C to stop."
 uwsgi --socket 127.0.0.1:9091 \
       --protocol uwsgi \
       --chdir /home/jsbien/git/glyph-miner \
-      --pythonpath /home/jsbien/git/glyph-miner/server \
+      --pythonpath /home/jsbien/git/glyph-miner \
       --module server.server:app \
       --master --processes 1 --threads 2 \
       --py-autoreload 1 \
