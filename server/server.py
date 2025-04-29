@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import sys
 import web
-sys.stdout.write(f"Using web module from: {web.__file__}\n")
-sys.stdout.flush()
+
+with open("/tmp/web-module-check.log", "w") as f:
+    import web
+    f.write(f"web.__file__ = {web.__file__}\n")
 
 import os
 import json
