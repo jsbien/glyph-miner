@@ -1,20 +1,18 @@
 server {
-    listen 80 default_server;
-    server_name _;
+    listen 9090 default_server;
+    listen [::]:9090 default_server;
 
     root /home/jsbien/git/glyph-miner/web;
     index index.html;
 
-    # Serve static files normally at /
     location / {
         try_files $uri $uri/ =404;
     }
 
-    # Forward only /api/ requests to uwsgi (dynamic)
     location /api/ {
         include uwsgi_params;
         uwsgi_pass 127.0.0.1:9091;
         uwsgi_read_timeout 300;
         client_max_body_size 100M;
-    }	
+    }
 }
