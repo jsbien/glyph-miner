@@ -68,6 +68,13 @@ with open("/tmp/debug-web.txt", "w") as f:
 
 # web.config.debug = False
 
+timestamp = time.strftime("%Y%m%d-%H%M%S")
+with open(f"debug-web-{timestamp}.log", "w") as f:
+    f.write(f"web.__file__ = {web.__file__}\n")
+    f.write(f"sys.path = {sys.path}\n")
+    f.write(f"os.listdir(web.__path__[0]) = {os.listdir(web.__path__[0])}\n")
+
+
 # connect to database
 db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
 
