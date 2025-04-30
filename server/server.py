@@ -31,39 +31,19 @@ from ctypes import *
 from PIL import Image, ImageDraw, ImageOps
 from datetime import datetime
 
-# define ressource paths
-urls = (
-    '/api/', 'index',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
-    '/api/images/(.*)/templates/(.*)/matches', 'matches',
-    '/api/images/(.*)/templates/(.*)/model', 'model',
-    '/api/images/(.*)/templates/(.*)/typography', 'typography',
-    '/api/images/(.*)/templates/(.*)', 'template',
-    '/api/images/(.*)/templates', 'templates',
-    '/api/images/(.*)/crops', 'crop',
-    '/api/images/(.*)/(color|binarized)', 'image_file',
-    '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
-    '/api/images/(.*)', 'image',
-    '/api/images', 'images',
-    '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
-    '/api/collections/(.*)/templates/(.*)', 'collection_template',
-    '/api/collections/(.*)/templates', 'collection_templates',
-    '/api/collections/(.*)/images', 'collection_images',
-    '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
-    '/api/collections/(.*)', 'collection',
-    '/api/collections', 'collections',
-    '/api/memberships', 'memberships',
-    '/api/ping', 'PingHandler'
-)
+import datetime
 
-# DEBUG: inspect the structure of urls
-with open("/tmp/debug-urls.txt", "w") as f:
-    f.write(f"Type of urls: {type(urls)}\n")
-    for i, item in enumerate(urls):
-        f.write(f"urls[{i}] = {repr(item)} (type: {type(item)})\n")
+class PingHandler:
+    def GET(self):
+        raise Exception("PING HANDLER WAS CALLED")
+        # try:
+        #     timestamp = datetime.datetime.now().isoformat()
+        #     with open(f"./debug-ping-{timestamp}.log", "a") as f:
+        #         f.write(f"[{timestamp}] /api/ping accessed\n")
+        # except Exception as e:
+        #     # Don't crash on logging failure
+        #     pass
+        return "PONG"
 
 imageList = {}
 
@@ -757,20 +737,6 @@ class matchcrop:
         return contents
 
     
-import datetime
-
-class PingHandler:
-    def GET(self):
-        raise Exception("PING HANDLER WAS CALLED")
-        # try:
-        #     timestamp = datetime.datetime.now().isoformat()
-        #     with open(f"./debug-ping-{timestamp}.log", "a") as f:
-        #         f.write(f"[{timestamp}] /api/ping accessed\n")
-        # except Exception as e:
-        #     # Don't crash on logging failure
-        #     pass
-        return "PONG"
-    
 
 class DateTimeEncoder(json.JSONEncoder):
 
@@ -778,6 +744,40 @@ class DateTimeEncoder(json.JSONEncoder):
         if isinstance(o, datetime):
             return o.isoformat()
         return json.JSONEncoder.default(self, o)
+    
+# define ressource paths
+urls = (
+    '/api/', 'index',
+    '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
+    '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
+    '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
+    '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
+    '/api/images/(.*)/templates/(.*)/matches', 'matches',
+    '/api/images/(.*)/templates/(.*)/model', 'model',
+    '/api/images/(.*)/templates/(.*)/typography', 'typography',
+    '/api/images/(.*)/templates/(.*)', 'template',
+    '/api/images/(.*)/templates', 'templates',
+    '/api/images/(.*)/crops', 'crop',
+    '/api/images/(.*)/(color|binarized)', 'image_file',
+    '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
+    '/api/images/(.*)', 'image',
+    '/api/images', 'images',
+    '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
+    '/api/collections/(.*)/templates/(.*)', 'collection_template',
+    '/api/collections/(.*)/templates', 'collection_templates',
+    '/api/collections/(.*)/images', 'collection_images',
+    '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
+    '/api/collections/(.*)', 'collection',
+    '/api/collections', 'collections',
+    '/api/memberships', 'memberships',
+    '/api/ping', 'PingHandler'
+)
+
+# DEBUG: inspect the structure of urls
+with open("/tmp/debug-urls.txt", "w") as f:
+    f.write(f"Type of urls: {type(urls)}\n")
+    for i, item in enumerate(urls):
+        f.write(f"urls[{i}] = {repr(item)} (type: {type(item)})\n")
 
 
 # import datetime
