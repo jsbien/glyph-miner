@@ -1,5 +1,7 @@
 # coding: utf-8
 from server.webapp import webapi
+# for debugging
+import datetime
 
 class application:
     def __init__(self, mapping=(), fvars=None):
@@ -65,6 +67,20 @@ class application:
         if isinstance(f, (tuple, list)):
             path = webapi.ctx.path
             print("[DEBUG] Matching path:", path)
+
+            # DEBUG dump to timestamped file
+            try:
+                timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+                filename = f"debug-delegate-urls-{timestamp}.log"
+                with open(filename, "w") as f_debug:
+                f_debug.write(f"Type of f: {type(f)}\n")
+                for i, item in enumerate(f):
+                    f_debug.write(f"f[{i}] = {repr(item)} (type: {type(item)})\n")
+            except Exception as e:
+                # Avoid crashing if debug write fails
+                pass
+
+
             for pattern, what in f:
                 if hasattr(pattern, 'match'):
                     match = pattern.match(path)
