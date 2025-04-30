@@ -59,6 +59,12 @@ urls = (
     '/api/ping', 'PingHandler'
 )
 
+# DEBUG: inspect the structure of urls
+with open("/tmp/debug-urls.txt", "w") as f:
+    f.write(f"Type of urls: {type(urls)}\n")
+    for i, item in enumerate(urls):
+        f.write(f"urls[{i}] = {repr(item)} (type: {type(item)})\n")
+
 imageList = {}
 
 with open("/tmp/debug-web.txt", "w") as f:
