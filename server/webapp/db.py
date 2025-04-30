@@ -106,7 +106,8 @@ class SQLQuery(object):
     Internally, consists of `items`, which is a list of strings and
     SQLParams, which get concatenated to produce the actual query.
     """
-    __slots__ = ["items"]
+#    __slots__ = ["items"]
+    __slots__ = ['items', 'chunks']
 
     # tested in sqlquote's docstring
     def __init__(self, items=None):
