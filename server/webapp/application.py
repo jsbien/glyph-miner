@@ -11,6 +11,7 @@ class application:
     def wsgifunc(self):
         def wsgi(env, start_resp):
             webapi.ctx = webapi.storage()
+            webapi.ctx.headers = []
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
             webapi.ctx.fullpath = env.get('PATH_INFO', '/')
