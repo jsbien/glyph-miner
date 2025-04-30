@@ -114,6 +114,14 @@ class application:
                 except Exception:
                     pass
 
+                instance = cls()
+
+                if hasattr(instance, 'GET'):
+                    result = instance.GET()
+                    return result
+                else:
+                    return self._delegate(cls, fvars, args)
+
             return self._delegate(cls, fvars, args)
         if isinstance(f, (tuple, list)):
             path = webapi.ctx.path
