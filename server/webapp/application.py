@@ -74,6 +74,15 @@ class application:
                 mod = __import__(mod, None, None, [''])
                 cls = getattr(mod, cls)
             else:
+                try:
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+                    with open(f"./debug-delegate-resolve-{timestamp}.log", "w") as f:
+                        f.write(f"Trying to resolve handler: {repr(what)}\n")
+                        f.write(f"Handler in fvars: {what in fvars}\n")
+                        f.write(f"Available keys in fvars: {list(fvars.keys())}\n")
+                except Exception:
+                    pass
+
                 cls = fvars[f]
             return self._delegate(cls, fvars, args)
         if isinstance(f, (tuple, list)):
