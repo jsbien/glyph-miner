@@ -1164,78 +1164,35 @@ register_database('firebird', FirebirdDB)
 register_database('mssql', MSSQLDB)
 register_database('oracle', OracleDB)
 
-def _interpolate(string_):
-    # TEMPORARY FIX: bypass the old tokenizer-based interpolation
-    yield False, string_
+import re
 
+def _interpolate(string_, vars=None):
+    """
+    Substitute $var or ${var} in SQL queries using the given vars dictionary.
+    Designed as a safe Python 3-compatible replacement for web.py-style interpolation.
+    """
+    if vars is None:
+        vars = {}
 
-# def _interpolate(format): 
-#     """
-#     Takes a format string and returns a list of 2-tuples of the form
-#     (boolean, string) where boolean says whether string should be evaled
-#     or not.
+    pattern = re.compile(r'\$(\w+)|\$\{(\w+)\}')
 
-#     from <http://lfw.org/python/Itpl.py> (public domain, Ka-Ping Yee)
-#     """
-# #    from tokenize import tokenprog
+    def replacer(match):
+        var_name = match.group(1) or match.group(2)
+        if var_name in vars:
+            value = vars[var_name]
+            if isinstance(value, str):
+                return "'" + value.replace("'", "''") + "'"
+            elif value is None:
+                return "NULL"
+            else:
+                return str(value)
+        else:
+            raise KeyError(f"Missing variable for interpolation: {var_name}")
 
-#     def matchorfail(text, pos):
-#         match = tokenprog.match(text, pos)
-#         if match is None:
-#             raise _ItplError(text, pos)
-#         return match, match.end()
+    substituted = pattern.sub(replacer, string_)
 
-#     namechars = "abcdefghijklmnopqrstuvwxyz" \
-#         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-#     chunks = []
-#     pos = 0
-
-#     while 1:
-#         dollar = format.find("$", pos)
-#         if dollar < 0: 
-#             break
-#         nextchar = format[dollar + 1]
-
-#         if nextchar == "{":
-#             chunks.append((0, format[pos:dollar]))
-#             pos, level = dollar + 2, 1
-#             while level:
-#                 match, pos = matchorfail(format, pos)
-#                 tstart, tend = match.regs[3]
-#                 token = format[tstart:tend]
-#                 if token == "{": 
-#                     level = level + 1
-#                 elif token == "}":  
-#                     level = level - 1
-#             chunks.append((1, format[dollar + 2:pos - 1]))
-
-#         elif nextchar in namechars:
-#             chunks.append((0, format[pos:dollar]))
-#             match, pos = matchorfail(format, dollar + 1)
-#             while pos < len(format):
-#                 if format[pos] == "." and \
-#                     pos + 1 < len(format) and format[pos + 1] in namechars:
-#                     match, pos = matchorfail(format, pos + 1)
-#                 elif format[pos] in "([":
-#                     pos, level = pos + 1, 1
-#                     while level:
-#                         match, pos = matchorfail(format, pos)
-#                         tstart, tend = match.regs[3]
-#                         token = format[tstart:tend]
-#                         if token[0] in "([": 
-#                             level = level + 1
-#                         elif token[0] in ")]":  
-#                             level = level - 1
-#                 else: 
-#                     break
-#             chunks.append((1, format[dollar + 1:pos]))
-#         else:
-#             chunks.append((0, format[pos:dollar + 1]))
-#             pos = dollar + 1 + (nextchar == "$")
-
-#     if pos < len(format): 
-#         chunks.append((0, format[pos:]))
-#    return chunks
+    # web.py expects this function to be a generator
+    yield False, substituted
 
 if __name__ == "__main__":
     import doctest
