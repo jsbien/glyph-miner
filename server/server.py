@@ -785,6 +785,36 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
     f.write(f"'PingHandler' in globals(): {'PingHandler' in globals()}\n")
     
+
+
+handler_map = {
+    'PingHandler': PingHandler,
+    'index': index,
+    'collections': collections,
+    'collection': collection,
+    'collection_images': collection_images,
+    'collection_templates': collection_templates,
+    'collection_template': collection_template,
+    'collection_synthetic_pages': collection_synthetic_pages,
+    'images': images,
+    'image': image,
+    'templates': templates,
+    'template': template,
+    'synthetic_pages': synthetic_pages,
+    'crop': crop,
+    'image_file': image_file,
+    'memberships': memberships,
+    'matches': matches,
+    'match': match,
+    'matchlabel': matchlabel,
+    'matchselect': matchselect,
+    'matchcrop': matchcrop,
+    'model': model,
+    'typography': typography,
+    'collection_matches': collection_matches
+}
+
+
 app = web.application(urls, globals())
 application = app.wsgifunc()
 if __name__ == "__main__":
