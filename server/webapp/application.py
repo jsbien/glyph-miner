@@ -18,6 +18,10 @@ class application:
 
             try:
                 result = self.handle_with_processors()
+                print(f"[DEBUG] handler returned: {result!r}")
+                if not isinstance(result, (str, bytes, list, tuple)):
+                    raise TypeError(f"Invalid response type: {type(result)}, value: {result}")
+
                 if isinstance(result, list):
                     import datetime
                     ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
