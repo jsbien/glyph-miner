@@ -108,6 +108,7 @@ class application:
                             if hasattr(instance, 'GET'):
                                 result = instance.GET()
                                 debug_file.write(f"GET() returned: {repr(result)}\n")
+                                return result
                         except Exception as e:
                             debug_file.write(f"Exception when calling handler: {e}\n")
                 except Exception:
