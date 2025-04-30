@@ -242,7 +242,9 @@ class SQLQuery(object):
     
     def _str(self):
         try:
-            return self.query() % tuple([sqlify(x) for x in list(self.values())])            
+            result = self.query() % tuple([sqlify(x) for x in list(self.values())])
+            return result.decode("utf-8") if isinstance(result, bytes) else result
+#            return self.query() % tuple([sqlify(x) for x in list(self.values())])            
         except (ValueError, TypeError):
             return self.query()
         
