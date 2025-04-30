@@ -761,6 +761,7 @@ import datetime
 
 class PingHandler:
     def GET(self):
+        raise Exception("PING HANDLER WAS CALLED")
         try:
             timestamp = datetime.datetime.now().isoformat()
             with open(f"./debug-ping-{timestamp}.log", "a") as f:
