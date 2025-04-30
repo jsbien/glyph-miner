@@ -35,14 +35,10 @@ import datetime
 
 class PingHandler:
     def GET(self):
-        raise Exception("PING HANDLER WAS CALLED")
-        # try:
-        #     timestamp = datetime.datetime.now().isoformat()
-        #     with open(f"./debug-ping-{timestamp}.log", "a") as f:
-        #         f.write(f"[{timestamp}] /api/ping accessed\n")
-        # except Exception as e:
-        #     # Don't crash on logging failure
-        #     pass
+        import datetime
+        ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        with open(f"./debug-pinghandler-{ts}.log", "w") as debug_file:
+            debug_file.write("PingHandler.GET() was called\n")
         return "PONG"
 
 imageList = {}
