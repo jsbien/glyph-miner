@@ -19,6 +19,14 @@ class application:
             try:
                 result = self.handle_with_processors()
                 if isinstance(result, list):
+                    import datetime
+                    ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+                    with open(f"./debug-wsgi-return-{ts}.log", "w") as debug_file:
+                        debug_file.write(f"result from handler: {repr(result)}\n")
+                        debug_file.write(f"type: {type(result)}\n")
+                        debug_file.write(f"list length: {len(result)}\n")
+                        debug_file.write(f"first: {type(result[0])}, second: {type(result[1])}, third: {type(result[2])}\n")
+
                     status, headers, body = result
                     start_resp(status, headers)
                     return body
@@ -86,13 +94,20 @@ class application:
                 cls = fvars[f]
                 try:
                     ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-                    with open(f"./debug-dispatch-{ts}.log", "w") as debug_file:
+                    with open(f"./debug-delegate-invoke-{ts}.log", "w") as debug_file:
                         debug_file.write(f"Resolved {repr(f)} to: {cls}\n")
                         debug_file.write(f"Type: {type(cls)}\n")
-                        debug_file.write(f"Has GET: {hasattr(cls(), 'GET')}\n")
-                except Exception as e:
+                        try:
+                            instance = cls()
+                            debug_file.write("Handler instantiated successfully\n")
+                            debug_file.write(f"Has GET: {hasattr(instance, 'GET')}\n")
+                            if hasattr(instance, 'GET'):
+                                result = instance.GET()
+                                debug_file.write(f"GET() returned: {repr(result)}\n")
+                        except Exception as e:
+                            debug_file.write(f"Exception when calling handler: {e}\n")
+                except Exception:
                     pass
-
 
             return self._delegate(cls, fvars, args)
         if isinstance(f, (tuple, list)):
