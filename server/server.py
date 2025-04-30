@@ -35,11 +35,17 @@ import datetime
 
 class PingHandler:
     def GET(self):
-        import datetime
-        ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        with open(f"./debug-pinghandler-{ts}.log", "w") as debug_file:
-            debug_file.write("PingHandler.GET() was called\n")
-        return ["200 OK", [("Content-Type", "text/plain")], [b"PONG"]]
+        web.header("Content-Type", "text/plain")
+        return "PONG"
+
+
+# class PingHandler:
+#     def GET(self):
+#         import datetime
+#         ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+#         with open(f"./debug-pinghandler-{ts}.log", "w") as debug_file:
+#             debug_file.write("PingHandler.GET() was called\n")
+#         return ["200 OK", [("Content-Type", "text/plain")], [b"PONG"]]
 
 imageList = {}
 
