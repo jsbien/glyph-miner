@@ -48,8 +48,8 @@ class application:
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
         try:
-            with open(f"./debug-request-path-{timestamp}.log", "w") as f:
-                f.write(f"web.ctx.path = {web.ctx.path}\n")
+            with open(f"./debug-request-path-{timestamp}.log", "w") as debugf:
+                debugf.write(f"web.ctx.path = {web.ctx.path}\n")
         except Exception as e:
             pass
 
