@@ -762,13 +762,13 @@ import datetime
 class PingHandler:
     def GET(self):
         raise Exception("PING HANDLER WAS CALLED")
-        try:
-            timestamp = datetime.datetime.now().isoformat()
-            with open(f"./debug-ping-{timestamp}.log", "a") as f:
-                f.write(f"[{timestamp}] /api/ping accessed\n")
-        except Exception as e:
-            # Don't crash on logging failure
-            pass
+        # try:
+        #     timestamp = datetime.datetime.now().isoformat()
+        #     with open(f"./debug-ping-{timestamp}.log", "a") as f:
+        #         f.write(f"[{timestamp}] /api/ping accessed\n")
+        # except Exception as e:
+        #     # Don't crash on logging failure
+        #     pass
         return "PONG"
     
 
@@ -779,7 +779,14 @@ class DateTimeEncoder(json.JSONEncoder):
             return o.isoformat()
         return json.JSONEncoder.default(self, o)
 
+
+# import datetime
+timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
+    f.write(f"'PingHandler' in globals(): {'PingHandler' in globals()}\n")
+    
 app = web.application(urls, globals())
 application = app.wsgifunc()
 if __name__ == "__main__":
     app.run()
+    
