@@ -81,7 +81,10 @@ class application:
                 pass
 
 
-            for pattern, what in f:
+            for i in range(0, len(f), 2):
+                pattern = f[i]
+                what = f[i + 1]
+#            for pattern, what in f:
                 if hasattr(pattern, 'match'):
                     match = pattern.match(path)
                     if match:
