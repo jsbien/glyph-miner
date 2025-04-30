@@ -249,7 +249,8 @@ class SQLQuery(object):
             return self.query()
         
     def __str__(self):
-        return safestr(self._str())
+        return self._str()  # Already guaranteed str
+#        return safestr(self._str())
         
     def __unicode__(self):
         return safeunicode(self._str())
