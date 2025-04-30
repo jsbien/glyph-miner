@@ -76,10 +76,10 @@ class application:
             else:
                 try:
                     timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-                    with open(f"./debug-delegate-resolve-{timestamp}.log", "w") as f:
-                        f.write(f"Trying to resolve handler: {repr(what)}\n")
-                        f.write(f"Handler in fvars: {what in fvars}\n")
-                        f.write(f"Available keys in fvars: {list(fvars.keys())}\n")
+                    with open(f"./debug-delegate-resolve-{timestamp}.log", "w") as df:
+                        df.write(f"Trying to resolve handler: {repr(what)}\n")
+                        df.write(f"Handler in fvars: {what in fvars}\n")
+                        df.write(f"Available keys in fvars: {list(fvars.keys())}\n")
                 except Exception:
                     pass
 
