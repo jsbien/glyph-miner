@@ -815,7 +815,8 @@ handler_map = {
 }
 
 
-app = web.application(urls, globals())
+#app = web.application(urls, globals())
+app = web.application(urls, handler_map)
 application = app.wsgifunc()
 if __name__ == "__main__":
     app.run()
