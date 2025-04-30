@@ -763,7 +763,7 @@ class PingHandler:
     def GET(self):
         try:
             timestamp = datetime.datetime.now().isoformat()
-            with open("./debug-ping-{timestamp}.log", "a") as f:
+            with open(f"./debug-ping-{timestamp}.log", "a") as f:
                 f.write(f"[{timestamp}] /api/ping accessed\n")
         except Exception as e:
             # Don't crash on logging failure
