@@ -815,6 +815,15 @@ handler_map = {
 }
 
 
+import datetime
+ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+with open(f"./handler-map-debug-{ts}.log", "w") as debug_file:
+    handler = handler_map.get("PingHandler", None)
+    debug_file.write(f"PingHandler in handler_map: {'PingHandler' in handler_map}\n")
+    debug_file.write(f"handler_map['PingHandler']: {repr(handler)}\n")
+    debug_file.write(f"type: {type(handler)}\n")
+
+
 #app = web.application(urls, globals())
 app = web.application(urls, handler_map)
 application = app.wsgifunc()
