@@ -1164,72 +1164,77 @@ register_database('firebird', FirebirdDB)
 register_database('mssql', MSSQLDB)
 register_database('oracle', OracleDB)
 
-def _interpolate(format): 
-    """
-    Takes a format string and returns a list of 2-tuples of the form
-    (boolean, string) where boolean says whether string should be evaled
-    or not.
+def _interpolate(string_):
+    # TEMPORARY FIX: bypass the old tokenizer-based interpolation
+    yield False, string_
 
-    from <http://lfw.org/python/Itpl.py> (public domain, Ka-Ping Yee)
-    """
-#    from tokenize import tokenprog
 
-    def matchorfail(text, pos):
-        match = tokenprog.match(text, pos)
-        if match is None:
-            raise _ItplError(text, pos)
-        return match, match.end()
+# def _interpolate(format): 
+#     """
+#     Takes a format string and returns a list of 2-tuples of the form
+#     (boolean, string) where boolean says whether string should be evaled
+#     or not.
 
-    namechars = "abcdefghijklmnopqrstuvwxyz" \
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-    chunks = []
-    pos = 0
+#     from <http://lfw.org/python/Itpl.py> (public domain, Ka-Ping Yee)
+#     """
+# #    from tokenize import tokenprog
 
-    while 1:
-        dollar = format.find("$", pos)
-        if dollar < 0: 
-            break
-        nextchar = format[dollar + 1]
+#     def matchorfail(text, pos):
+#         match = tokenprog.match(text, pos)
+#         if match is None:
+#             raise _ItplError(text, pos)
+#         return match, match.end()
 
-        if nextchar == "{":
-            chunks.append((0, format[pos:dollar]))
-            pos, level = dollar + 2, 1
-            while level:
-                match, pos = matchorfail(format, pos)
-                tstart, tend = match.regs[3]
-                token = format[tstart:tend]
-                if token == "{": 
-                    level = level + 1
-                elif token == "}":  
-                    level = level - 1
-            chunks.append((1, format[dollar + 2:pos - 1]))
+#     namechars = "abcdefghijklmnopqrstuvwxyz" \
+#         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+#     chunks = []
+#     pos = 0
 
-        elif nextchar in namechars:
-            chunks.append((0, format[pos:dollar]))
-            match, pos = matchorfail(format, dollar + 1)
-            while pos < len(format):
-                if format[pos] == "." and \
-                    pos + 1 < len(format) and format[pos + 1] in namechars:
-                    match, pos = matchorfail(format, pos + 1)
-                elif format[pos] in "([":
-                    pos, level = pos + 1, 1
-                    while level:
-                        match, pos = matchorfail(format, pos)
-                        tstart, tend = match.regs[3]
-                        token = format[tstart:tend]
-                        if token[0] in "([": 
-                            level = level + 1
-                        elif token[0] in ")]":  
-                            level = level - 1
-                else: 
-                    break
-            chunks.append((1, format[dollar + 1:pos]))
-        else:
-            chunks.append((0, format[pos:dollar + 1]))
-            pos = dollar + 1 + (nextchar == "$")
+#     while 1:
+#         dollar = format.find("$", pos)
+#         if dollar < 0: 
+#             break
+#         nextchar = format[dollar + 1]
 
-    if pos < len(format): 
-        chunks.append((0, format[pos:]))
+#         if nextchar == "{":
+#             chunks.append((0, format[pos:dollar]))
+#             pos, level = dollar + 2, 1
+#             while level:
+#                 match, pos = matchorfail(format, pos)
+#                 tstart, tend = match.regs[3]
+#                 token = format[tstart:tend]
+#                 if token == "{": 
+#                     level = level + 1
+#                 elif token == "}":  
+#                     level = level - 1
+#             chunks.append((1, format[dollar + 2:pos - 1]))
+
+#         elif nextchar in namechars:
+#             chunks.append((0, format[pos:dollar]))
+#             match, pos = matchorfail(format, dollar + 1)
+#             while pos < len(format):
+#                 if format[pos] == "." and \
+#                     pos + 1 < len(format) and format[pos + 1] in namechars:
+#                     match, pos = matchorfail(format, pos + 1)
+#                 elif format[pos] in "([":
+#                     pos, level = pos + 1, 1
+#                     while level:
+#                         match, pos = matchorfail(format, pos)
+#                         tstart, tend = match.regs[3]
+#                         token = format[tstart:tend]
+#                         if token[0] in "([": 
+#                             level = level + 1
+#                         elif token[0] in ")]":  
+#                             level = level - 1
+#                 else: 
+#                     break
+#             chunks.append((1, format[dollar + 1:pos]))
+#         else:
+#             chunks.append((0, format[pos:dollar + 1]))
+#             pos = dollar + 1 + (nextchar == "$")
+
+#     if pos < len(format): 
+#         chunks.append((0, format[pos:]))
     return chunks
 
 if __name__ == "__main__":
