@@ -189,8 +189,11 @@ class SQLQuery(object):
                 # automatically escape % characters in the query
                 # For backward compatability, ignore escaping when the query looks already escaped
                 if paramstyle in ['format', 'pyformat']:
-                    if '%' in x and '%%' not in x:
-                        x = x.replace('%', '%%')
+                    for live, x in self.chunks:
+                        if isinstance(x, bytes):
+                            x = x.decode("utf-8")
+                        if '%' in x and '%%' not in x:
+                            x = x.replace('%', '%%')
                 s.append(x)
                 return "".join(x.decode("utf-8") if isinstance(x, bytes) else str(x) for x in s)
 #        return "".join(s)
