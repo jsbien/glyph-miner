@@ -50,7 +50,7 @@ class application:
         try:
             with open(f"./debug-request-path-{timestamp}.log", "w") as debugf:
                 debugf.write(f"Starting path debugging\n") 
-#               path = getattr(webapi.ctx, "path", "(no ctx.path)")
+                path = getattr(webapi.ctx, "path", "(no ctx.path)")
                 debugf.write(f"web.ctx.path = {path}\n") 
 #                debugf.write(f"web.ctx.path = {web.ctx.path}\n")
         except Exception as e:
