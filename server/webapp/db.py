@@ -125,7 +125,7 @@ class SQLQuery(object):
         
         if items is None:
             self.items = []
-            self.chunks = [] 
+#            self.chunks = [] 
         elif isinstance(items, list):
             self.items = items
         elif isinstance(items, SQLParam):
@@ -225,7 +225,7 @@ class SQLQuery(object):
         """
         if target is None:
             target = SQLQuery()
-
+            target.chunks = []  # ✅ Needed initialization
         target_items = target.items
 
         if prefix:
