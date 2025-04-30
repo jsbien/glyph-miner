@@ -192,7 +192,8 @@ class SQLQuery(object):
                     if '%' in x and '%%' not in x:
                         x = x.replace('%', '%%')
                 s.append(x)
-        return "".join(s)
+                return "".join(x.decode("utf-8") if isinstance(x, bytes) else str(x) for x in s)
+#        return "".join(s)
     
     def values(self):
         """
