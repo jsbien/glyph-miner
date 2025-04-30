@@ -122,8 +122,10 @@ class SQLQuery(object):
             >>> SQLQuery(SQLParam(1))
             <sql: '1'>
         """
+        
         if items is None:
             self.items = []
+            self.chunks = [] 
         elif isinstance(items, list):
             self.items = items
         elif isinstance(items, SQLParam):
