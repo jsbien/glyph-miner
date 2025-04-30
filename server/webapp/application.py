@@ -109,6 +109,16 @@ class application:
                 if hasattr(pattern, 'match'):
                     match = pattern.match(path)
                     if match:
+                        try:
+                            timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+                            with open(f"./debug-resolve-delegate-{timestamp}.log", "w") as df_out:
+                                df_out.write(f"Delegating to: {repr(what)}\n")
+                                df_out.write(f"Is str: {isinstance(what, str)}\n")
+                                df_out.write(f"Keys in fvars: {list(fvars.keys())}\n")
+                                df_out.write(f"{repr(what)} in fvars: {what in fvars}\n")
+                        except Exception:
+                            pass
+
                         return self._delegate(what, fvars, match.groups())
                 else:
                     if path == pattern:
