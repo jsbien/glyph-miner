@@ -1235,7 +1235,7 @@ def _interpolate(string_):
 
 #     if pos < len(format): 
 #         chunks.append((0, format[pos:]))
-    return chunks
+#    return chunks
 
 if __name__ == "__main__":
     import doctest
