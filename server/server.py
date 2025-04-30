@@ -39,7 +39,8 @@ class PingHandler:
         ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         with open(f"./debug-pinghandler-{ts}.log", "w") as debug_file:
             debug_file.write("PingHandler.GET() was called\n")
-        return "PONG"
+            return [b"PONG"]
+#            return "PONG"
 
 imageList = {}
 
