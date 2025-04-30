@@ -829,6 +829,14 @@ with open(f"./handler-map-debug-{ts}.log", "w") as debug_file:
 app = web.application(urls, globals())
 #app = web.application(urls, handler_map)
 application = app.wsgifunc()
+
+import datetime
+ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+with open(f"./debug-application-object-{ts}.log", "w") as debug_file:
+    debug_file.write(f"type(application): {type(application)}\n")
+    debug_file.write(f"dir(application): {dir(application)}\n")
+
+
 if __name__ == "__main__":
     app.run()
     
