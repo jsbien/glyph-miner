@@ -84,6 +84,16 @@ class application:
                     pass
 
                 cls = fvars[f]
+                try:
+                    ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+                    with open(f"./debug-dispatch-{ts}.log", "w") as debug_file:
+                        debug_file.write(f"Resolved {repr(f)} to: {cls}\n")
+                        debug_file.write(f"Type: {type(cls)}\n")
+                        debug_file.write(f"Has GET: {hasattr(cls(), 'GET')}\n")
+                except Exception as e:
+                    pass
+
+
             return self._delegate(cls, fvars, args)
         if isinstance(f, (tuple, list)):
             path = webapi.ctx.path
