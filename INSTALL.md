@@ -32,15 +32,29 @@ First, make sure you have the following packages installed on your system:
 
 ### Other prerequisites
 
-You will need a recent version of uwsgi. Get the newest version through PIP:
-`sudo pip install uwsgi`
+Install uWSGI (now version 3.11.2) in a virtual environment:
 
-home = /usr/bin
-include-system-site-packages = true
-version = 3.11.2
-executable = /usr/bin/python3.11
-command = /usr/bin/python3 -m venv --system-site-packages /home/jsbien/git/glyph-miner/uwsgi-env
 
+	python3 -m venv --system-site-packages ~/glyph-miner/git/glyph-miner/uwsgi-env
+	source ~/git/glyph-miner/uwsgi-env/bin/activate
+	sudo pip install uwsgi`
+
+### Obtaining  Glyph Miner
+To get the latest version of the software, clone the git repository:
+`git clone https://github.com/benedikt-budig/glyph-miner.git`
+
+### Compiling binaries
+
+
+Next, you need to compile the C++ library that handles the template matching:
+
+
+    cd glyph-miner/server
+    make standalone
+
+Last but not least, make sure the correct rights are set so that the server can
+write into `web/tiles`, `web/thumbnails`, `web/synthetic_pages`, `server/images`
+and `server/templates`.
 
 
 ### Setting up nginx and uWSGI
@@ -65,19 +79,6 @@ adding the following lines in /etc/nginx/sites-enabled/default:
 Do not forget to restart nginx in order to make your changes work:
 `sudo service nginx restart`
 
-### Installing Glyph Miner
-To get the latest version of the software, clone the git repository:
-`git clone https://github.com/benedikt-budig/glyph-miner.git`
-
-Next, you need to compile the C++ library that handles the template matching:
-
-
-    cd glyph-miner/server
-    make standalone
-
-Last but not least, make sure the correct rights are set so that the server can
-write into `web/tiles`, `web/thumbnails`, `web/synthetic_pages`, `server/images`
-and `server/templates`.
 
 ### Setting up the database
 Glyph Miner uses a MySQL database to store its data. Create a new database and
