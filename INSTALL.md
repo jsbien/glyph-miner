@@ -54,18 +54,59 @@ make:
         500 http://deb.debian.org/debian bookworm/main amd64 Packages
         100 /var/lib/dpkg/status
 
+git:
+  Installed: 1:2.39.5-0+deb12u2
+  Candidate: 1:2.39.5-0+deb12u2
+  Version table:
+ *** 1:2.39.5-0+deb12u2 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        500 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+python3-pil:
+  Installed: 9.4.0-1.1+deb12u1
+  Candidate: 9.4.0-1.1+deb12u1
+  Version table:
+ *** 9.4.0-1.1+deb12u1 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        500 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+ python3-dev:
+  Installed: 3.11.2-1+b1
+  Candidate: 3.11.2-1+b1
+  Version table:
+ *** 3.11.2-1+b1 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+python3-pip:
+  Installed: 23.0.1+dfsg-1
+  Candidate: 23.0.1+dfsg-1
+  Version table:
+ *** 23.0.1+dfsg-1 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+python3-mysqldb:
+  Installed: 1.4.6-2+b1
+  Candidate: 1.4.6-2+b1
+  Version table:
+ *** 1.4.6-2+b1 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        100 /var/lib/dpkg/status
+
 ### Other prerequisites
 
 You will need a recent version of uwsgi. Get the newest version through PIP:
 `sudo pip install uwsgi`
-
-python3 -m venv ~/git/glyph-miner/uwsgi-env additinal argument!
 
 home = /usr/bin
 include-system-site-packages = true
 version = 3.11.2
 executable = /usr/bin/python3.11
 command = /usr/bin/python3 -m venv --system-site-packages /home/jsbien/git/glyph-miner/uwsgi-env
+
 
 
 ### Setting up nginx and uWSGI
