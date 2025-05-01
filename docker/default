@@ -25,7 +25,7 @@
         root /opt/glyph-miner/server;
         client_max_body_size 100M;
         include uwsgi_params;
-        uwsgi_pass 127.0.0.1:9091;
+        uwsgi_pass 127.0.0.1:9090;
         uwsgi_read_timeout 300;
     }
 }
