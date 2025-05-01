@@ -83,7 +83,8 @@ class collections:
 
     def GET(self):
         web.header('Access-Control-Allow-Origin', '*')
-        collections = db.select('collections')
+        collections = db.query('SELECT * FROM collections')
+#        collections = db.select('collections')
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
