@@ -124,6 +124,7 @@ class SQLQuery(object):
             <sql: '1'>
         """
         
+        self.chunks = []  # Ensure this is always defined
         if items is None:
             self.items = []
 #            self.chunks = [] 
