@@ -15,6 +15,8 @@ First, make sure you have the following packages installed on your system:
 
 `nginx mysql-server git python-numpy python-pil make g++ python-dev python-pip python-mysqldb`
 
+For Debian bookworm this means:
+
 * nginx/stable,now 1.22.1-9+deb12u1 amd64 [installed]
   * nginx-common/stable,now 1.22.1-9+deb12u1 all [installed,automatic]
 * python3-numpy/stable,now 1:1.24.2-1+deb12u1 amd64 [installed,automatic]
@@ -40,21 +42,23 @@ Install uWSGI (now version 3.11.2) in a virtual environment:
 	sudo pip install uwsgi`
 
 ### Obtaining  Glyph Miner
-To get the latest version of the software, clone the git repository:
-`git clone https://github.com/benedikt-budig/glyph-miner.git`
+Clone the git repository:
+
+	
+	git clone https://github.com/jsbien/glyph-miner.git
+
+Make sure the correct rights are set so that the server can
+write into `web/tiles`, `web/thumbnails`, `web/synthetic_pages`, `server/images`
+and `server/templates`.
+
 
 ### Compiling binaries
 
 
-Next, you need to compile the C++ library that handles the template matching:
-
+Next compile the C++ library that handles the template matching:
 
     cd glyph-miner/server
     make standalone
-
-Last but not least, make sure the correct rights are set so that the server can
-write into `web/tiles`, `web/thumbnails`, `web/synthetic_pages`, `server/images`
-and `server/templates`.
 
 
 ### Setting up nginx and uWSGI
