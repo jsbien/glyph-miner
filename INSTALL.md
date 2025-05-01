@@ -1,3 +1,9 @@
+## Docker
+
+# on Linux
+
+# on Windows
+
 ## Manual Installation
 The Glyph Miner software is preferably installed on a Linux
 machine. This guide shows how to install the software on GNU/Linux
@@ -13,10 +19,40 @@ First, make sure you have the following packages installed on your system:
 
 * nginx/stable,now 1.22.1-9+deb12u1 amd64 [installed]
   * nginx-common/stable,now 1.22.1-9+deb12u1 all [installed,automatic]
-
+* python3-numpy/stable,now 1:1.24.2-1+deb12u1 amd64 [installed,automatic]
 [](apt list --installed | grep nginx)
 
 python3-numpy/stable,now 1:1.24.2-1+deb12u1 amd64 [installed,automatic]
+
+default-mysql-server:
+  Installed: (none)
+  Candidate: 1.1.0
+  Version table:
+     1.1.0 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+mariadb-server:
+  Installed: 1:10.11.11-0+deb12u1
+  Candidate: 1:10.11.11-0+deb12u1
+  Version table:
+ *** 1:10.11.11-0+deb12u1 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+g++:
+  Installed: 4:12.2.0-3
+  Candidate: 4:12.2.0-3
+  Version table:
+ *** 4:12.2.0-3 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        100 /var/lib/dpkg/status
+
+make:
+  Installed: 4.3-4.1
+  Candidate: 4.3-4.1
+  Version table:
+ *** 4.3-4.1 500
+        500 http://deb.debian.org/debian bookworm/main amd64 Packages
+        100 /var/lib/dpkg/status
 
 ### Other prerequisites
 
