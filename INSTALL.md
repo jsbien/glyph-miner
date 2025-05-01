@@ -22,8 +22,6 @@ First, make sure you have the following packages installed on your system:
 * python3-numpy/stable,now 1:1.24.2-1+deb12u1 amd64 [installed,automatic]
 [](apt list --installed | grep nginx)
 
-python3-numpy/stable,now 1:1.24.2-1+deb12u1 amd64 [installed,automatic]
-
 default-mysql-server:
   Installed: (none)
   Candidate: 1.1.0
@@ -38,6 +36,10 @@ mariadb-server:
         500 http://deb.debian.org/debian bookworm/main amd64 Packages
         100 /var/lib/dpkg/status
 
+mariadb-server-core/stable,now 1:10.11.11-0+deb12u1 amd64 [installed,automatic]
+mariadb-server/stable,now 1:10.11.11-0+deb12u1 amd64 [installed]
+
+
 g++:
   Installed: 4:12.2.0-3
   Candidate: 4:12.2.0-3
@@ -45,6 +47,13 @@ g++:
  *** 4:12.2.0-3 500
         500 http://deb.debian.org/debian bookworm/main amd64 Packages
         100 /var/lib/dpkg/status
+
+g++-10/now 10.2.1-6 amd64 [installed,local]
+g++-12/stable,now 12.2.0-14 amd64 [installed,automatic]
+g++/stable,now 4:12.2.0-3 amd64 [installed]
+
+make/stable,now 4.3-4.1 amd64 [installed]
+
 
 make:
   Installed: 4.3-4.1
@@ -63,6 +72,9 @@ git:
         500 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages
         100 /var/lib/dpkg/status
 
+git/stable,stable-security,now 1:2.39.5-0+deb12u2 amd64 [installed]
+
+
 python3-pil:
   Installed: 9.4.0-1.1+deb12u1
   Candidate: 9.4.0-1.1+deb12u1
@@ -71,6 +83,8 @@ python3-pil:
         500 http://deb.debian.org/debian bookworm/main amd64 Packages
         500 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages
         100 /var/lib/dpkg/status
+
+???
 
  python3-dev:
   Installed: 3.11.2-1+b1
@@ -95,6 +109,9 @@ python3-mysqldb:
  *** 1.4.6-2+b1 500
         500 http://deb.debian.org/debian bookworm/main amd64 Packages
         100 /var/lib/dpkg/status
+
+python3-mysqldb/stable,now 1.4.6-2+b1 amd64 [installed]
+
 
 ### Other prerequisites
 
