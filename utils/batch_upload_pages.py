@@ -5,7 +5,7 @@ import argparse
 import logging
 from datetime import datetime
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 API = "http://localhost:9090/api"
 
@@ -25,6 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 def find_or_create_collection(title, dry_run):
     collections = requests.get(f"{API}/collections").json()
     for col in collections:
@@ -40,6 +41,7 @@ def find_or_create_collection(title, dry_run):
     logger.info(f"[+] Created collection: {title}")
     return res.json()["id"]
 
+
 def create_document(title, dry_run):
     if dry_run:
         logger.info(f"[DRY-RUN] Would create document: {title}")
@@ -47,6 +49,7 @@ def create_document(title, dry_run):
     res = requests.post(f"{API}/images", json={"title": title})
     res.raise_for_status()
     return res.json()["id"]
+
 
 def upload_image(image_id, path, img_type, dry_run):
     if dry_run:
@@ -57,6 +60,7 @@ def upload_image(image_id, path, img_type, dry_run):
         res.raise_for_status()
     logger.info(f"[+] Uploaded {img_type} image: {path.name}")
 
+
 def assign_to_collection(image_id, collection_id, dry_run):
     if dry_run:
         logger.info(f"[DRY-RUN] Would assign document {image_id} to collection {collection_id}")
@@ -65,15 +69,17 @@ def assign_to_collection(image_id, collection_id, dry_run):
     res.raise_for_status()
     logger.info(f"[+] Assigned document {image_id} to collection {collection_id}")
 
+
 def is_binary_image(path):
     with Image.open(path) as img:
         img = img.convert("L")
         colors = set(img.getdata())
         return colors.issubset({0, 255})
 
+
 def main():
     parser = argparse.ArgumentParser(description="Batch upload B/W images as multipage documents into Glyph Miner.")
-    parser.add_argument("--input-dir", required=True, help="Directory containing B/W PNG images.")
+    parser.add_argument("--input-dir", required=True, help="Directory containing images (PNG or JPG).")
     parser.add_argument("--title", required=True, help="Base title of the document (used as prefix per page).")
     parser.add_argument("--collection", required=True, help="Name of the collection to create/use.")
     parser.add_argument("--dry-run", action="store_true", help="Run in dry-run mode (no changes will be made).")
@@ -81,10 +87,21 @@ def main():
 
     input_dir = Path(args.input_dir)
     assert input_dir.is_dir(), f"Not a directory: {input_dir}"
+    logger.info(f"Using input directory: {input_dir.resolve()}")
+
+    image_paths = sorted([
+        p for ext in ("*.png", "*.PNG", "*.jpg", "*.JPG", "*.jpeg", "*.JPEG")
+        for p in input_dir.glob(ext)
+    ])
+
+    logger.info(f"Found {len(image_paths)} image(s) to process.")
+    if not image_paths:
+        logger.warning("No image files found in input directory. Exiting.")
+        return
 
     collection_id = find_or_create_collection(args.collection, args.dry_run)
 
-    for bw_img in sorted(input_dir.glob("*.png")):
+    for bw_img in image_paths:
         page_number = bw_img.stem.split("-")[-1]
         title = f"{args.title} - Page {page_number}"
 
@@ -98,6 +115,7 @@ def main():
         upload_image(doc_id, bw_img, "binarized", args.dry_run)
         assign_to_collection(doc_id, collection_id, args.dry_run)
         logger.info(f"[✓] Uploaded: {title}")
+
 
 if __name__ == "__main__":
     main()
