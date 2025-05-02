@@ -5,7 +5,7 @@ import argparse
 import logging
 from datetime import datetime
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 API = "http://localhost:9090/api"
 
@@ -37,8 +37,13 @@ def find_or_create_collection(title, dry_run):
         return -1
     res = requests.post(f"{API}/collections", json={"title": title})
     res.raise_for_status()
-    logger.info(f"[+] Created collection: {title}")
-    return res.json()["id"]
+    data = res.json()
+    if isinstance(data, dict):
+        return data["id"]
+    elif isinstance(data, list) and data:
+        return data[0]["id"]
+    else:
+        raise ValueError(f"Unexpected response format from /collections: {data}")
 
 
 def create_document(title, dry_run):
