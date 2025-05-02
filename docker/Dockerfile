@@ -21,15 +21,15 @@ RUN pip3 install uwsgi
 COPY docker/default /etc/nginx/sites-enabled/default
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
+# Cleaning old files
+RUN rm -rf /opt/glyph-miner/*
+
 # Start script
 COPY docker/start-container.sh /opt/glyph-miner/start-container.sh
 RUN chmod +x /opt/glyph-miner/start-container.sh
 
 # Working dir
 WORKDIR /opt/glyph-miner
-
-# Cleaning old files
-RUN rm -rf /opt/glyph-miner/*
 
 # Copy application
 COPY . /opt/glyph-miner

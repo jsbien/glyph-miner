@@ -60,7 +60,7 @@ You can run a new container based on this image using:
     docker run -p 8080:80 --name glyphminer -t -i glyphminer
 
 Once the container has been spun up, the Glyph Miner interface is available at
-`http://localhost:8080`.
+	`http://localhost:8080`.
 
 **BEWARE**: In this default configuration, any changes
 you make to the system (like adding documents, mining glyphs, etc.) are not
