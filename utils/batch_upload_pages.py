@@ -5,7 +5,7 @@ import argparse
 import logging
 from datetime import datetime
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 API = "http://localhost:9090/api"
 
@@ -32,18 +32,25 @@ def find_or_create_collection(title, dry_run):
         if col["title"] == title:
             logger.info(f"[✓] Found existing collection: {title}")
             return col["id"]
+
     if dry_run:
         logger.info(f"[DRY-RUN] Would create collection: {title}")
         return -1
+
+    logger.info(f"[+] Creating collection: {title}")
     res = requests.post(f"{API}/collections", json={"title": title})
     res.raise_for_status()
     data = res.json()
-    if isinstance(data, dict):
+
+    if isinstance(data, dict) and "id" in data:
         return data["id"]
-    elif isinstance(data, list) and data:
+    elif isinstance(data, list) and data and "id" in data[0]:
         return data[0]["id"]
     else:
-        raise ValueError(f"Unexpected response format from /collections: {data}")
+        logger.error("Server returned empty or invalid response when creating collection.")
+        logger.error(f"Request payload: title={title}")
+        logger.error(f"Response body: {data}")
+        raise RuntimeError("Collection creation failed unexpectedly. Check backend behavior.")
 
 
 def create_document(title, dry_run):
