@@ -90,7 +90,7 @@ def main():
     logger.info(f"Using input directory: {input_dir.resolve()}")
 
     image_paths = sorted([
-        p for ext in ("*.png", "*.PNG", "*.jpg", "*.JPG", "*.jpeg", "*.JPEG")
+        p for ext in ("*.png", "*.PNG", "*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.tiff", "*.TIFF")
         for p in input_dir.glob(ext)
     ])
 
