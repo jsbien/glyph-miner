@@ -26,9 +26,12 @@ For Debian bookworm this means:
 * g++/stable,now 4:12.2.0-3 amd64 [installed]
   * g++-12/stable,now 12.2.0-14 amd64 [installed,automatic]
 * git/stable,stable-security,now 1:2.39.5-0+deb12u2 amd64 [installed]
-* python3-pil: Installed: 9.4.0-1.1+deb12u1 ???
-* python3-dev: Installed: 3.11.2-1+b1 ???
-* python3-pip: Installed: 23.0.1+dfsg-1 ???
+* python3-pil/stable,stable-security,now 9.4.0-1.1+deb12u1 amd64 [installed]
+  * python3-pil.imagetk/stable,stable-security,now 9.4.0-1.1+deb12u1 amd64 [installed,automatic]
+* python3-dev/stable,now 3.11.2-1+b1 amd64 [installed,automatic]
+  * libpython3-dev/stable,now 3.11.2-1+b1 amd64 [installed,automatic]
+* python3-pip/stable,now 23.0.1+dfsg-1 all [installed]
+  * python3-pip-whl/stable,now 23.0.1+dfsg-1 all [installed,automatic]
 * python3-mysqldb/stable,now 1.4.6-2+b1 amd64 [installed]
 
 
