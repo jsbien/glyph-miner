@@ -267,7 +267,9 @@ class memberships:
             return web.badrequest("No collection given.")
 
         dbId = db.insert('collections_images', image_id=data["image_id"], collection_id=data["collection_id"])
-        return json.dumps(db.select('collections_images', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
+#        return json.dumps(db.select('collections_images', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
+        return json.dumps(db.select("collections", vars={"dbId": dbId}, where="id = $dbId")[0], cls=DateTimeEncoder)
+
 
     def OPTIONS(self, imageId):
         web.header('Content-Type', 'application/json')
