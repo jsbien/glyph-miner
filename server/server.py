@@ -761,32 +761,32 @@ class DateTimeEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
     
 # define ressource paths
-urls = (
-    '/api/', 'index',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
-    '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
-    '/api/images/(.*)/templates/(.*)/matches', 'matches',
-    '/api/images/(.*)/templates/(.*)/model', 'model',
-    '/api/images/(.*)/templates/(.*)/typography', 'typography',
-    '/api/images/(.*)/templates/(.*)', 'template',
-    '/api/images/(.*)/templates', 'templates',
-    '/api/images/(.*)/crops', 'crop',
-    '/api/images/(.*)/(color|binarized)', 'image_file',
-    '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
-    '/api/images/(.*)', 'image',
-    '/api/images', 'images',
-    '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
-    '/api/collections/(.*)/templates/(.*)', 'collection_template',
-    '/api/collections/(.*)/templates', 'collection_templates',
-    '/api/collections/(.*)/images', 'collection_images',
-    '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
-    '/api/collections/(.*)', 'collection',
-    '/api/collections', 'collections_handler',
-    '/api/memberships', 'memberships',
-    '/api/ping', 'PingHandler'
-)
+# urls = (
+#     '/api/', 'index',
+#     '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
+#     '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
+#     '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
+#     '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
+#     '/api/images/(.*)/templates/(.*)/matches', 'matches',
+#     '/api/images/(.*)/templates/(.*)/model', 'model',
+#     '/api/images/(.*)/templates/(.*)/typography', 'typography',
+#     '/api/images/(.*)/templates/(.*)', 'template',
+#     '/api/images/(.*)/templates', 'templates',
+#     '/api/images/(.*)/crops', 'crop',
+#     '/api/images/(.*)/(color|binarized)', 'image_file',
+#     '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
+#     '/api/images/(.*)', 'image',
+#     '/api/images', 'images',
+#     '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
+#     '/api/collections/(.*)/templates/(.*)', 'collection_template',
+#     '/api/collections/(.*)/templates', 'collection_templates',
+#     '/api/collections/(.*)/images', 'collection_images',
+#     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
+#     '/api/collections/(.*)', 'collection',
+#     '/api/collections', 'collections_handler',
+#     '/api/memberships', 'memberships',
+#     '/api/ping', 'PingHandler'
+# )
 
 # DEBUG: inspect the structure of urls
 with open("/tmp/debug-urls.txt", "w") as f:
