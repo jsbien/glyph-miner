@@ -5,7 +5,7 @@ import argparse
 import logging
 from datetime import datetime
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 API = "http://localhost:9090/api"
 
@@ -41,6 +41,9 @@ def find_or_create_collection(title, dry_run):
     res = requests.post(f"{API}/collections", json={"title": title})
     res.raise_for_status()
     data = res.json()
+
+    # 🔍 Diagnostic logging
+    logger.error(f"[DEBUG] Collection creation response: {data} (type: {type(data)})")
 
     if isinstance(data, dict) and "id" in data:
         return data["id"]
