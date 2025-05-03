@@ -38,9 +38,21 @@ def find_or_create_collection(title, dry_run):
         return -1
 
     logger.info(f"[+] Creating collection: {title}")
+    # res = requests.post(f"{API}/collections", json={"title": title})
+    # res.raise_for_status()
+    # data = res.json()
     res = requests.post(f"{API}/collections", json={"title": title})
-    res.raise_for_status()
-    data = res.json()
+    try:
+        res.raise_for_status()
+        content_type = res.headers.get("Content-Type", "")
+        print(f"[DEBUG] Raw response content-type: {content_type}")
+        print(f"[DEBUG] Raw response text: {res.text}")
+        data = res.json()
+except Exception as e:
+    print(f"[DEBUG] Exception while parsing response: {e}")
+    print(f"[DEBUG] Response status: {res.status_code}")
+    print(f"[DEBUG] Response body: {res.text}")
+    raise
 
     # 🔍 Diagnostic logging
     logger.error(f"[DEBUG] Collection creation response: {data} (type: {type(data)})")
