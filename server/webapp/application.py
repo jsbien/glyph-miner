@@ -2,6 +2,8 @@
 from server.webapp import webapi
 # for debugging
 import datetime
+from server.webapp.webapi import _NotFound, _Redirect
+
 
 class application:
     def __init__(self, mapping=(), fvars=None):
@@ -44,16 +46,20 @@ class application:
                 else:
                     start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                     return [b"Internal Server Error (Bad result type)"]
+            except _NotFound as e:
+                return e()
+            except _Redirect as e:
+                return e()
                 
-            except webapi.notfound as e:
-                return e()
-            except webapi.redirect as e:
-                return e()
-            except Exception as e:
-                import traceback
-                print(traceback.format_exc())
-                start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
-                return [b"Internal Server Error"]
+            # except webapi.notfound as e:
+            #     return e()
+            # except webapi.redirect as e:
+            #     return e()
+            # except Exception as e:
+            #     import traceback
+            #     print(traceback.format_exc())
+            #     start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
+            #     return [b"Internal Server Error"]
 
 
              # except Exception as e:
