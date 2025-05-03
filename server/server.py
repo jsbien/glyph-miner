@@ -1,6 +1,7 @@
 # server/server.py
 
-import web
+# import web wrong!
+import server.webapp as web
 import json
 from datetime import datetime
 from web.db import SQLLiteral
