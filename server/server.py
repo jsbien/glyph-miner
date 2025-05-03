@@ -74,13 +74,6 @@ class index:
         return 'Glyph Miner API'
 
 
-class collection:
-
-    def GET(self, collectionId):
-        web.header('Access-Control-Allow-Origin', '*')
-        return json.dumps(db.select('collections', dict(cid=collectionId), where="id = $cid")[0], cls=DateTimeEncoder)
-
-
 class collections_handler:
 
     def GET(self):
