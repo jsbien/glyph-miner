@@ -142,12 +142,12 @@ class collections_handler:
 
 
 #    def OPTIONS(self, imageId):
-    def OPTIONS(self):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
-        return
+    # def OPTIONS(self):
+    #     web.header('Content-Type', 'application/json')
+    #     web.header('Access-Control-Allow-Origin', '*')
+    #     web.header('Access-Control-Allow-Credentials', 'true')
+    #     web.header('Access-Control-Allow-Headers', 'Content-Type')
+    #     return
 
 
 class synthetic_pages:
