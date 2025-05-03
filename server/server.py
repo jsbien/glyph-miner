@@ -103,7 +103,6 @@ class collections_handler:
         print(">>> ENTERED GET <<<", flush=True)
         collections = list(db.select('collections'))
         return json.dumps(collections)
-x2    
     
 # class collections_handler:
 
