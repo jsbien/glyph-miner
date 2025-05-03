@@ -822,7 +822,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
     f.write(f"'PingHandler' in globals(): {'PingHandler' in globals()}\n")
     
-
+print(f">>> collections_handler has methods: {dir(collections_handler)}", flush=True)
 
 handler_map = {
     'PingHandler': PingHandler,
@@ -871,6 +871,11 @@ ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 with open(f"./debug-application-object-{ts}.log", "w") as debug_file:
     debug_file.write(f"type(application): {type(application)}\n")
     debug_file.write(f"dir(application): {dir(application)}\n")
+
+if hasattr(collections_handler, "POST"):
+    print(">>> YES: collections_handler.POST exists", flush=True)
+else:
+    print(">>> NO: collections_handler.POST is missing", flush=True)
 
 
 if __name__ == "__main__":
