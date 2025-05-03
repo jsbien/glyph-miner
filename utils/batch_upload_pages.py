@@ -44,6 +44,8 @@ def find_or_create_collection(title, dry_run):
 
     # 🔍 Diagnostic logging
     logger.error(f"[DEBUG] Collection creation response: {data} (type: {type(data)})")
+    print(f"[DEBUG] Collection creation response: {data} (type: {type(data)})")
+
 
     if isinstance(data, dict) and "id" in data:
         return data["id"]
