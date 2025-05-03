@@ -2,7 +2,7 @@
 from server.webapp import webapi
 # for debugging
 import datetime
-from server.webapp.webapi import _NotFound, _Redirect
+from server.webapp.webapi import _NotFound, Redirect
 
 
 class application:
@@ -48,7 +48,7 @@ class application:
                     return [b"Internal Server Error (Bad result type)"]
             except _NotFound as e:
                 return e()
-            except _Redirect as e:
+            except Redirect as e:
                 return e()
                 
             # except webapi.notfound as e:
