@@ -2,7 +2,7 @@ import sys
 import types
 import traceback
 import server.webapp.webapi as webapi
-
+from server.webapp.webapi import _NotFound, Redirect  # Let these propagate
 
 class application:
     def __init__(self, mapping, fvars):
@@ -40,6 +40,8 @@ class application:
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
+            except (_NotFound, Redirect):
+                raise  # Let framework handle 404/redirects properly
             except Exception:
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
