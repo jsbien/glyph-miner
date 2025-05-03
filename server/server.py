@@ -137,7 +137,8 @@ class collections_handler:
             return web.internalerror("Failed to create collection.")
 
 
-    def OPTIONS(self, imageId):
+#    def OPTIONS(self, imageId):
+    def OPTIONS(self):
         web.header('Content-Type', 'application/json')
         web.header('Access-Control-Allow-Origin', '*')
         web.header('Access-Control-Allow-Credentials', 'true')
