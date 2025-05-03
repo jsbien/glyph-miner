@@ -799,7 +799,7 @@ urls = (
 #     '/api/collections/(.*)/templates', 'collection_templates',
 #     '/api/collections/(.*)/images', 'collection_images',
 #     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
-#     '/api/collections/(.*)', 'collection',
+     '/api/collections/(.*)', 'collection',
     '/api/collections', 'collections',
 #     '/api/memberships', 'memberships',
      '/api/ping', 'PingHandler'
