@@ -57,45 +57,44 @@ class application:
         return self._delegate(self.mapping, self.fvars, ())
 
 
-def _delegate(self, f, fvars, args=[]):
-    def handle_class(cls):
-        meth = web.ctx.method
-        if meth == 'HEAD' and not hasattr(cls, meth):
-            meth = 'GET'
-        if not hasattr(cls, meth):
-            raise web.nomethod(cls)
-        tocall = getattr(cls(), meth)
-        return tocall(*args)
+    def _delegate(self, f, fvars, args=[]):
+        def handle_class(cls):
+            meth = webapi.ctx.method
+            if meth == 'HEAD' and not hasattr(cls, meth):
+                meth = 'GET'
+            if not hasattr(cls, meth):
+                raise webapi.nomethod(cls)
+            tocall = getattr(cls(), meth)
+            return tocall(*args)
 
-    def is_class(o):
-        return isinstance(o, type)
+        def is_class(o):
+            return isinstance(o, type)
 
-    if f is None:
-        raise web.notfound()
-    elif isinstance(f, application):
-        return f.handle_with_processors()
-    elif is_class(f):
-        return handle_class(f)
-    elif isinstance(f, str):
-        if f.startswith('redirect '):
-            url = f.split(' ', 1)[1]
-            if web.ctx.method == "GET":
-                x = web.ctx.env.get('QUERY_STRING', '')
-                if x:
-                    url += '?' + x
-            raise web.redirect(url)
-        elif '.' in f:
-            mod, cls = f.rsplit('.', 1)
-            mod = __import__(mod, None, None, [''])
-            cls = getattr(mod, cls)
+        if f is None:
+            raise webapi.notfound()
+        elif isinstance(f, application):
+            return f.handle_with_processors()
+        elif is_class(f):
+            return handle_class(f)
+        elif isinstance(f, str):
+            if f.startswith('redirect '):
+                url = f.split(' ', 1)[1]
+                if webapi.ctx.method == "GET":
+                    x = webapi.ctx.env.get('QUERY_STRING', '')
+                    if x:
+                        url += '?' + x
+                raise webapi.redirect(url)
+            elif '.' in f:
+                mod, cls = f.rsplit('.', 1)
+                mod = __import__(mod, None, None, [''])
+                cls = getattr(mod, cls)
+            else:
+                cls = fvars[f]
+            return handle_class(cls)
+        elif hasattr(f, '__call__'):
+            return f()
         else:
-            cls = fvars[f]
-        return handle_class(cls)
-    elif hasattr(f, '__call__'):
-        return f()
-    else:
-        return web.notfound()
-
+            return webapi.notfound()
     
 #     def _delegate(self, f, fvars, args=()):
 # #        import datetime
