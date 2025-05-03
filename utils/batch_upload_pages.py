@@ -52,7 +52,7 @@ def find_or_create_collection(title, dry_run):
         print(f"[DEBUG] Exception while parsing response: {e}")
         print(f"[DEBUG] Response status: {res.status_code}")
         print(f"[DEBUG] Response body: {res.text}")
-    raise
+        raise
 
     # 🔍 Diagnostic logging
     logger.error(f"[DEBUG] Collection creation response: {data} (type: {type(data)})")
