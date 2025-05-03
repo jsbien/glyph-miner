@@ -90,33 +90,78 @@ class collections_handler:
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
-    def POST(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
-        print(">>> POST /collections received <<<")
-        if not "title" in data or data["title"] == "":
-            return web.badrequest("No title given.")
-        if not "subtitle" in data:
-            data["subtitle"] = None
-        if not "author" in data:
-            data["author"] = None
-        if not "year" in data:
-            data["year"] = None
-        if not "signature" in data:
-            data["signature"] = None
+def POST(self):
+    web.header('Access-Control-Allow-Origin', '*')
+    print(">>> POST /collections entered <<<")
 
+    try:
+        data_raw = web.data()
+        print(f"[DEBUG] Raw request data: {data_raw}")
+        data = json.loads(data_raw)
+        print(f"[DEBUG] Parsed data: {data}")
+    except Exception as e:
+        print(f"[ERROR] Failed to parse request body: {e}")
+        return web.badrequest("Invalid JSON payload.")
+
+    if not "title" in data or data["title"] == "":
+        print("[ERROR] Title missing in payload.")
+        return web.badrequest("No title given.")
+
+    for key in ["subtitle", "author", "year", "signature"]:
+        if key not in data:
+            data[key] = None
+
+    try:
         dbId = db.insert('collections',
                          title=data["title"],
                          subtitle=data["subtitle"],
                          author=data["author"],
                          year=data["year"],
                          signature=data["signature"])
+        print(f"[DEBUG] dbId after insert: {dbId} ({type(dbId)})")
+
         result = list(db.select('collections', vars={'dbId': dbId}, where="id = $dbId"))
+        print(f"[DEBUG] Select result: {result}")
+
         if not result:
-            raise RuntimeError(f"No collection found after insert (id={dbId})")
+            print("[ERROR] No collection found after insert.")
+            return web.internalerror("Collection inserted but not found.")
+
         web.header("Content-Type", "application/json")
         print(">>> COLLECTION CREATED AND RETURNED <<<")
         return json.dumps(result[0], cls=DateTimeEncoder)
+
+    except Exception as e:
+        print(f"[FATAL] Exception during insert/select: {e}")
+        return web.internalerror("Failed to create collection.")
+    
+    # def POST(self):
+    #     web.header('Access-Control-Allow-Origin', '*')
+    #     data = json.loads(web.data())
+    #     print(">>> POST /collections received <<<")
+    #     if not "title" in data or data["title"] == "":
+    #         return web.badrequest("No title given.")
+    #     if not "subtitle" in data:
+    #         data["subtitle"] = None
+    #     if not "author" in data:
+    #         data["author"] = None
+    #     if not "year" in data:
+    #         data["year"] = None
+    #     if not "signature" in data:
+    #         data["signature"] = None
+
+    #     dbId = db.insert('collections',
+    #                      title=data["title"],
+    #                      subtitle=data["subtitle"],
+    #                      author=data["author"],
+    #                      year=data["year"],
+    #                      signature=data["signature"])
+    #     result = list(db.select('collections', vars={'dbId': dbId}, where="id = $dbId"))
+    #     if not result:
+    #         raise RuntimeError(f"No collection found after insert (id={dbId})")
+    #     web.header("Content-Type", "application/json")
+    #     print(">>> COLLECTION CREATED AND RETURNED <<<")
+    #     return json.dumps(result[0], cls=DateTimeEncoder)
 
 #        return json.dumps(db.select('collections', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
