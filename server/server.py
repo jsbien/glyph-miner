@@ -118,7 +118,7 @@ class collections_handler:
         for key in ["subtitle", "author", "year", "signature"]:
             if key not in data:
                 data[key] = None
-
+                
         try:
             dbId = db.insert('collections',
                              title=data["title"],
@@ -809,7 +809,7 @@ urls = (
 #     '/api/collections/(.*)', 'collection',
     '/api/collections', 'collections_handler',
 #     '/api/memberships', 'memberships',
-#     '/api/ping', 'PingHandler'
+     '/api/ping', 'PingHandler'
 )
 
 # DEBUG: inspect the structure of urls
@@ -863,8 +863,8 @@ with open(f"./handler-map-debug-{ts}.log", "w") as debug_file:
     debug_file.write(f"type: {type(handler)}\n")
 
 
-app = web.application(urls, globals())
-#app = web.application(urls, handler_map)
+#app = web.application(urls, globals())
+app = web.application(urls, handler_map)
 application = app.wsgifunc()
 
 import datetime
