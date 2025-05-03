@@ -74,7 +74,7 @@ class index:
         return 'Glyph Miner API'
 
 
-class collections_handler:
+class collection_handler:
 
     def GET(self):
         web.header('Access-Control-Allow-Origin', '*')
