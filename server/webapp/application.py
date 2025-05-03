@@ -46,10 +46,19 @@ class application:
                 else:
                     start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                     return [b"Internal Server Error (Bad result type)"]
-            except _NotFound as e:
-                return e()
-            except Redirect as e:
-                return e()
+
+            except (_NotFound, Redirect):
+                raise
+            except Exception as e:
+                import traceback
+                print(traceback.format_exc())
+                start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
+                return [b"Internal Server Error"]
+
+            # except _NotFound as e:
+            #     return e()
+            # except Redirect as e:
+            #     return e()
                 
             # except webapi.notfound as e:
             #     return e()
