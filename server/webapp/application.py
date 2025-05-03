@@ -52,7 +52,6 @@ class application:
                 return [b"Internal Server Error"]
 
         return wsgi
-
     def handle_with_processors(self):
         return self._delegate(self.mapping, self.fvars, ())
 #        return self._delegate(self.mapping, handler_map, ())
@@ -96,7 +95,8 @@ class application:
         elif hasattr(f, '__call__'):
             return f()
         else:
-            return webapi.notfound()
+            raise webapi.notfound()
+#            return webapi.notfound()
     
 #     def _delegate(self, f, fvars, args=()):
 # #        import datetime
