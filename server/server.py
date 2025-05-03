@@ -761,7 +761,7 @@ class DateTimeEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
     
 # define ressource paths
-# urls = (
+urls = (
 #     '/api/', 'index',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
@@ -783,10 +783,10 @@ class DateTimeEncoder(json.JSONEncoder):
 #     '/api/collections/(.*)/images', 'collection_images',
 #     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
 #     '/api/collections/(.*)', 'collection',
-#     '/api/collections', 'collections_handler',
+    '/api/collections', 'collections_handler',
 #     '/api/memberships', 'memberships',
 #     '/api/ping', 'PingHandler'
-# )
+)
 
 # DEBUG: inspect the structure of urls
 with open("/tmp/debug-urls.txt", "w") as f:
