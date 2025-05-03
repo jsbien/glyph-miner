@@ -44,6 +44,16 @@ class application:
                 else:
                     start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                     return [b"Internal Server Error (Bad result type)"]
+                
+                except webapi.notfound as e:
+                    return e()
+                except webapi.redirect as e:
+                    return e()
+                except Exception as e:
+                    import traceback
+                    print(traceback.format_exc())
+                    start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
+                    return [b"Internal Server Error"]
 
 
              # except Exception as e:
@@ -52,15 +62,6 @@ class application:
              #     start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
              #    return [b"Internal Server Error"]
 
-             except webapi.notfound as e:
-                 return e()
-             except webapi.redirect as e:
-                 return e()
-             except Exception as e:
-                 import traceback
-                 print(traceback.format_exc())
-                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
-                 return [b"Internal Server Error"]
 
 
         return wsgi
