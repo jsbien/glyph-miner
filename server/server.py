@@ -74,7 +74,7 @@ class index:
         return 'Glyph Miner API'
 
 
-class collection:
+class collection_handler:
 
     def GET(self, collectionId):
         web.header('Access-Control-Allow-Origin', '*')
@@ -783,7 +783,7 @@ urls = (
     '/api/collections/(.*)/images', 'collection_images',
     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
     '/api/collections/(.*)', 'collection',
-    '/api/collections', 'collections',
+    '/api/collections', 'collections_handler',
     '/api/memberships', 'memberships',
     '/api/ping', 'PingHandler'
 )
