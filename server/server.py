@@ -5,7 +5,7 @@ import os
 import time
 # import web
 
-print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py <<<")
+print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.01 <<<")
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
@@ -93,6 +93,7 @@ class collections:
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
         data = json.loads(web.data())
+        print(">>> POST /collections received <<<")
         if not "title" in data or data["title"] == "":
             return web.badrequest("No title given.")
         if not "subtitle" in data:
