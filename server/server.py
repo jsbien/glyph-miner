@@ -4,7 +4,6 @@
 import server.webapp as web
 import json
 from datetime import datetime
-from web.db import SQLLiteral
 
 print(">>> LOADED: server.py (Python 3, safe handler names) ver. 0.02 <<<")
 
