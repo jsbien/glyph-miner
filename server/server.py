@@ -823,7 +823,7 @@ handler_map = {
     'PingHandler': PingHandler,
     'index': index,
     'collections': collections_handler,
-    'collection': collection,
+    'collection': collection_handler,
     'collection_images': collection_images,
     'collection_templates': collection_templates,
     'collection_template': collection_template,
