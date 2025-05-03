@@ -805,7 +805,7 @@ with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
 handler_map = {
     'PingHandler': PingHandler,
     'index': index,
-    'collections': collections,
+    'collections': collections_handler,
     'collection': collection,
     'collection_images': collection_images,
     'collection_templates': collection_templates,
