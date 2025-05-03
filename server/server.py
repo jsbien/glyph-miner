@@ -5,6 +5,8 @@ import os
 import time
 # import web
 
+print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py <<<")
+
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
 
