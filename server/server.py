@@ -108,7 +108,13 @@ class collections:
                          author=data["author"],
                          year=data["year"],
                          signature=data["signature"])
-        return json.dumps(db.select('collections', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
+        result = list(db.select('collections', vars={'dbId': dbId}, where="id = $dbId"))
+        if not result:
+            raise RuntimeError(f"No collection found after insert (id={dbId})")
+        web.header("Content-Type", "application/json")
+        return json.dumps(result[0], cls=DateTimeEncoder)
+
+#        return json.dumps(db.select('collections', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId):
         web.header('Content-Type', 'application/json')
