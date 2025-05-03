@@ -85,6 +85,9 @@ class collection_handler:
 
 class collections_handler:
 
+    def __init__(self):
+        print(">>> INIT: collections_handler <<<", flush=True)
+
     def GET(self):
         print(">>> ENTERED GET <<<", flush=True)
         web.header('Access-Control-Allow-Origin', '*')
@@ -857,6 +860,7 @@ with open(f"./handler-map-debug-{ts}.log", "w") as debug_file:
     debug_file.write(f"handler_map['PingHandler']: {repr(handler)}\n")
     debug_file.write(f"type: {type(handler)}\n")
 
+print(f">>> collections_handler has POST: {'POST' in dir(collections_handler)}", flush=True)
 
 #app = web.application(urls, globals())
 app = web.application(urls, handler_map)
