@@ -112,6 +112,7 @@ class collections:
         if not result:
             raise RuntimeError(f"No collection found after insert (id={dbId})")
         web.header("Content-Type", "application/json")
+        print(">>> COLLECTION CREATED AND RETURNED <<<")
         return json.dumps(result[0], cls=DateTimeEncoder)
 
 #        return json.dumps(db.select('collections', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
