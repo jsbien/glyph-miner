@@ -84,6 +84,7 @@ class application:
                 mod = __import__(mod, None, None, [''])
                 cls = getattr(mod, cls)
             else:
+                print(f"[DEBUG] _delegate f = {f}, fvars keys = {list(fvars.keys())}", flush=True)
                 cls = fvars[f]
             return handle_class(cls)
         elif hasattr(f, '__call__'):
