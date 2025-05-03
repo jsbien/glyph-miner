@@ -83,62 +83,84 @@ class collection_handler:
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
-class collections_handler:
+import json
+from server.webapp import webapi
+from server.server import db  # Ensure your db instance is available at this path
 
-    def __init__(self):
-        print(">>> INIT: collections_handler <<<", flush=True)
+class collections_handler:
+    def POST(self):
+        data = webapi.data()
+        payload = json.loads(data)
+        print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
+
+        if "title" not in payload:
+            raise webapi.badrequest()
+
+        db.insert('collections', title=payload["title"])
+        return json.dumps({'status': 'ok'})
 
     def GET(self):
         print(">>> ENTERED GET <<<", flush=True)
-        web.header('Access-Control-Allow-Origin', '*')
-        collections = db.query('SELECT * FROM collections')
-        output = [collection for collection in collections]
-        return json.dumps(output, cls=DateTimeEncoder)
+        collections = list(db.select('collections'))
+        return json.dumps(collections)
+x2    
+    
+# class collections_handler:
 
-    def POST(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        print(">>> POST /collections entered <<<", flush=True)
+#     def __init__(self):
+#         print(">>> INIT: collections_handler <<<", flush=True)
 
-        try:
-            data_raw = web.data()
-            print(f"[DEBUG] Raw request data: {data_raw}")
-            data = json.loads(data_raw)
-            print(f"[DEBUG] Parsed data: {data}")
-        except Exception as e:
-            print(f"[ERROR] Failed to parse request body: {e}")
-            return web.badrequest("Invalid JSON payload.")
+#     def GET(self):
+#         print(">>> ENTERED GET <<<", flush=True)
+#         web.header('Access-Control-Allow-Origin', '*')
+#         collections = db.query('SELECT * FROM collections')
+#         output = [collection for collection in collections]
+#         return json.dumps(output, cls=DateTimeEncoder)
 
-        if not "title" in data or data["title"] == "":
-            print("[ERROR] Title missing in payload.")
-            return web.badrequest("No title given.")
+#     def POST(self):
+#         web.header('Access-Control-Allow-Origin', '*')
+#         print(">>> POST /collections entered <<<", flush=True)
 
-        for key in ["subtitle", "author", "year", "signature"]:
-            if key not in data:
-                data[key] = None
+#         try:
+#             data_raw = web.data()
+#             print(f"[DEBUG] Raw request data: {data_raw}")
+#             data = json.loads(data_raw)
+#             print(f"[DEBUG] Parsed data: {data}")
+#         except Exception as e:
+#             print(f"[ERROR] Failed to parse request body: {e}")
+#             return web.badrequest("Invalid JSON payload.")
+
+#         if not "title" in data or data["title"] == "":
+#             print("[ERROR] Title missing in payload.")
+#             return web.badrequest("No title given.")
+
+#         for key in ["subtitle", "author", "year", "signature"]:
+#             if key not in data:
+#                 data[key] = None
                 
-        try:
-            dbId = db.insert('collections',
-                             title=data["title"],
-                             subtitle=data["subtitle"],
-                             author=data["author"],
-                             year=data["year"],
-                             signature=data["signature"])
-            print(f"[DEBUG] dbId after insert: {dbId} ({type(dbId)})")
+#         try:
+#             dbId = db.insert('collections',
+#                              title=data["title"],
+#                              subtitle=data["subtitle"],
+#                              author=data["author"],
+#                              year=data["year"],
+#                              signature=data["signature"])
+#             print(f"[DEBUG] dbId after insert: {dbId} ({type(dbId)})")
 
-            result = list(db.select('collections', vars={'dbId': dbId}, where="id = $dbId"))
-            print(f"[DEBUG] Select result: {result}")
+#             result = list(db.select('collections', vars={'dbId': dbId}, where="id = $dbId"))
+#             print(f"[DEBUG] Select result: {result}")
 
-            if not result:
-                print("[ERROR] No collection found after insert.")
-                return web.internalerror("Collection inserted but not found.")
+#             if not result:
+#                 print("[ERROR] No collection found after insert.")
+#                 return web.internalerror("Collection inserted but not found.")
 
-            web.header("Content-Type", "application/json")
-            print(">>> COLLECTION CREATED AND RETURNED <<<")
-            return json.dumps(result[0], cls=DateTimeEncoder)
+#             web.header("Content-Type", "application/json")
+#             print(">>> COLLECTION CREATED AND RETURNED <<<")
+#             return json.dumps(result[0], cls=DateTimeEncoder)
 
-        except Exception as e:
-            print(f"[FATAL] Exception during insert/select: {e}")
-            return web.internalerror("Failed to create collection.")
+#         except Exception as e:
+#             print(f"[FATAL] Exception during insert/select: {e}")
+#             return web.internalerror("Failed to create collection.")
 
 
 #    def OPTIONS(self, imageId):
