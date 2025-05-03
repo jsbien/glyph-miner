@@ -48,10 +48,10 @@ def find_or_create_collection(title, dry_run):
         print(f"[DEBUG] Raw response content-type: {content_type}")
         print(f"[DEBUG] Raw response text: {res.text}")
         data = res.json()
-except Exception as e:
-    print(f"[DEBUG] Exception while parsing response: {e}")
-    print(f"[DEBUG] Response status: {res.status_code}")
-    print(f"[DEBUG] Response body: {res.text}")
+    except Exception as e:
+        print(f"[DEBUG] Exception while parsing response: {e}")
+        print(f"[DEBUG] Response status: {res.status_code}")
+        print(f"[DEBUG] Response body: {res.text}")
     raise
 
     # 🔍 Diagnostic logging
