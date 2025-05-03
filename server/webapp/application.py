@@ -54,7 +54,8 @@ class application:
         return wsgi
 
     def handle_with_processors(self):
-        return self._delegate(self.mapping, self.fvars, ())
+#        return self._delegate(self.mapping, self.fvars, ())
+        return self._delegate(self.mapping, handler_map, ())
 
 
     def _delegate(self, f, fvars, args=[]):
@@ -89,6 +90,7 @@ class application:
                 mod = __import__(mod, None, None, [''])
                 cls = getattr(mod, cls)
             else:
+                print(f">>> Looking up handler: {f} in fvars: {list(fvars.keys())}", flush=True)
                 cls = fvars[f]
             return handle_class(cls)
         elif hasattr(f, '__call__'):
