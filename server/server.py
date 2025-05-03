@@ -5,7 +5,7 @@ import os
 import time
 # import web
 
-print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.01 <<<")
+print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.02 <<<", flush=True)
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
@@ -86,6 +86,7 @@ class collection_handler:
 class collections_handler:
 
     def GET(self):
+        print(">>> ENTERED GET <<<", flush=True)
         web.header('Access-Control-Allow-Origin', '*')
         collections = db.query('SELECT * FROM collections')
         output = [collection for collection in collections]
@@ -93,7 +94,7 @@ class collections_handler:
 
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
-        print(">>> POST /collections entered <<<")
+        print(">>> POST /collections entered <<<", flush=True)
 
         try:
             data_raw = web.data()
