@@ -11,6 +11,9 @@ __all__ = [
   "database", 'DB',
 ]
 
+def q(x):
+    return SQLQuery(x)
+
 import time
 try:
     import datetime
