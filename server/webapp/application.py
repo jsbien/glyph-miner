@@ -5,10 +5,16 @@ import server.webapp.webapi as webapi
 from server.webapp.webapi import _NotFound, Redirect  # Let these propagate
 
 class application:
-    def __init__(self, mapping, fvars):
-        self.mapping = mapping
-        self.fvars = fvars or {}
+    # def __init__(self, mapping, fvars):
+    #     self.mapping = mapping
+    #     self.fvars = fvars or {}
 
+        def __init__(self, mapping, fvars):
+            self.mapping = mapping  # this will get replaced by resolve_route()
+            self.fvars = fvars
+            self.args = []
+
+        
         def resolve_route(self, path):
             """Match the path against self.mapping and return (handler_key, args)."""
             for i in range(0, len(self.mapping), 2):
