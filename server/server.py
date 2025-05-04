@@ -90,6 +90,7 @@ from server.server import db  # Ensure your db instance is available at this pat
 class collections_handler:
     def POST(self):
         print(">>> Entering collections_handler.POST", flush=True)
+        print(f"[DEBUG] Content-Length: {webapi.ctx.env.get('CONTENT_LENGTH')}", flush=True)
         data = webapi.data()
         print(f"[DEBUG] raw data = {repr(data)}", flush=True)
         # decode bytes to string first
