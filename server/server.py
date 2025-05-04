@@ -87,17 +87,34 @@ import json
 from server.webapp import webapi
 from server.server import db  # Ensure your db instance is available at this path
 
+
 class collections_handler:
     def POST(self):
         print(">>> Entering collections_handler.POST", flush=True)
-        print(f"[DEBUG] Content-Length: {webapi.ctx.env.get('CONTENT_LENGTH')}", flush=True)
-        data = webapi.data()
+        cl = int(webapi.ctx.env.get("CONTENT_LENGTH") or 0)
+        raw = webapi.ctx.env["wsgi.input"].read(cl)
+
+        print(f"[DEBUG] Content-Length: {cl}", flush=True)
+        print(f"[DEBUG] raw input stream read: {repr(raw)}", flush=True)
+
+        try:
+            decoded = raw.decode("utf-8")
+        except Exception as e:
+            decoded = f"<< decode error: {e} >>"
+
+        print(f"[DEBUG] decoded input stream: {repr(decoded)}", flush=True)
+
+        # continue with parsing
+
+# disabled for testing purposes:
+#        data = webapi.data()
         print(f"[DEBUG] raw data = {repr(data)}", flush=True)
-        # decode bytes to string first
-        if isinstance(data, bytes):
-            data = data.decode("utf-8", errors="replace")  # safe decoding
-            print(f"[DEBUG] decoded data = {repr(data)}", flush=True)
+# disabled for testing purposes:
+        # # decode bytes to string first
         # if isinstance(data, bytes):
+        #     data = data.decode("utf-8", errors="replace")  # safe decoding
+        #     print(f"[DEBUG] decoded data = {repr(data)}", flush=True)
+        # # if isinstance(data, bytes):
         #     data = data.decode("utf-8")
         payload = json.loads(data)
         print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
