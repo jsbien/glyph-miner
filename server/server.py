@@ -51,7 +51,7 @@ class PingHandler:
 
 imageList = {}
 
-with open("/tmp/debug-web.txt", "w") as f:
+with open("debug-web.txt", "w") as f:
     f.write(f"web.__file__ = {web.__file__}\n")
     f.write(f"dir(web) = {dir(web)}\n")
 
@@ -892,7 +892,7 @@ print(">>> URL ROUTES:", urls)
 print(">>> URL ROUTES COUNT:", len(urls))
 
 # DEBUG: inspect the structure of urls
-with open("/tmp/debug-urls.log", "w") as f:
+with open("debug-urls.log", "w") as f:
     f.write(f"Type of urls: {type(urls)}\n")
     for i, item in enumerate(urls):
         f.write(f"urls[{i}] = {repr(item)} (type: {type(item)})\n")
