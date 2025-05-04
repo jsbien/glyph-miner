@@ -66,7 +66,12 @@ class application:
     def handle_with_processors(self):
         try:
             print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
-            return self._delegate(self.mapping, self.fvars, ())
+            return self._delegate(self.mapping, self.fvars, self.args)
+        except _NotFound:
+            raise
+        except Exception:
+            print(traceback.format_exc())
+            raise
 
     def _delegate(self, f, fvars, args=[]):
         def handle_class(cls):
