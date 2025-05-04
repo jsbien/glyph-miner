@@ -892,8 +892,8 @@ print(">>> URL ROUTES:", urls)
 print(">>> URL ROUTES COUNT:", len(urls))
 
 # DEBUG: inspect the structure of urls
-with open("/tmp/debug-urls.txt", "w") as f:
-    f.write(f"Type of urls: {type(urls)}\n")
+with open("/tmp/debug-urls.log", "w") as f:
+    f.write(f"Type of urls: {type(urls)}\n")g
     for i, item in enumerate(urls):
         f.write(f"urls[{i}] = {repr(item)} (type: {type(item)})\n")
 
