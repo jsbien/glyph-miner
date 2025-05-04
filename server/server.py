@@ -104,46 +104,91 @@ import json
 from server.webapp import webapi
 from server.server import db  # Ensure your db instance is available at this path
 
-
 class collections_handler:
     def GET(self):
-        print(">>> ENTERED GET <<<", flush=True)
+        print(">>> ENTERED collections_handler.GET <<<", flush=True)
+
         try:
-            collections = list(db.select('collections'))
+            collections_query = db.select('collections')
+            collections = list(collections_query)
+
             print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+            web.header('Content-Type', 'application/json')
             return json.dumps(collections)
+
         except Exception as e:
-            print(f"[ERROR] Failed to fetch collections: {e}", flush=True)
-            raise web.internalerror("Failed to fetch collections")
+            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
+            raise
 
     def POST(self):
-        print(">>> Entering collections_handler.POST", flush=True)
+        print(">>> ENTERED collections_handler.POST <<<", flush=True)
 
         try:
-            raw = webapi.data()  # Should return bytes
-            print(f"[DEBUG] raw input stream read: {repr(raw)}", flush=True)
+            raw = web.data()
+            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
             decoded = raw.decode("utf-8", errors="replace")
-            print(f"[DEBUG] decoded input stream: {repr(decoded)}", flush=True)
+            print(f"[DEBUG] decoded input = {decoded}", flush=True)
 
             payload = json.loads(decoded)
             print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
 
-            title = payload.get("title")
-            if not title:
-                raise web.badrequest("Missing 'title' in request payload.")
-
-            db.insert('collections', title=title)
-            return json.dumps({"status": "ok"})
-
-        except json.JSONDecodeError as e:
-            print(f"[ERROR] JSON decode failed: {e}", flush=True)
+        except Exception as e:
+            print(f"[ERROR] Failed to decode JSON payload: {e}", flush=True)
             raise web.badrequest("Invalid JSON payload.")
 
+        try:
+            db.insert('collections', title=payload["title"])
+            print("[DEBUG] Inserted collection", flush=True)
+            web.header('Content-Type', 'application/json')
+            return json.dumps({"status": "ok"})
+
         except Exception as e:
-            print(f"[ERROR] Unexpected error in POST: {e}", flush=True)
-            raise web.internalerror("Failed to create collection.")
+            print(f"[ERROR] Database insertion failed: {e}", flush=True)
+            raise
 
 
+class collections_handler:
+    def GET(self):
+        print(">>> ENTERED collections_handler.GET <<<", flush=True)
+
+        try:
+            collections_query = db.select('collections')
+            collections = list(collections_query)
+
+            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+            web.header('Content-Type', 'application/json')
+            return json.dumps(collections)
+
+        except Exception as e:
+            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
+            raise
+
+    def POST(self):
+        print(">>> ENTERED collections_handler.POST <<<", flush=True)
+
+        try:
+            raw = web.data()
+            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+            decoded = raw.decode("utf-8", errors="replace")
+            print(f"[DEBUG] decoded input = {decoded}", flush=True)
+
+            payload = json.loads(decoded)
+            print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
+
+        except Exception as e:
+            print(f"[ERROR] Failed to decode JSON payload: {e}", flush=True)
+            raise web.badrequest("Invalid JSON payload.")
+
+        try:
+            db.insert('collections', title=payload["title"])
+            print("[DEBUG] Inserted collection", flush=True)
+            web.header('Content-Type', 'application/json')
+            return json.dumps({"status": "ok"})
+
+        except Exception as e:
+            print(f"[ERROR] Database insertion failed: {e}", flush=True)
+            raise
+        
 # class collections_handler:
 #     def POST(self):
 #         print(">>> Entering collections_handler.POST", flush=True)
