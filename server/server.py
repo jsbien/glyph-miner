@@ -90,6 +90,7 @@ from server.server import db  # Ensure your db instance is available at this pat
 class collections_handler:
     def POST(self):
         data = webapi.data()
+        print(f"[DEBUG] raw data = {repr(data)}", flush=True)
         payload = json.loads(data)
         print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
 
