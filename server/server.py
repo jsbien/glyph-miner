@@ -92,13 +92,13 @@ class collections_handler:
     def POST(self):
         print(">>> Entering collections_handler.POST", flush=True)
         cl = int(webapi.ctx.env.get("CONTENT_LENGTH") or 0)
-        raw = webapi.ctx.env["wsgi.input"].read(cl)
+        data = webapi.ctx.env["wsgi.input"].read(cl)
 
         print(f"[DEBUG] Content-Length: {cl}", flush=True)
-        print(f"[DEBUG] raw input stream read: {repr(raw)}", flush=True)
+        print(f"[DEBUG] raw input stream read: {repr(data)}", flush=True)
 
         try:
-            decoded = raw.decode("utf-8")
+            decoded = data.decode("utf-8")
         except Exception as e:
             decoded = f"<< decode error: {e} >>"
 
