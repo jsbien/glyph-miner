@@ -74,30 +74,69 @@ class index:
         return 'Glyph Miner API'
 
 
-class collection_handler:
-
+class collections_handler:
     def GET(self):
-        print(">>> ENTERED collections_handler.GET <<<", flush=True)
+        print(">>> ENTERED GET <<<", flush=True)
+        try:
+            collections = list(db.select('collections'))
+            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+            return json.dumps(collections)
+        except Exception as e:
+            print(f"[ERROR] Failed to fetch collections: {e}", flush=True)
+            raise web.internalerror("Failed to fetch collections")
+
+    def POST(self):
+        print(">>> Entering collections_handler.POST", flush=True)
 
         try:
-            collections_query = db.select('collections')
-            collections = list(collections_query)
+            raw = webapi.data()  # Should return bytes
+            print(f"[DEBUG] raw input stream read: {repr(raw)}", flush=True)
+            decoded = raw.decode("utf-8", errors="replace")
+            print(f"[DEBUG] decoded input stream: {repr(decoded)}", flush=True)
 
-            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-            web.header('Content-Type', 'application/json')
-            return json.dumps(collections)
+            payload = json.loads(decoded)
+            print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
+
+            title = payload.get("title")
+            if not title:
+                raise web.badrequest("Missing 'title' in request payload.")
+
+            db.insert('collections', title=title)
+            return json.dumps({"status": "ok"})
+
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] JSON decode failed: {e}", flush=True)
+            raise web.badrequest("Invalid JSON payload.")
 
         except Exception as e:
-            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
-            raise
+            print(f"[ERROR] Unexpected error in POST: {e}", flush=True)
+            raise web.internalerror("Failed to create collection.")
 
-        def GET(self):
-            print(">>> ENTERED GET <<<", flush=True)
-            web.header('Access-Control-Allow-Origin', '*')
-            collections = db.query('SELECT * FROM collections')
-#        collections = db.select('collections')
-            output = [collection for collection in collections]
-            return json.dumps(output, cls=DateTimeEncoder)
+    
+# class collection_handler:
+
+#     def GET(self):
+#         print(">>> ENTERED collections_handler.GET <<<", flush=True)
+
+#         try:
+#             collections_query = db.select('collections')
+#             collections = list(collections_query)
+
+#             print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+#             web.header('Content-Type', 'application/json')
+#             return json.dumps(collections)
+
+#         except Exception as e:
+#             print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
+#             raise
+
+#         def GET(self):
+#             print(">>> ENTERED GET <<<", flush=True)
+#             web.header('Access-Control-Allow-Origin', '*')
+#             collections = db.query('SELECT * FROM collections')
+# #        collections = db.select('collections')
+#             output = [collection for collection in collections]
+#             return json.dumps(output, cls=DateTimeEncoder)
 
 import json
 from server.webapp import webapi
