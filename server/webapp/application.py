@@ -49,8 +49,12 @@ class application:
 
         return wsgi
 
+    # def handle_with_processors(self):
+    #     return self._delegate(self.mapping, self.fvars, ())
     def handle_with_processors(self):
-        return self._delegate(self.mapping, self.fvars, ())
+        try:
+            print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
+            return self._delegate(self.mapping, self.fvars, ())
 
     def _delegate(self, f, fvars, args=[]):
         def handle_class(cls):
