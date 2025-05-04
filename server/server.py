@@ -888,6 +888,9 @@ urls = (
      '/api/ping', 'PingHandler'
 )
 
+print(">>> URL ROUTES:", urls)
+print(">>> URL ROUTES COUNT:", len(urls))
+
 # DEBUG: inspect the structure of urls
 with open("/tmp/debug-urls.txt", "w") as f:
     f.write(f"Type of urls: {type(urls)}\n")
