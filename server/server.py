@@ -104,30 +104,20 @@ import json
 from server.webapp import webapi
 from server.server import db  # Ensure your db instance is available at this path
 
+# used to work?
 class collections_handler:
-    def GET(self):
-        print(">>> ENTERED collections_handler.GET <<<", flush=True)
-        try:
-            collections_query = db.select('collections')
-            collections = list(collections_query)
-            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-            web.header('Content-Type', 'application/json')
-            return json.dumps(collections)
-        except Exception as e:
-            print(f"[ERROR] GET failed: {e}", flush=True)
-            raise
-
     def POST(self):
-        print(">>> ENTERED collections_handler.POST <<<", flush=True)
+        print(">>> Entering collections_handler.POST", flush=True)
         try:
-            raw_bytes = web.data()
-            print(f"[DEBUG] raw input = {repr(raw_bytes)}", flush=True)
+            raw = web.data()
+            print(f"[DEBUG] raw data = {repr(raw)}", flush=True)
 
-            raw_str = raw_bytes.decode("utf-8", errors="replace")
-            print(f"[DEBUG] decoded input = {raw_str}", flush=True)
+            if isinstance(raw, bytes):
+                raw = raw.decode("utf-8", errors="replace")
+                print(f"[DEBUG] decoded data = {repr(raw)}", flush=True)
 
-            payload = json.loads(raw_str)
-            print(f"[DEBUG] Parsed JSON payload: {payload}", flush=True)
+            payload = json.loads(raw)
+            print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
 
         except Exception as e:
             print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
@@ -135,13 +125,12 @@ class collections_handler:
 
         try:
             db.insert('collections', title=payload["title"])
-            print("[DEBUG] Inserted collection into DB", flush=True)
+            print("[DEBUG] Inserted new collection into DB", flush=True)
             web.header('Content-Type', 'application/json')
             return json.dumps({"status": "ok"})
         except Exception as e:
             print(f"[ERROR] DB insert failed: {e}", flush=True)
             raise web.internalerror("Database insert failed.")
-
 
 # class collections_handler:
 #     def GET(self):
