@@ -886,8 +886,8 @@ print(f">>> collections_handler has POST: {'POST' in dir(collections_handler)}",
 #app = web.application(urls, globals())
 app = web.application(urls, handler_map)
 
-# Monkey-patch application._delegate to log what's happening
-original_delegate = application._delegate
+# 🐒 Monkey-patch the web.application class
+original_delegate = web.application._delegate
 
 def patched_delegate(self, f, fvars, args=[]):
     print(">>> 🐒 Monkey-patched _delegate called <<<", flush=True)
@@ -895,7 +895,9 @@ def patched_delegate(self, f, fvars, args=[]):
     print(f"[DEBUG] fvars keys = {list(fvars.keys())}", flush=True)
     return original_delegate(self, f, fvars, args)
 
-application._delegate = patched_delegate
+web.application._delegate = patched_delegate
+
+# ✅ Now assign the WSGI callable
 
 application = app.wsgifunc()
 
