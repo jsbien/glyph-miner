@@ -30,7 +30,9 @@ class application:
             webapi.ctx.path = env.get('PATH_INFO', '/')
 
             # Route resolution here:
-            self.mapping, self.args = self.resolve_route(webapi.ctx.path)
+#            self.mapping, self.args = self.resolve_route(webapi.ctx.path)
+            handler_key, args = self.resolve_route(webapi.ctx.path)
+
 
             webapi.ctx.fullpath = env.get('PATH_INFO', '/')
             webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
@@ -67,8 +69,11 @@ class application:
 
     def handle_with_processors(self):
         try:
-            print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
-            return self._delegate(self.mapping, self.fvars, self.args)
+            handler_key, args = self.resolve_route(webapi.ctx.path)
+            return self._delegate(handler_key, self.fvars, args)
+
+            # print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
+            # return self._delegate(self.mapping, self.fvars, self.args)
         except _NotFound:
             raise
         except Exception:
