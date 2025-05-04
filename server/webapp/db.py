@@ -748,54 +748,84 @@ class DB:
 
         return xjoin(sql, nout)
 
-    def insert(self, tablename, seqname=None, _test=False, **values): 
+    def insert(self, tablename, seqname=None, _test=False, **values):
         """
-        Inserts `values` into `tablename`. Returns current sequence ID.
-        Set `seqname` to the ID if it's not the default, or to `False`
-        if there isn't one.
-        
-            >>> db = DB(None, {})
-            >>> q = db.insert('foo', name='bob', age=2, created=SQLLiteral('NOW()'), _test=True)
-            >>> q
-            <sql: "INSERT INTO foo (age, name, created) VALUES (2, 'bob', NOW())">
-            >>> q.query()
-            'INSERT INTO foo (age, name, created) VALUES (%s, %s, NOW())'
-            >>> q.values()
-            [2, 'bob']
-        """
-        def q(x): return "(" + x + ")"
-        
-        if values:
-            _keys = SQLQuery.join(list(values.keys()), ', ')
-            _values = SQLQuery.join([sqlparam(v) for v in list(values.values())], ', ')
-            sql_query = SQLQuery("INSERT INTO %s " % tablename) + q(_keys) + ' VALUES ' + q(_values)
-#            sql_query = "INSERT INTO %s " % tablename + q(_keys) + ' VALUES ' + q(_values)
-        else:
-            sql_query = SQLQuery(self._get_insert_default_values_query(tablename))
+        Inserts a row into `tablename` and returns the last inserted id.
 
-        if _test: return sql_query
-        
+        Example:
+        db.insert('users', name='bob', created=now())
+        """
         db_cursor = self._db_cursor()
-        if seqname is not False: 
-            sql_query = self._process_insert_query(sql_query, tablename, seqname)
 
-        if isinstance(sql_query, tuple):
-            # for some databases, a separate query has to be made to find 
-            # the id of the inserted row.
-            q1, q2 = sql_query
-            self._db_execute(db_cursor, q1)
-            self._db_execute(db_cursor, q2)
-        else:
-            self._db_execute(db_cursor, sql_query)
+        _keys = SQLQuery.join(list(values.keys()), ', ')
+        _values = SQLQuery.join([sqlparam(v) for v in values.values()], ', ')
+        sql_query = SQLQuery("INSERT INTO %s " % tablename) + q(_keys) + ' VALUES ' + q(_values)
 
-        try: 
-            out = db_cursor.fetchone()[0]
-        except Exception: 
-            out = None
+        if self.paramstyle == "pyformat":
+            query, params = self._process_query(sql_query)
+            try:
+                out = db_cursor.execute(query, params)
+            except Exception as e:
+                print("ERR:", query)
+                print("PARAMS:", params)
+                raise
+            else:
+                out = self._db_execute(db_cursor, sql_query)
+
+            if not _test:
+                self._db_commit()
+
+            return out
+
+    
+    # def insert(self, tablename, seqname=None, _test=False, **values): 
+    #     """
+    #     Inserts `values` into `tablename`. Returns current sequence ID.
+    #     Set `seqname` to the ID if it's not the default, or to `False`
+    #     if there isn't one.
         
-        if not self.ctx.transactions: 
-            self.ctx.commit()
-        return out
+    #         >>> db = DB(None, {})
+    #         >>> q = db.insert('foo', name='bob', age=2, created=SQLLiteral('NOW()'), _test=True)
+    #         >>> q
+    #         <sql: "INSERT INTO foo (age, name, created) VALUES (2, 'bob', NOW())">
+    #         >>> q.query()
+    #         'INSERT INTO foo (age, name, created) VALUES (%s, %s, NOW())'
+    #         >>> q.values()
+    #         [2, 'bob']
+    #     """
+    #     def q(x): return "(" + x + ")"
+        
+    #     if values:
+    #         _keys = SQLQuery.join(list(values.keys()), ', ')
+    #         _values = SQLQuery.join([sqlparam(v) for v in list(values.values())], ', ')
+#             sql_query = SQLQuery("INSERT INTO %s " % tablename) + q(_keys) + ' VALUES ' + q(_values)
+# #            sql_query = "INSERT INTO %s " % tablename + q(_keys) + ' VALUES ' + q(_values)
+#         else:
+#             sql_query = SQLQuery(self._get_insert_default_values_query(tablename))
+
+#         if _test: return sql_query
+        
+#         db_cursor = self._db_cursor()
+#         if seqname is not False: 
+#             sql_query = self._process_insert_query(sql_query, tablename, seqname)
+
+#         if isinstance(sql_query, tuple):
+#             # for some databases, a separate query has to be made to find 
+#             # the id of the inserted row.
+#             q1, q2 = sql_query
+#             self._db_execute(db_cursor, q1)
+#             self._db_execute(db_cursor, q2)
+#         else:
+#             self._db_execute(db_cursor, sql_query)
+
+#         try: 
+#             out = db_cursor.fetchone()[0]
+#         except Exception: 
+#             out = None
+        
+#         if not self.ctx.transactions: 
+#             self.ctx.commit()
+#         return out
         
     def _get_insert_default_values_query(self, table):
         return "INSERT INTO %s DEFAULT VALUES" % table
