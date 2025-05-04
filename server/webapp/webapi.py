@@ -179,19 +179,35 @@ class NoMethod(HTTPError):
     """A `405 Method Not Allowed` error."""
     def __init__(self, cls=None):
         status = '405 Method Not Allowed'
-        headers = {}
-        headers = [('Content-Type', 'text/html')]
-#        headers.append(('Content-Type', 'text/html'))
-#        headers['Content-Type'] = 'text/html'
+
+        allowed_methods = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
+        if cls:
+            allowed_methods = [m for m in allowed_methods if hasattr(cls, m)]
+
+        headers = [
+            ('Content-Type', 'text/html'),
+            ('Allow', ', '.join(allowed_methods))
+        ]
+
+        HTTPError.__init__(self, status, headers, "")
+
+# class NoMethod(HTTPError):
+#     """A `405 Method Not Allowed` error."""
+#     def __init__(self, cls=None):
+#         status = '405 Method Not Allowed'
+#         headers = {}
+#         headers = [('Content-Type', 'text/html')]
+# #        headers.append(('Content-Type', 'text/html'))
+# #        headers['Content-Type'] = 'text/html'
 
       
-        methods = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
-        if cls:
-            methods = [method for method in methods if hasattr(cls, method)]
+#         methods = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
+#         if cls:
+#             methods = [method for method in methods if hasattr(cls, method)]
 
-        headers['Allow'] = ', '.join(methods)
-        data = None
-        HTTPError.__init__(self, status, headers, data)
+#         headers['Allow'] = ', '.join(methods)
+#         data = None
+#         HTTPError.__init__(self, status, headers, data)
         
 nomethod = NoMethod
 
