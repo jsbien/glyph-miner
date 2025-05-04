@@ -77,27 +77,27 @@ class index:
 class collection_handler:
 
     def GET(self):
-    print(">>> ENTERED collections_handler.GET <<<", flush=True)
+        print(">>> ENTERED collections_handler.GET <<<", flush=True)
 
-    try:
-        collections_query = db.select('collections')
-        collections = list(collections_query)
+        try:
+            collections_query = db.select('collections')
+            collections = list(collections_query)
 
-        print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-        web.header('Content-Type', 'application/json')
-        return json.dumps(collections)
+            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+            web.header('Content-Type', 'application/json')
+            return json.dumps(collections)
 
-    except Exception as e:
-        print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
-        raise
+        except Exception as e:
+            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
+            raise
 
-    def GET(self):
-        print(">>> ENTERED GET <<<", flush=True)
-        web.header('Access-Control-Allow-Origin', '*')
-        collections = db.query('SELECT * FROM collections')
+        def GET(self):
+            print(">>> ENTERED GET <<<", flush=True)
+            web.header('Access-Control-Allow-Origin', '*')
+            collections = db.query('SELECT * FROM collections')
 #        collections = db.select('collections')
-        output = [collection for collection in collections]
-        return json.dumps(output, cls=DateTimeEncoder)
+            output = [collection for collection in collections]
+            return json.dumps(output, cls=DateTimeEncoder)
 
 import json
 from server.webapp import webapi
@@ -144,17 +144,17 @@ class collections_handler:
     def GET(self):
         print(">>> ENTERED collections_handler.GET <<<", flush=True)
 
-    try:
-        collections_query = db.select('collections')
-        collections = list(collections_query)
+        try:
+            collections_query = db.select('collections')
+            collections = list(collections_query)
 
-        print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-        web.header('Content-Type', 'application/json')
-        return json.dumps(collections)
+            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+            web.header('Content-Type', 'application/json')
+            return json.dumps(collections)
 
-    except Exception as e:
-        print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
-        raise
+        except Exception as e:
+            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
+            raise
 
     # def GET(self):
     #     print(">>> ENTERED GET <<<", flush=True)
