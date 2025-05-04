@@ -77,6 +77,7 @@ class index:
 class collection_handler:
 
     def GET(self):
+        print(">>> ENTERED GET <<<", flush=True)
         web.header('Access-Control-Allow-Origin', '*')
         collections = db.query('SELECT * FROM collections')
 #        collections = db.select('collections')
