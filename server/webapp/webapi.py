@@ -180,8 +180,10 @@ class NoMethod(HTTPError):
     def __init__(self, cls=None):
         status = '405 Method Not Allowed'
         headers = {}
+        headers = [('Content-Type', 'text/html')]
+#        headers.append(('Content-Type', 'text/html'))
 #        headers['Content-Type'] = 'text/html'
-        headers.append(('Content-Type', 'text/html'))
+
       
         methods = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
         if cls:
