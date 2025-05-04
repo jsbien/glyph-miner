@@ -74,6 +74,37 @@ class index:
         return 'Glyph Miner API'
 
 
+    
+class collection_handler:
+
+    def GET(self):
+        print(">>> ENTERED collections_handler.GET <<<", flush=True)
+
+        try:
+            collections_query = db.select('collections')
+            collections = list(collections_query)
+
+            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
+            web.header('Content-Type', 'application/json')
+            return json.dumps(collections)
+
+        except Exception as e:
+            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
+            raise
+
+        def GET(self):
+            print(">>> ENTERED GET <<<", flush=True)
+            web.header('Access-Control-Allow-Origin', '*')
+            collections = db.query('SELECT * FROM collections')
+#        collections = db.select('collections')
+            output = [collection for collection in collections]
+            return json.dumps(output, cls=DateTimeEncoder)
+
+import json
+from server.webapp import webapi
+from server.server import db  # Ensure your db instance is available at this path
+
+
 class collections_handler:
     def GET(self):
         print(">>> ENTERED GET <<<", flush=True)
@@ -112,8 +143,43 @@ class collections_handler:
             print(f"[ERROR] Unexpected error in POST: {e}", flush=True)
             raise web.internalerror("Failed to create collection.")
 
-    
-# class collection_handler:
+
+# class collections_handler:
+#     def POST(self):
+#         print(">>> Entering collections_handler.POST", flush=True)
+#         cl = int(webapi.ctx.env.get("CONTENT_LENGTH") or 0)
+#         data = webapi.ctx.env["wsgi.input"].read(cl)
+
+#         print(f"[DEBUG] Content-Length: {cl}", flush=True)
+#         print(f"[DEBUG] raw input stream read: {repr(data)}", flush=True)
+
+#         try:
+#             decoded = data.decode("utf-8")
+#         except Exception as e:
+#             decoded = f"<< decode error: {e} >>"
+
+#         print(f"[DEBUG] decoded input stream: {repr(decoded)}", flush=True)
+
+#         # continue with parsing
+
+# # disabled for testing purposes:
+# #        data = webapi.data()
+#         print(f"[DEBUG] raw data = {repr(data)}", flush=True)
+# # disabled for testing purposes:
+#         # # decode bytes to string first
+#         # if isinstance(data, bytes):
+#         #     data = data.decode("utf-8", errors="replace")  # safe decoding
+#         #     print(f"[DEBUG] decoded data = {repr(data)}", flush=True)
+#         # # if isinstance(data, bytes):
+#         #     data = data.decode("utf-8")
+#         payload = json.loads(data)
+#         print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
+
+#         if "title" not in payload:
+#             raise webapi.badrequest()
+
+#         db.insert('collections', title=payload["title"])
+#         return json.dumps({'status': 'ok'})
 
 #     def GET(self):
 #         print(">>> ENTERED collections_handler.GET <<<", flush=True)
@@ -129,71 +195,6 @@ class collections_handler:
 #         except Exception as e:
 #             print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
 #             raise
-
-#         def GET(self):
-#             print(">>> ENTERED GET <<<", flush=True)
-#             web.header('Access-Control-Allow-Origin', '*')
-#             collections = db.query('SELECT * FROM collections')
-# #        collections = db.select('collections')
-#             output = [collection for collection in collections]
-#             return json.dumps(output, cls=DateTimeEncoder)
-
-import json
-from server.webapp import webapi
-from server.server import db  # Ensure your db instance is available at this path
-
-
-class collections_handler:
-    def POST(self):
-        print(">>> Entering collections_handler.POST", flush=True)
-        cl = int(webapi.ctx.env.get("CONTENT_LENGTH") or 0)
-        data = webapi.ctx.env["wsgi.input"].read(cl)
-
-        print(f"[DEBUG] Content-Length: {cl}", flush=True)
-        print(f"[DEBUG] raw input stream read: {repr(data)}", flush=True)
-
-        try:
-            decoded = data.decode("utf-8")
-        except Exception as e:
-            decoded = f"<< decode error: {e} >>"
-
-        print(f"[DEBUG] decoded input stream: {repr(decoded)}", flush=True)
-
-        # continue with parsing
-
-# disabled for testing purposes:
-#        data = webapi.data()
-        print(f"[DEBUG] raw data = {repr(data)}", flush=True)
-# disabled for testing purposes:
-        # # decode bytes to string first
-        # if isinstance(data, bytes):
-        #     data = data.decode("utf-8", errors="replace")  # safe decoding
-        #     print(f"[DEBUG] decoded data = {repr(data)}", flush=True)
-        # # if isinstance(data, bytes):
-        #     data = data.decode("utf-8")
-        payload = json.loads(data)
-        print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
-
-        if "title" not in payload:
-            raise webapi.badrequest()
-
-        db.insert('collections', title=payload["title"])
-        return json.dumps({'status': 'ok'})
-
-    def GET(self):
-        print(">>> ENTERED collections_handler.GET <<<", flush=True)
-
-        try:
-            collections_query = db.select('collections')
-            collections = list(collections_query)
-
-            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-            web.header('Content-Type', 'application/json')
-            return json.dumps(collections)
-
-        except Exception as e:
-            print(f"[ERROR] collections_handler.GET failed: {e}", flush=True)
-            raise
 
     # def GET(self):
     #     print(">>> ENTERED GET <<<", flush=True)
