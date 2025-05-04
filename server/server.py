@@ -91,6 +91,9 @@ class collections_handler:
     def POST(self):
         data = webapi.data()
         print(f"[DEBUG] raw data = {repr(data)}", flush=True)
+        # decode bytes to string first
+        if isinstance(data, bytes):
+            data = data.decode("utf-8")
         payload = json.loads(data)
         print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
 
