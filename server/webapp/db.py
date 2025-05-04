@@ -768,7 +768,8 @@ class DB:
         if values:
             _keys = SQLQuery.join(list(values.keys()), ', ')
             _values = SQLQuery.join([sqlparam(v) for v in list(values.values())], ', ')
-            sql_query = "INSERT INTO %s " % tablename + q(_keys) + ' VALUES ' + q(_values)
+            sql_query = SQLQuery("INSERT INTO %s " % tablename) + q(_keys) + ' VALUES ' + q(_values)
+#            sql_query = "INSERT INTO %s " % tablename + q(_keys) + ' VALUES ' + q(_values)
         else:
             sql_query = SQLQuery(self._get_insert_default_values_query(tablename))
 
