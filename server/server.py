@@ -142,7 +142,7 @@ class collections_handler:
         return json.dumps({'status': 'ok'})
 
     def GET(self):
-    print(">>> ENTERED collections_handler.GET <<<", flush=True)
+        print(">>> ENTERED collections_handler.GET <<<", flush=True)
 
     try:
         collections_query = db.select('collections')
