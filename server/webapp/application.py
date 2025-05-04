@@ -1,28 +1,24 @@
 import sys
+import re
 import types
 import traceback
 import server.webapp.webapi as webapi
 from server.webapp.webapi import _NotFound, Redirect  # Let these propagate
 
 class application:
-    # def __init__(self, mapping, fvars):
-    #     self.mapping = mapping
-    #     self.fvars = fvars or {}
+    def __init__(self, mapping, fvars):
+        self.mapping = mapping  # will be replaced by resolve_route()
+        self.fvars = fvars
+        self.args = []
 
-        def __init__(self, mapping, fvars):
-            self.mapping = mapping  # this will get replaced by resolve_route()
-            self.fvars = fvars
-            self.args = []
-
-        
-        def resolve_route(self, path):
-            """Match the path against self.mapping and return (handler_key, args)."""
-            for i in range(0, len(self.mapping), 2):
-                regex, handler_key = self.mapping[i], self.mapping[i + 1]
-                match = re.compile("^" + regex + "$").match(path)
-                if match:
-                    return handler_key, list(match.groups())
-                return None, []
+    def resolve_route(self, path):
+        """Match the path against self.mapping and return (handler_key, args)."""
+        for i in range(0, len(self.mapping), 2):
+            regex, handler_key = self.mapping[i], self.mapping[i + 1]
+            match = re.compile("^" + regex + "$").match(path)
+            if match:
+                return handler_key, list(match.groups())
+        return None, []
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
@@ -30,8 +26,10 @@ class application:
             webapi.ctx.headers = []
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
-# Add this line to match the route and update self.mapping properly:
-            self.mapping, self.args = self._resolve_route(webapi.ctx.path)
+
+            # Route resolution here:
+            self.mapping, self.args = self.resolve_route(webapi.ctx.path)
+
             webapi.ctx.fullpath = env.get('PATH_INFO', '/')
             webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
@@ -53,12 +51,11 @@ class application:
                     start_resp('200 OK', [('Content-Type', 'text/html')])
                     return [result]
 
-                # Fallback error
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
             except (_NotFound, Redirect):
-                raise  # Let framework handle 404/redirects properly
+                raise
             except Exception:
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
@@ -66,8 +63,6 @@ class application:
 
         return wsgi
 
-    # def handle_with_processors(self):
-    #     return self._delegate(self.mapping, self.fvars, ())
     def handle_with_processors(self):
         try:
             print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
