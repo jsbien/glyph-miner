@@ -160,30 +160,55 @@ class collections_handler:
             raise
 
     def POST(self):
-        print(">>> ENTERED collections_handler.POST <<<", flush=True)
-        try:
-            raw = web.data()
-            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+    print(">>> ENTERED collections_handler.POST <<<", flush=True)
+    try:
+        raw_bytes = web.data()
+        print(f"[DEBUG] raw input = {repr(raw_bytes)}", flush=True)
 
-            if isinstance(raw, bytes):
-                raw = raw.decode("utf-8", errors="replace")
-                print(f"[DEBUG] decoded input = {raw}", flush=True)
+        raw_str = raw_bytes.decode("utf-8", errors="replace")
+        print(f"[DEBUG] decoded input = {raw_str}", flush=True)
 
-            payload = json.loads(raw)
-            print(f"[DEBUG] Parsed JSON payload: {payload}", flush=True)
+        payload = json.loads(raw_str)
+        print(f"[DEBUG] Parsed JSON payload: {payload}", flush=True)
 
-        except Exception as e:
-            print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
-            raise web.badrequest("Invalid JSON payload.")
+    except Exception as e:
+        print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
+        raise web.badrequest("Invalid JSON payload.")
 
-        try:
-            db.insert('collections', title=payload["title"])
-            print("[DEBUG] Inserted collection into DB", flush=True)
-            web.header('Content-Type', 'application/json')
-            return json.dumps({"status": "ok"})
-        except Exception as e:
-            print(f"[ERROR] DB insert failed: {e}", flush=True)
-            raise web.internalerror("Database insert failed.")
+    try:
+        db.insert('collections', title=payload["title"])
+        print("[DEBUG] Inserted collection into DB", flush=True)
+        web.header('Content-Type', 'application/json')
+        return json.dumps({"status": "ok"})
+    except Exception as e:
+        print(f"[ERROR] DB insert failed: {e}", flush=True)
+        raise web.internalerror("Database insert failed.")
+
+    # def POST(self):
+    #     print(">>> ENTERED collections_handler.POST <<<", flush=True)
+    #     try:
+    #         raw = web.data()
+    #         print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+
+    #         if isinstance(raw, bytes):
+    #             raw = raw.decode("utf-8", errors="replace")
+    #             print(f"[DEBUG] decoded input = {raw}", flush=True)
+
+    #         payload = json.loads(raw)
+    #         print(f"[DEBUG] Parsed JSON payload: {payload}", flush=True)
+
+    #     except Exception as e:
+    #         print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
+    #         raise web.badrequest("Invalid JSON payload.")
+
+    #     try:
+    #         db.insert('collections', title=payload["title"])
+    #         print("[DEBUG] Inserted collection into DB", flush=True)
+    #         web.header('Content-Type', 'application/json')
+    #         return json.dumps({"status": "ok"})
+    #     except Exception as e:
+    #         print(f"[ERROR] DB insert failed: {e}", flush=True)
+    #         raise web.internalerror("Database insert failed.")
 
 # class collections_handler:
 #     def GET(self):
