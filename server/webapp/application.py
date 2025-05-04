@@ -15,6 +15,8 @@ class application:
             webapi.ctx.headers = []
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
+# Add this line to match the route and update self.mapping properly:
+            self.mapping, self.args = self._match(webapi.ctx.path)
             webapi.ctx.fullpath = env.get('PATH_INFO', '/')
             webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
