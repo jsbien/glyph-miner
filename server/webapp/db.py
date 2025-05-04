@@ -769,7 +769,7 @@ class DB:
         print("[DEBUG] With params:", params, flush=True)
 
         try:
-            out = db_cursor.execute(query, _values)
+            out = db_cursor.execute(query, params)
             self.ctx.commit()  # ✅ Use ctx.commit() instead of _db_commit()
             return out
 #            out = db_cursor.execute(query, params)
