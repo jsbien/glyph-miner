@@ -752,33 +752,32 @@ class DB:
         return xjoin(sql, nout)
 
     def insert(self, tablename, seqname=None, _test=False, **values):
-        """
-        Inserts a row into `tablename` and returns the last inserted id.
+    """
+    Inserts a row into `tablename` and returns the last inserted id.
 
-        Example:
+    Example:
         db.insert('users', name='bob', created=now())
-        """
-        db_cursor = self._db_cursor()
+    """
+    db_cursor = self._db_cursor()
 
-        _keys = SQLQuery.join(list(values.keys()), ', ')
-        _values = SQLQuery.join([sqlparam(v) for v in values.values()], ', ')
-        sql_query = SQLQuery("INSERT INTO %s " % tablename) + q(_keys) + ' VALUES ' + q(_values)
+    fields = ', '.join(values.keys())
+    placeholders = ', '.join(['%s'] * len(values))
+    query = f"INSERT INTO {tablename} ({fields}) VALUES ({placeholders})"
+    params = list(values.values())
 
-        if self.paramstyle == "pyformat":
-            query, params = self._process_query(sql_query)
-            try:
-                out = db_cursor.execute(query, params)
-            except Exception as e:
-                print("ERR:", query)
-                print("PARAMS:", params)
-                raise
-            else:
-                out = self._db_execute(db_cursor, sql_query)
+    print("[DEBUG] Executing query:", query, flush=True)
+    print("[DEBUG] With params:", params, flush=True)
 
-            if not _test:
-                self._db_commit()
+    try:
+        out = db_cursor.execute(query, params)
+    except Exception as e:
+        print("[ERROR] MySQL execution failed:", e, flush=True)
+        raise
 
-            return out
+    if not _test:
+        self._db_commit()
+
+    return out
 
     
     # def insert(self, tablename, seqname=None, _test=False, **values): 
