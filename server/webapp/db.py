@@ -769,15 +769,19 @@ class DB:
         print("[DEBUG] With params:", params, flush=True)
 
         try:
-            out = db_cursor.execute(query, params)
+            out = db_cursor.execute(query, _values)
+            self.ctx.commit()  # ✅ Use ctx.commit() instead of _db_commit()
+            return out
+#            out = db_cursor.execute(query, params)
         except Exception as e:
             print("[ERROR] MySQL execution failed:", e, flush=True)
+            self.ctx.rollback()
             raise
 
         if not _test:
             self._db_commit()
 
-        return out
+            return out
 
     
     # def insert(self, tablename, seqname=None, _test=False, **values): 
