@@ -9,6 +9,15 @@ class application:
         self.mapping = mapping
         self.fvars = fvars or {}
 
+        def resolve_route(self, path):
+            """Match the path against self.mapping and return (handler_key, args)."""
+            for i in range(0, len(self.mapping), 2):
+                regex, handler_key = self.mapping[i], self.mapping[i + 1]
+                match = re.compile("^" + regex + "$").match(path)
+                if match:
+                    return handler_key, list(match.groups())
+                return None, []
+
     def wsgifunc(self):
         def wsgi(env, start_resp):
             webapi.ctx = webapi.storage()
