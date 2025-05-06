@@ -112,7 +112,7 @@ class collections_handler:
 
 
 
-    class collection_handler:
+class collection_handler:
 
     def GET(self):
         web.header('Access-Control-Allow-Origin', '*')
@@ -121,74 +121,6 @@ class collections_handler:
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
-
-
-
-#     class collections_handler:
-
-#     def __init__(self):
-#         print(">>> INIT: collections_handler <<<", flush=True)
-
-#     def GET(self):
-#         print(">>> ENTERED GET <<<", flush=True)
-#         web.header('Access-Control-Allow-Origin', '*')
-#         collections = db.query('SELECT * FROM collections')
-#         output = [collection for collection in collections]
-#         return json.dumps(output, cls=DateTimeEncoder)
-
-#     def POST(self):
-#         web.header('Access-Control-Allow-Origin', '*')
-#         print(">>> POST /collections entered <<<", flush=True)
-
-#         try:
-#             data_raw = web.data()
-#             print(f"[DEBUG] Raw request data: {data_raw}")
-#             data = json.loads(data_raw)
-#             print(f"[DEBUG] Parsed data: {data}")
-#         except Exception as e:
-#             print(f"[ERROR] Failed to parse request body: {e}")
-#             return web.badrequest("Invalid JSON payload.")
-
-#         if not "title" in data or data["title"] == "":
-#             print("[ERROR] Title missing in payload.")
-#             return web.badrequest("No title given.")
-
-#         for key in ["subtitle", "author", "year", "signature"]:
-#             if key not in data:
-#                 data[key] = None
-                
-#         try:
-#             dbId = db.insert('collections',
-#                              title=data["title"],
-#                              subtitle=data["subtitle"],
-#                              author=data["author"],
-#                              year=data["year"],
-#                              signature=data["signature"])
-#             print(f"[DEBUG] dbId after insert: {dbId} ({type(dbId)})")
-
-#             result = list(db.select('collections', vars={'dbId': dbId}, where="id = $dbId"))
-#             print(f"[DEBUG] Select result: {result}")
-
-#             if not result:
-#                 print("[ERROR] No collection found after insert.")
-#                 return web.internalerror("Collection inserted but not found.")
-
-#             web.header("Content-Type", "application/json")
-#             print(">>> COLLECTION CREATED AND RETURNED <<<")
-#             return json.dumps(result[0], cls=DateTimeEncoder)
-
-#         except Exception as e:
-#             print(f"[FATAL] Exception during insert/select: {e}")
-#             return web.internalerror("Failed to create collection.")
-
-
-#    def OPTIONS(self, imageId):
-    # def OPTIONS(self):
-    #     web.header('Content-Type', 'application/json')
-    #     web.header('Access-Control-Allow-Origin', '*')
-    #     web.header('Access-Control-Allow-Credentials', 'true')
-    #     web.header('Access-Control-Allow-Headers', 'Content-Type')
-    #     return
 
 
 class synthetic_pages:
