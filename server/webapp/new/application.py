@@ -1,26 +1,13 @@
 import sys
-import re
 import types
 import traceback
 import server.webapp.webapi as webapi
-from server.webapp.webapi import _NotFound, Redirect  # Let these propagate
+
 
 class application:
     def __init__(self, mapping, fvars):
-        self.mapping = mapping  # will be replaced by resolve_route()
-        self.fvars = fvars
-        self.args = []
-
-    def resolve_route(self, path):
-        print(f"[DEBUG] resolve_route() called with path: {path}")
-        print(f"[DEBUG] self.mapping = {self.mapping} (type: {type(self.mapping)}, len: {len(self.mapping)})")
-        """Match the path against self.mapping and return (handler_key, args)."""
-        for i in range(0, len(self.mapping), 2):
-            regex, handler_key = self.mapping[i], self.mapping[i + 1]
-            match = re.compile("^" + regex + "$").match(path)
-            if match:
-                return handler_key, list(match.groups())
-        return None, []
+        self.mapping = mapping
+        self.fvars = fvars or {}
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
@@ -28,11 +15,6 @@ class application:
             webapi.ctx.headers = []
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
-
-            # Route resolution here:
-#            self.mapping, self.args = self.resolve_route(webapi.ctx.path)
-            handler_key, args = self.resolve_route(webapi.ctx.path)
-
             webapi.ctx.fullpath = env.get('PATH_INFO', '/')
             webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
@@ -54,31 +36,19 @@ class application:
                     start_resp('200 OK', [('Content-Type', 'text/html')])
                     return [result]
 
+                # Fallback error
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-            except (_NotFound, Redirect):
-                raise
             except Exception:
-                print("⚠️ Unhandled exception occurred:", flush=True)
-                print(traceback.format_exc(), flush=True)
+                print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
         return wsgi
 
     def handle_with_processors(self):
-        try:
-            handler_key, args = self.resolve_route(webapi.ctx.path)
-            return self._delegate(handler_key, self.fvars, args)
-
-            # print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
-            # return self._delegate(self.mapping, self.fvars, self.args)
-        except _NotFound:
-            raise
-        except Exception:
-            print(traceback.format_exc())
-            raise
+        return self._delegate(self.mapping, self.fvars, ())
 
     def _delegate(self, f, fvars, args=[]):
         def handle_class(cls):
@@ -112,7 +82,6 @@ class application:
                 mod = __import__(mod, None, None, [''])
                 cls = getattr(mod, cls)
             else:
-                print(f"[DEBUG] _delegate f = {f}, fvars keys = {list(fvars.keys())}", flush=True)
                 cls = fvars[f]
             return handle_class(cls)
         elif hasattr(f, '__call__'):
