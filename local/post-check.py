@@ -1,21 +1,15 @@
-#!/usr/bin/env python3
 import requests
-import sys
+import json
 
-if len(sys.argv) != 2:
-    print("Usage: post-check.py <API endpoint>")
-    sys.exit(1)
+url = "http://localhost:9090/api/collections"
+headers = {"Content-Type": "application/json"}
+data = {"title": "Debug Collection"}
 
-url = sys.argv[1]
-payload = {"title": "Debug Collection (post-check.py)"}
+response = requests.post(url, headers=headers, data=json.dumps(data))
 
-try:
-    response = requests.post(url, json=payload)
-    print(f"Status Code: {response.status_code}")
-    print("Response Body:")
-    print(response.text)
-    response.raise_for_status()
-    sys.exit(0)
-except requests.RequestException as e:
-    print(f"Request failed: {e}")
-    sys.exit(1)
+print("Status Code:", response.status_code)
+print("Response Body:")
+print(response.text)
+
+if response.status_code != 200:
+    exit(1)
