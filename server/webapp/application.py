@@ -3,12 +3,12 @@ import re
 import types
 import traceback
 import server.webapp.webapi as webapi
-from server.webapp.webapi import _NotFound, Redirect  # imported, but not explicitly caught here
+from server.webapp.webapi import _NotFound, _Redirect  # Used for isinstance checks
 
 class application:
-    def __init__(self, mapping, fvars):
-        self.mapping = mapping  # route table
-        self.fvars = fvars      # imported controller classes
+    def __init__(self, mapping=(), fvars=None):
+        self.mapping = mapping
+        self.fvars = fvars or {}
         self.args = []
 
     def resolve_route(self, path):
@@ -24,7 +24,6 @@ class application:
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
-            # Setup web context
             webapi.ctx = webapi.storage()
             webapi.ctx.headers = []
             webapi.ctx.env = env
@@ -33,7 +32,6 @@ class application:
             webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
             try:
-                # Main dispatch handler
                 result = self.handle_with_processors()
 
                 # Validate and encode response
@@ -51,9 +49,12 @@ class application:
                 else:
                     raise TypeError(f"Invalid response type: {type(result)}, value: {result}")
 
-            except Exception:
-                # ⚠️ Do NOT catch Redirect or _NotFound here!
-                # Let web.py handle those internally as HTTP responses
+            except Exception as e:
+                # ✅ Let web.py handle known redirects and 404s
+                if isinstance(e, (_Redirect, _NotFound)):
+                    return e()
+
+                # ❌ Otherwise treat as internal error
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
@@ -66,7 +67,6 @@ class application:
             handler_key, args = self.resolve_route(webapi.ctx.path)
             return self._delegate(handler_key, self.fvars, args)
         except _NotFound:
-            # Let _NotFound propagate
             raise
         except Exception:
             print(traceback.format_exc())
