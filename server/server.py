@@ -83,7 +83,10 @@ class collection_handler:
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
-class collections_handler:
+
+
+
+    class collections_handler:
 
     def __init__(self):
         print(">>> INIT: collections_handler <<<", flush=True)
