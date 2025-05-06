@@ -30,7 +30,6 @@ class application:
             webapi.ctx.path = env.get('PATH_INFO', '/')
 
             # Route resolution here:
-#            self.mapping, self.args = self.resolve_route(webapi.ctx.path)
             handler_key, args = self.resolve_route(webapi.ctx.path)
 
             webapi.ctx.fullpath = env.get('PATH_INFO', '/')
@@ -60,8 +59,7 @@ class application:
             except (_NotFound, Redirect):
                 raise
             except Exception:
-                print("⚠️ Unhandled exception occurred:", flush=True)
-                print(traceback.format_exc(), flush=True)
+                print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
@@ -71,9 +69,6 @@ class application:
         try:
             handler_key, args = self.resolve_route(webapi.ctx.path)
             return self._delegate(handler_key, self.fvars, args)
-
-            # print(f"[DEBUG] handle_with_processors(): self.mapping = {self.mapping}", flush=True)
-            # return self._delegate(self.mapping, self.fvars, self.args)
         except _NotFound:
             raise
         except Exception:
