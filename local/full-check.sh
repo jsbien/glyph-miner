@@ -66,9 +66,6 @@ else
   GET_RESULT=0
 fi
 
-echo ">>> Running GET test..."
-python3 local/test_get_collections.py
-
 # ✅ Final result
 if [ "$HTML_RESULT" -eq 0 ] && [ "$POST_RESULT" -eq 0 ] && [ "$GET_RESULT" -eq 0 ]; then
   echo "✅ All tests passed"
