@@ -3,18 +3,18 @@ import re
 import types
 import traceback
 import server.webapp.webapi as webapi
-from server.webapp.webapi import _NotFound, Redirect  # Let these propagate
+from server.webapp.webapi import _NotFound, Redirect  # imported, but not explicitly caught here
 
 class application:
     def __init__(self, mapping, fvars):
-        self.mapping = mapping  # will be replaced by resolve_route()
-        self.fvars = fvars
+        self.mapping = mapping  # route table
+        self.fvars = fvars      # imported controller classes
         self.args = []
 
     def resolve_route(self, path):
+        """Match the path against self.mapping and return (handler_key, args)."""
         print(f"[DEBUG] resolve_route() called with path: {path}")
         print(f"[DEBUG] self.mapping = {self.mapping} (type: {type(self.mapping)}, len: {len(self.mapping)})")
-        """Match the path against self.mapping and return (handler_key, args)."""
         for i in range(0, len(self.mapping), 2):
             regex, handler_key = self.mapping[i], self.mapping[i + 1]
             match = re.compile("^" + regex + "$").match(path)
@@ -24,23 +24,19 @@ class application:
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
+            # Setup web context
             webapi.ctx = webapi.storage()
             webapi.ctx.headers = []
             webapi.ctx.env = env
             webapi.ctx.path = env.get('PATH_INFO', '/')
-
-            # Route resolution here:
-            handler_key, args = self.resolve_route(webapi.ctx.path)
-
-            webapi.ctx.fullpath = env.get('PATH_INFO', '/')
+            webapi.ctx.fullpath = webapi.ctx.path
             webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
             try:
+                # Main dispatch handler
                 result = self.handle_with_processors()
 
-                if not isinstance(result, (str, bytes, list, tuple)):
-                    raise TypeError(f"Invalid response type: {type(result)}, value: {result}")
-
+                # Validate and encode response
                 if isinstance(result, list):
                     status = '200 OK'
                     headers = [('Content-Type', 'text/html')] + webapi.ctx.headers
@@ -52,13 +48,12 @@ class application:
                 elif isinstance(result, bytes):
                     start_resp('200 OK', [('Content-Type', 'text/html')])
                     return [result]
+                else:
+                    raise TypeError(f"Invalid response type: {type(result)}, value: {result}")
 
-                start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
-                return [b"Internal Server Error"]
-
-            except (_NotFound, Redirect):
-                raise
             except Exception:
+                # ⚠️ Do NOT catch Redirect or _NotFound here!
+                # Let web.py handle those internally as HTTP responses
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
@@ -66,16 +61,19 @@ class application:
         return wsgi
 
     def handle_with_processors(self):
+        """Main entry point for dispatching request."""
         try:
             handler_key, args = self.resolve_route(webapi.ctx.path)
             return self._delegate(handler_key, self.fvars, args)
         except _NotFound:
+            # Let _NotFound propagate
             raise
         except Exception:
             print(traceback.format_exc())
             raise
 
     def _delegate(self, f, fvars, args=[]):
+        """Resolve a controller (class/function) from route and call it."""
         def handle_class(cls):
             meth = webapi.ctx.method
             if meth == 'HEAD' and not hasattr(cls, meth):
@@ -98,9 +96,9 @@ class application:
             if f.startswith('redirect '):
                 url = f.split(' ', 1)[1]
                 if webapi.ctx.method == "GET":
-                    x = webapi.ctx.env.get('QUERY_STRING', '')
-                    if x:
-                        url += '?' + x
+                    q = webapi.ctx.env.get('QUERY_STRING', '')
+                    if q:
+                        url += '?' + q
                 raise webapi.redirect(url)
             elif '.' in f:
                 mod, cls = f.rsplit('.', 1)
