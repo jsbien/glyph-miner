@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-
-import sys
 import requests
+import json
 
-if len(sys.argv) != 2:
-    print("Usage: post-check.py <url>")
-    sys.exit(2)
+url = "http://localhost:9090/api/collections"
+headers = {"Content-Type": "application/json"}
+data = {"title": "Debug Collection"}
 
-url = sys.argv[1]
-print(f"📡 Sending POST to {url}")
-response = requests.post(url, json={"test": "data"})
-
-print(f"🔎 Status Code: {response.status_code}")
-print(f"📬 Response Body:\n{response.text}")
-
-if response.status_code == 200 and '"status": "ok"' in response.text:
-    sys.exit(0)
-else:
-    print("❌ Unexpected response.")
-    sys.exit(1)
+try:
+    response = requests.post(url, headers=headers, json=data)
+    print(f"Status Code: {response.status_code}")
+    try:
+        print("Response JSON:")
+        print(response.json())
+    except json.JSONDecodeError:
+        print("Response is not valid JSON.")
+        print("Raw response:")
+        print(response.text)
+except requests.exceptions.RequestException as e:
+    print(f"Request failed: {e}")
