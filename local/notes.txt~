@@ -1,0 +1,4 @@
+
+Run as MySQL root user (or any user with CREATE USER privilege):
+mysql -u root -p < local/init_glyphminer_db.sql
+Run as MySQL root user (or any user with CREATE USER privilege):

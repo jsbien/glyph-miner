@@ -1,0 +1,44 @@
+#!/bin/bash
+set -e
+
+# Configuration
+POST_URL="http://localhost:9090/api/collections"
+HTML_URL="http://localhost:9090"
+LOGDIR="./log"
+LOGFILE="$LOGDIR/test-$(date +%Y%m%d-%H%M%S).log"
+
+# Ensure log directory exists
+mkdir -p "$LOGDIR"
+
+# Fetch commit info
+COMMIT_HASH=$(git rev-parse HEAD)
+COMMIT_MSG=$(git log -1 --pretty=%s)
+
+# Start log
+{
+  echo "🕒 Timestamp: $(date)"
+  echo "🔢 Commit: $COMMIT_HASH"
+  echo "📝 Message: $COMMIT_MSG"
+  echo "======================================="
+  echo "🔄 Restarting server via restart-server.sh..."
+} | tee "$LOGFILE"
+
+./local/restart-server.sh | tee -a "$LOGFILE"
+
+echo "⏳ Waiting for server to be ready..." | tee -a "$LOGFILE"
+sleep 3
+
+echo "🔬 Running POST test..." | tee -a "$LOGFILE"
+if ! ./local/post-check.py "$POST_URL" 2>&1 | tee -a "$LOGFILE"; then
+  echo "❌ POST test failed" | tee -a "$LOGFILE"
+  exit 1
+fi
+
+echo "🔬 Running HTML test..." | tee -a "$LOGFILE"
+if ! ./local/html-check.js "$HTML_URL" 2>&1 | tee -a "$LOGFILE"; then
+  echo "❌ HTML test failed" | tee -a "$LOGFILE"
+  exit 1
+fi
+
+echo "✅ All tests passed" | tee -a "$LOGFILE"
+exit 0

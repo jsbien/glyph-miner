@@ -1,4 +1,6 @@
 #!/bin/bash
+# Save PID to file
+echo $$ > /tmp/uwsgi-wrapper.pid
 
 # Create timestamped logfile in current directory
 timestamp=$(date +"%Y%m%d-%H%M%S")
@@ -8,11 +10,14 @@ echo "Logging to $logfile"
 echo "Ctrl+C to stop."
 
 # Run uwsgi with timestamped log and show print() output
-uwsgi --socket 127.0.0.1:9091 \
-      --protocol uwsgi \
-      --chdir /home/jsbien/git/glyph-miner \
-      --pythonpath /home/jsbien/git/glyph-miner \
-      --module server.server:application \
-      --master --processes 1 --threads 2 \
-      --py-autoreload 1 \
-      --logto uwsgi-$(date +%Y%m%d-%H%M%S).log
+exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
+  --socket 127.0.0.1:9091 \
+  --protocol uwsgi \
+  --chdir /home/jsbien/work/jsbien_glyph-miner/glyph-miner \
+  --pythonpath /home/jsbien/work/jsbien_glyph-miner/glyph-miner \
+  --module server.server:application \
+  --master \
+  --processes 1 \
+  --threads 2 \
+  --logto uwsgi-$(date +%Y%m%d-%H%M%S).log
+

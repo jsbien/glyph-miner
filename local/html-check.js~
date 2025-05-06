@@ -1,0 +1,73 @@
+#!/usr/bin/env node
+
+const puppeteer = require('puppeteer');
+const { execSync, spawn } = require('child_process');
+const http = require('http');
+const path = require('path');
+
+const url = process.argv[2];
+if (!url) {
+  console.error("❌ Usage: html-check.js <url>");
+  process.exit(2);
+}
+
+// Step 1: Restart the server using the new shell script
+console.log("🔁 Restarting server via restart-server.sh...");
+try {
+  const restartScript = path.join(__dirname, 'restart-server.sh');
+  execSync(restartScript, { stdio: 'inherit' });
+} catch (err) {
+  console.error("❌ Failed to restart server.");
+  process.exit(1);
+}
+
+// Step 2: Launch browser and test
+(async () => {
+  const port = new URL(url).port || 80;
+
+  const browser = await puppeteer.launch({ headless: "new" });
+  const page = await browser.newPage();
+
+  try {
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 10000 });
+
+    // Check for error-like messages inside known UI elements
+    const errorTexts = await page.$$eval('.alert, .alert-danger, .error', elements =>
+      elements.map(el => el.innerText.trim()).filter(text =>
+        text.includes('Error') || text.includes('Internal Server Error') || text.includes('Bad Gateway')
+      )
+    );
+
+    if (errorTexts.length > 0) {
+      console.error("❌ Found visible error messages on the page:");
+      errorTexts.forEach(msg => console.error(`→ ${msg}`));
+      await browser.close();
+      process.exit(1);
+    }
+
+    // Fallback: check raw body text
+    const bodyText = await page.evaluate(() => document.body.innerText);
+    const knownErrors = [
+      "TypeError", "ReferenceError", "SyntaxError", "Cannot read properties",
+      "Unexpected token", "failed to load", "Error:", "Uncaught",
+      "Internal Server Error", "Bad Gateway"
+    ];
+    const failed = knownErrors.some(err => bodyText.includes(err));
+
+    if (failed) {
+      console.error("❌ Found known error message in body text.");
+      console.log(bodyText);
+      await browser.close();
+      process.exit(1);
+    }
+
+    console.log("✅ Page loaded successfully with no known errors.");
+    await browser.close();
+    process.exit(0);
+
+  } catch (err) {
+    console.error("❌ Error while loading page:", err.message);
+    await browser.close();
+    process.exit(1);
+  }
+})();
