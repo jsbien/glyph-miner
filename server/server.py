@@ -859,6 +859,11 @@ def patched_delegate(self, f, fvars, args):
     if cls:
         print(f"[DEBUG] Methods in {cls.__name__}: {dir(cls)}", flush=True)
 
+    if isinstance(f, str) and f in fvars:
+        handler = fvars[f]
+        print(f"[DEBUG] fvars['{f}'] = {handler}", flush=True)
+        print(f"[DEBUG] methods of handler: {dir(handler)}", flush=True)
+
     return original_delegate(self, f, fvars, args)
 
 application._delegate = patched_delegate
