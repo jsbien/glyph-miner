@@ -800,7 +800,7 @@ print(f">>> collections_handler has methods: {dir(collections_handler)}", flush=
 handler_map = {
     'PingHandler': PingHandler,
     'index': index,
-    'collections': collections_handler,
+    'collections': collections_handler(),
     'collection': collection_handler,
     'collection_images': collection_images,
     'collection_templates': collection_templates,
