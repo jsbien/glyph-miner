@@ -863,6 +863,8 @@ def patched_delegate(self, f, fvars, args):
         print(">>> NO: collections_handler lacks GET method <<<", flush=True)
 
     cls = fvars.get(f)
+    print(f"[DEBUG] 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
+
     print(f"[DEBUG] cls = {cls}", flush=True)
     if cls:
         print(f"[DEBUG] Methods in {cls.__name__}: {dir(cls)}", flush=True)
