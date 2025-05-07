@@ -852,6 +852,10 @@ def patched_delegate(self, f, fvars, args):
     print(f"[DEBUG] fvars keys = {list(fvars.keys())}", flush=True)
     print(f"[DEBUG] fvars['collections'] = {fvars['collections']}", flush=True)
     print(f"[DEBUG] methods of fvars['collections']: {dir(fvars['collections'])}", flush=True)
+    print(f"[DEBUG] f = {f!r} (type: {type(f)})", flush=True)
+    print(f"[DEBUG] fvars keys = {list(fvars.keys())}", flush=True)
+    print(f"[DEBUG] f in fvars: {f in fvars}", flush=True)
+    print(f"[DEBUG] fvars.get(f): {fvars.get(f)}", flush=True)
 
     if hasattr(cls, 'GET'):
         print(">>> YES: collections_handler has GET method <<<", flush=True)
@@ -870,7 +874,8 @@ def patched_delegate(self, f, fvars, args):
 
     return original_delegate(self, f, fvars, args)
 
-app._delegate = patched_delegate.__get__(app)
+application._delegate = types.MethodType(patched_delegate, application)
+# app._delegate = patched_delegate.__get__(app)
 # application._delegate = patched_delegate
 
 application = app.wsgifunc()
