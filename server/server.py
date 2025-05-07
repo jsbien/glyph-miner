@@ -840,10 +840,11 @@ print(f">>> collections_handler has POST: {'POST' in dir(collections_handler)}",
 
 #app = web.application(urls, globals())
 app = web.application(urls, handler_map)
-application = app.wsgifunc()
+
 
 # Monkey patch _delegate for debugging
-original_delegate = application._delegate
+#original_delegate = application._delegate
+original_delegate = app._delegate
 
 def patched_delegate(self, f, fvars, args):
     print(">>> 🐒 Monkey-patched _delegate called <<<", flush=True)
@@ -869,9 +870,10 @@ def patched_delegate(self, f, fvars, args):
 
     return original_delegate(self, f, fvars, args)
 
-application._delegate = patched_delegate
+app._delegate = patched_delegate.__get__(app)
+# application._delegate = patched_delegate
 
-
+application = app.wsgifunc()
 import datetime
 ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 with open(f"./debug-application-object-{ts}.log", "w") as debug_file:
