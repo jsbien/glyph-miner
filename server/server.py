@@ -863,7 +863,12 @@ def patched_delegate(self, f, fvars, args):
         print(">>> NO: collections_handler lacks GET method <<<", flush=True)
 
     cls = fvars.get(f)
-    print(f"[DEBUG] 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
+    if cls is None:
+        print(f"[DEBUG] ❌ No class found for f = {f} in fvars keys = {list(fvars.keys())}", flush=True)
+    else:
+        print(f"[DEBUG] 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
+
+    # print(f"[DEBUG] 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
 
     print(f"[DEBUG] cls = {cls}", flush=True)
     if cls:
