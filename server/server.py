@@ -846,6 +846,9 @@ def patched_delegate(self, f, fvars, args):
     print(">>> 🐒 Monkey-patched _delegate called <<<", flush=True)
     print(f"[DEBUG] f = {f} (type: {type(f)})", flush=True)
     print(f"[DEBUG] fvars keys = {list(fvars.keys())}", flush=True)
+    print(f"[DEBUG] fvars['collections'] = {fvars['collections']}", flush=True)
+    print(f"[DEBUG] methods of fvars['collections']: {dir(fvars['collections'])}", flush=True)
+
     if hasattr(cls, 'GET'):
         print(">>> YES: collections_handler has GET method <<<", flush=True)
     else:
