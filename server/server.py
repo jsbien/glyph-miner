@@ -82,7 +82,10 @@ class collections_handler:
             collections = list(db.select('collections'))
             print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
             webapi.header('Content-Type', 'application/json')
-            return json.dumps(collections)
+            result = json.dumps(collections)
+            print(f"[DEBUG] Returning response: {result}", flush=True)
+            return result
+#            return json.dumps(collections)
         except Exception as e:
             print(f"[ERROR] GET failed: {e}", flush=True)
             raise webapi.internalerror("Database error.")
