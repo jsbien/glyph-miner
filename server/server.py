@@ -772,13 +772,13 @@ urls = (
 #     '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
 #     '/api/images/(.*)', 'image',
 #     '/api/images', 'images',
+    '/api/collections', 'collections',
 #     '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
 #     '/api/collections/(.*)/templates/(.*)', 'collection_template',
 #     '/api/collections/(.*)/templates', 'collection_templates',
 #     '/api/collections/(.*)/images', 'collection_images',
 #     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
      '/api/collections/(.*)', 'collection',
-    '/api/collections', 'collections',
 #     '/api/memberships', 'memberships',
      '/api/ping', 'PingHandler'
 )
