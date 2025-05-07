@@ -846,58 +846,58 @@ app = web.application(urls, handler_map)
 #original_delegate = application._delegate
 original_delegate = app._delegate
 
-def patched_delegate(self, f, fvars, args):
-    print(f"[DEBUG] 🐒 patched_delegate called with f = {f}", flush=True)
-    print(f"[DEBUG] 📌 fvars keys = {list(fvars.keys())}", flush=True)
-    print(f"[DEBUG] 📌 f = {f} (type: {type(f)})", flush=True)
-
-    cls = fvars.get(f)
-    if cls is None:
-        print(f"[DEBUG] ❌ No class found for f = '{f}'", flush=True)
-    else:
-        print(f"[DEBUG] ✅ Found class: {cls}", flush=True)
-        if hasattr(cls, 'GET'):
-            print(f"[DEBUG] ✅ cls has GET method", flush=True)
-        else:
-            print(f"[DEBUG] ❌ cls lacks GET method", flush=True)
-
-    return original_delegate(self, f, fvars, args)
-
-
 # def patched_delegate(self, f, fvars, args):
-#     print(">>> 🐒 Monkey-patched _delegate called <<<", flush=True)
-#     print(f"[DEBUG] f = {f} (type: {type(f)})", flush=True)
-#     print(f"[DEBUG] fvars keys = {list(fvars.keys())}", flush=True)
-#     print(f"[DEBUG] fvars['collections'] = {fvars['collections']}", flush=True)
-#     print(f"[DEBUG] methods of fvars['collections']: {dir(fvars['collections'])}", flush=True)
-#     print(f"[DEBUG] f = {f!r} (type: {type(f)})", flush=True)
-#     print(f"[DEBUG] fvars keys = {list(fvars.keys())}", flush=True)
-#     print(f"[DEBUG] f in fvars: {f in fvars}", flush=True)
-#     print(f"[DEBUG] fvars.get(f): {fvars.get(f)}", flush=True)
-
-#     if hasattr(cls, 'GET'):
-#         print(">>> YES: collections_handler has GET method <<<", flush=True)
-#     else:
-#         print(">>> NO: collections_handler lacks GET method <<<", flush=True)
+#     print(f"[DEBUG] 🐒 patched_delegate called with f = {f}", flush=True)
+#     print(f"[DEBUG] 📌 fvars keys = {list(fvars.keys())}", flush=True)
+#     print(f"[DEBUG] 📌 f = {f} (type: {type(f)})", flush=True)
 
 #     cls = fvars.get(f)
 #     if cls is None:
-#         print(f"[DEBUG] ❌ No class found for f = {f} in fvars keys = {list(fvars.keys())}", flush=True)
+#         print(f"[DEBUG] ❌ No class found for f = '{f}'", flush=True)
 #     else:
-#         print(f"[DEBUG] 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
-
-#     # print(f"[DEBUG] 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
-
-#     print(f"[DEBUG] cls = {cls}", flush=True)
-#     if cls:
-#         print(f"[DEBUG] Methods in {cls.__name__}: {dir(cls)}", flush=True)
-
-#     if isinstance(f, str) and f in fvars:
-#         handler = fvars[f]
-#         print(f"[DEBUG] fvars['{f}'] = {handler}", flush=True)
-#         print(f"[DEBUG] methods of handler: {dir(handler)}", flush=True)
+#         print(f"[DEBUG] ✅ Found class: {cls}", flush=True)
+#         if hasattr(cls, 'GET'):
+#             print(f"[DEBUG] ✅ cls has GET method", flush=True)
+#         else:
+#             print(f"[DEBUG] ❌ cls lacks GET method", flush=True)
 
 #     return original_delegate(self, f, fvars, args)
+
+
+def patched_delegate(self, f, fvars, args):
+    print(">>> 🐒 Monkey-patched _delegate called <<<", flush=True)
+    print(f"[DEBUG] 🐒 f = {f} (type: {type(f)})", flush=True)
+    print(f"[DEBUG] 🐒 fvars keys = {list(fvars.keys())}", flush=True)
+    print(f"[DEBUG] 🐒 fvars['collections'] = {fvars['collections']}", flush=True)
+    print(f"[DEBUG] 🐒 methods of fvars['collections']: {dir(fvars['collections'])}", flush=True)
+    print(f"[DEBUG] 🐒 f = {f!r} (type: {type(f)})", flush=True)
+    print(f"[DEBUG] 🐒 fvars keys = {list(fvars.keys())}", flush=True)
+    print(f"[DEBUG] 🐒 f in fvars: {f in fvars}", flush=True)
+    print(f"[DEBUG] 🐒 fvars.get(f): {fvars.get(f)}", flush=True)
+
+    if hasattr(cls, 'GET'):
+        print(">>> YES: collections_handler has GET method <<<", flush=True)
+    else:
+        print(">>> NO: collections_handler lacks GET method <<<", flush=True)
+
+    cls = fvars.get(f)
+    if cls is None:
+        print(f"[DEBUG] 🐒 ❌ No class found for f = {f} in fvars keys = {list(fvars.keys())}", flush=True)
+    else:
+        print(f"[DEBUG] 🐒 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
+
+    # print(f"[DEBUG] 🐒 🔁 cls: {cls}, has GET: {hasattr(cls, 'GET')}", flush=True)
+
+    print(f"[DEBUG] 🐒 cls = {cls}", flush=True)
+    if cls:
+        print(f"[DEBUG] 🐒 Methods in {cls.__name__}: {dir(cls)}", flush=True)
+
+    if isinstance(f, str) and f in fvars:
+        handler = fvars[f]
+        print(f"[DEBUG] 🐒 fvars['{f}'] = {handler}", flush=True)
+        print(f"[DEBUG] 🐒 methods of handler: {dir(handler)}", flush=True)
+
+    return original_delegate(self, f, fvars, args)
 
 application._delegate = types.MethodType(patched_delegate, application)
 # app._delegate = patched_delegate.__get__(app)
