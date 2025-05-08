@@ -12,3 +12,7 @@ class DBConnectionMixin:
             db=os.environ.get("GLYPH_DB_NAME", "glyph"),
             charset="utf8",
         )
+
+
+def get_connection(dburl=None, **params):
+    return MySQLdb.connect(**params)
