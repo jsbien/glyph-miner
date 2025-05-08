@@ -1,6 +1,5 @@
 # server/webapp/db/inserting.py
 
-from .base import get_db_cursor
 from .transaction import transaction
 
 def insert(db_cursor, table, **values):
