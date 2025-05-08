@@ -50,7 +50,7 @@ def database(dburl=None, **params):
     """ Returns a database connection instance """
     if dburl is None:
         dburl = "default_database_url"  # You can change this to your default
-    return conn.MySQLDB(dburl, **params)  # Assuming MySQLDB is in connection.py
+    return conn.MySQLdb(dburl, **params)  # Assuming MySQLDB is in connection.py
 
 # Registering databases (if necessary)
 def register_database(name, clazz):
