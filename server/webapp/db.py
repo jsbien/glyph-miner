@@ -644,6 +644,12 @@ class DB:
             >>> db.query("SELECT * FROM foo WHERE x = " + sqlquote('f'), _test=True)
             <sql: "SELECT * FROM foo WHERE x = 'f'">
         """
+        def query(self, sql_query, vars=None, processed=False, _test=False):
+            print(">>> 🐛 ENTERED db.query() <<<", flush=True)
+            print(f"[DEBUG] SQL query: {sql_query}", flush=True)
+            print(f"[DEBUG] Vars: {vars}", flush=True)
+#            return self._db_query(sql_query, vars, processed=processed, _test=_test)
+
         if vars is None: vars = {}
         
         if not processed and not isinstance(sql_query, SQLQuery):
@@ -690,6 +696,10 @@ class DB:
         clauses = [self.gen_clause(sql, val, vars) for sql, val in sql_clauses if val is not None]
         qout = SQLQuery.join(clauses)
         if _test: return qout
+        qout = SQLQuery(f"SELECT * FROM {what}")  # adjust to how qout is built
+        print(f"[DEBUG] db.select() -> what: {what}, kwargs: {kwargs}", flush=True)
+        print(f"[DEBUG] SQLQuery constructed: {qout}", flush=True)
+        
         return self.query(qout, processed=True)
     
     def where(self, table, what='*', order=None, group=None, limit=None, 
