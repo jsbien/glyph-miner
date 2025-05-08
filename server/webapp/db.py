@@ -631,7 +631,7 @@ class DB:
         return where
     
     def query(self, sql_query, vars=None, processed=False, _test=False): 
-        """
+            """
         Execute SQL query `sql_query` using dictionary `vars` to interpolate it.
         If `processed=True`, `vars` is a `reparam`-style list to use 
         instead of interpolating.
@@ -644,10 +644,9 @@ class DB:
             >>> db.query("SELECT * FROM foo WHERE x = " + sqlquote('f'), _test=True)
             <sql: "SELECT * FROM foo WHERE x = 'f'">
         """
-        def query(self, sql_query, vars=None, processed=False, _test=False):
-            print(">>> 🐛 ENTERED db.query() <<<", flush=True)
-            print(f"[DEBUG] SQL query: {sql_query}", flush=True)
-            print(f"[DEBUG] Vars: {vars}", flush=True)
+        print(">>> 🐛 ENTERED db.query() <<<", flush=True)
+        print(f"[DEBUG] SQL query: {sql_query}", flush=True)
+        print(f"[DEBUG] Vars: {vars}", flush=True)
 #            return self._db_query(sql_query, vars, processed=processed, _test=_test)
 
         if vars is None: vars = {}
