@@ -39,3 +39,21 @@ class MySQLDB:
 
     def __del__(self):
         self.close()
+
+     # In server/webapp/db/base.py
+import server.webapp.db.connection as conn
+
+_databases = {}
+
+# Assuming the MySQLDB or equivalent connection class was in connection.py
+def database(dburl=None, **params):
+    """ Returns a database connection instance """
+    if dburl is None:
+        dburl = "default_database_url"  # You can change this to your default
+    return conn.MySQLDB(dburl, **params)  # Assuming MySQLDB is in connection.py
+
+# Registering databases (if necessary)
+def register_database(name, clazz):
+    """ Register a database instance by name """
+    _databases[name] = clazz
+   
