@@ -81,19 +81,19 @@ class collections_handler:
         try:
             collections = list(db.select('collections'))
             print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-            webapi.header('Content-Type', 'application/json')
+            web.header('Content-Type', 'application/json')
             result = json.dumps(collections)
             print(f"[DEBUG] Returning response: {result}", flush=True)
             return result
 #            return json.dumps(collections)
         except Exception as e:
             print(f"[ERROR] GET failed: {e}", flush=True)
-            raise webapi.internalerror("Database error.")
+            raise web.internalerror("Database error.")
 
     def POST(self):
         print(">>> ENTERED POST <<<", flush=True)
         try:
-            raw = webapi.data()
+            raw = web.data()
             print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
 
             decoded = raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else raw
@@ -103,15 +103,15 @@ class collections_handler:
             print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
 
             db.insert('collections', title=payload["title"])
-            webapi.header('Content-Type', 'application/json')
+            web.header('Content-Type', 'application/json')
             return json.dumps({"status": "ok"})
 
         except json.JSONDecodeError as e:
             print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
-            raise webapi.badrequest("Invalid JSON payload.")
+            raise web.badrequest("Invalid JSON payload.")
         except Exception as e:
             print(f"[ERROR] POST failed: {e}", flush=True)
-            raise webapi.internalerror("Database insertion error.")
+            raise web.internalerror("Database insertion error.")
 
 
 
