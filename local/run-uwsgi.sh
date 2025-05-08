@@ -13,8 +13,8 @@ echo "Ctrl+C to stop."
 exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --socket 127.0.0.1:9091 \
   --protocol uwsgi \
-  --chdir /home/jsbien/work/jsbien_glyph-miner/glyph-miner \
-  --pythonpath /home/jsbien/work/jsbien_glyph-miner/glyph-miner \
+  --chdir /home/jsbien/git/glyph-miner \
+  --pythonpath /home/jsbien/git/glyph-miner \
   --module server.server:application \
   --master \
   --processes 1 \
