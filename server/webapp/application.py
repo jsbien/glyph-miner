@@ -10,7 +10,8 @@ import sys
 import re
 import types
 import traceback
-import server.webapp.webapi as webapi
+import server.webapp as web
+# import server.webapp.webapi as webapi
 # ⛔ Removed direct _NotFound and Redirect import
 
 class application:
@@ -32,15 +33,15 @@ class application:
 
     def wsgifunc(self):
         def wsgi(env, start_resp):
-            webapi.ctx = webapi.storage()
-            webapi.ctx.headers = []
-            webapi.ctx.env = env
-            webapi.ctx.path = env.get('PATH_INFO', '/')
+            web.ctx = web.storage()
+            web.ctx.headers = []
+            web.ctx.env = env
+            web.ctx.path = env.get('PATH_INFO', '/')
 
-            handler_key, args = self.resolve_route(webapi.ctx.path)
+            handler_key, args = self.resolve_route(web.ctx.path)
 
-            webapi.ctx.fullpath = env.get('PATH_INFO', '/')
-            webapi.ctx.method = env.get('REQUEST_METHOD', 'GET')
+            web.ctx.fullpath = env.get('PATH_INFO', '/')
+            web.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
             try:
                 result = self.handle_with_processors()
@@ -50,7 +51,7 @@ class application:
 
                 if isinstance(result, list):
                     status = '200 OK'
-                    headers = [('Content-Type', 'text/html')] + webapi.ctx.headers
+                    headers = [('Content-Type', 'text/html')] + web.ctx.headers
                     start_resp(status, headers)
                     return result
                 elif isinstance(result, str):
@@ -63,8 +64,8 @@ class application:
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-            # ✅ Use webapi-level error wrappers (important for correct GUI behavior)
-            except (webapi.NotFound, webapi.Redirect):
+            # ✅ Use web-level error wrappers (important for correct GUI behavior)
+            except (web.NotFound, web.Redirect):
                 raise
             except Exception:
                 print(traceback.format_exc())
@@ -75,9 +76,9 @@ class application:
 
     def handle_with_processors(self):
         try:
-            handler_key, args = self.resolve_route(webapi.ctx.path)
+            handler_key, args = self.resolve_route(web.ctx.path)
             return self._delegate(handler_key, self.fvars, args)
-        except webapi.NotFound:
+        except web.NotFound:
             raise
         except Exception:
             print(traceback.format_exc())
@@ -85,11 +86,11 @@ class application:
 
     def _delegate(self, f, fvars, args=[]):
         def handle_class(cls):
-            meth = webapi.ctx.method
+            meth = web.ctx.method
             if meth == 'HEAD' and not hasattr(cls, meth):
                 meth = 'GET'
             if not hasattr(cls, meth):
-                raise webapi.nomethod(cls)
+                raise web.nomethod(cls)
             tocall = getattr(cls(), meth)
             return tocall(*args)
 
@@ -97,7 +98,7 @@ class application:
             return isinstance(o, type)
 
         if f is None:
-            raise webapi.notfound()
+            raise web.notfound()
         elif isinstance(f, application):
             return f.handle_with_processors()
         elif is_class(f):
@@ -105,11 +106,11 @@ class application:
         elif isinstance(f, str):
             if f.startswith('redirect '):
                 url = f.split(' ', 1)[1]
-                if webapi.ctx.method == "GET":
-                    x = webapi.ctx.env.get('QUERY_STRING', '')
+                if web.ctx.method == "GET":
+                    x = web.ctx.env.get('QUERY_STRING', '')
                     if x:
                         url += '?' + x
-                raise webapi.redirect(url)
+                raise web.redirect(url)
             elif '.' in f:
                 mod, cls = f.rsplit('.', 1)
                 mod = __import__(mod, None, None, [''])
@@ -121,4 +122,4 @@ class application:
         elif hasattr(f, '__call__'):
             return f()
         else:
-            raise webapi.notfound()
+            raise web.notfound()
