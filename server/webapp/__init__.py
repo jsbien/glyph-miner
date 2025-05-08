@@ -15,10 +15,10 @@ from . import utils, db, net, wsgi, web_http as http, webapi, httpserver, debuge
 # from . import utils, db, net, wsgi, web_http, webapi, httpserver, debugerror
 from . import template, form
 
+
 from . import session
 
 from .utils import *
-from .db import *
 from .net import *
 from .wsgi import *
 from .web_http import *
@@ -31,9 +31,6 @@ try:
     from . import webopenid as openid
 except ImportError:
     pass # requires openid module
-
-from . import db
-database = db.database
 
 from . import webapi
 config = webapi.config
