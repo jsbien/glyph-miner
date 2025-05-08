@@ -4,7 +4,7 @@ import sys
 import server.webapp as web
 import os
 import time
-from server.webapp.db import db
+from server.webapp import db
 
 
 print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.04 <<<", flush=True)
