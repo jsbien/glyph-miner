@@ -35,4 +35,6 @@ except ImportError:
 from . import webapi
 config = webapi.config
 
+from .db.base import database
+
 
