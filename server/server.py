@@ -4,10 +4,15 @@ import sys
 import server.webapp as web
 import os
 import time
-from server.webapp import db
+# from server.webapp import db
 
 
-print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.04 <<<", flush=True)
+print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<", flush=True)
+
+# server/server.py
+import server.webapp as web
+db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
+
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
