@@ -14,7 +14,7 @@ from server.webapp.utils import *
 from server.webapp.db import *
 from server.webapp.net import *
 from server.webapp.wsgi import *
-from server.webapp.http import *
+# from server.webapp.http import *
 from server.webapp.webapi import *
 from server.webapp.httpserver import *
 from server.webapp.debugerror import *
