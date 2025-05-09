@@ -65,7 +65,8 @@ class application:
                 return [b"Internal Server Error"]
 
             # ✅ Use web-level error wrappers (important for correct GUI behavior)
-            except (web.NotFound, web.Redirect):
+#            except (web.NotFound, web.Redirect):
+            except (web.notfound, web.redirect):
                 raise
             except Exception:
                 print(traceback.format_exc())
