@@ -1,7 +1,8 @@
 # server/webapp/__init__.py
 
-from .webapi import *
+print("✅ server.webapp.__init__.py loaded", flush=True)
 
+from .webapi import *
 from .db import database
 
 
