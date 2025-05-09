@@ -11,30 +11,18 @@ __author__ = [
 __license__ = "public domain"
 __contributors__ = "see http://webpy.org/changes"
 
-from . import utils, db, net, wsgi, web_http as http, webapi, httpserver, debugerror
-# from . import utils, db, net, wsgi, web_http, webapi, httpserver, debugerror
-from . import template, form
-
-
-from . import session
-
-from .utils import *
-from .net import *
-from .wsgi import *
-from .web_http import *
-from .webapi import *
-from .httpserver import *
-from .debugerror import *
-from .application import *
-from .browser import *
-try:
-    from . import webopenid as openid
-except ImportError:
-    pass # requires openid module
+# server/webapp/__init__.py
 
 from . import webapi
-config = webapi.config
+from . import db
 
-from .db.base import database
+# Re-export required webapi symbols for compatibility
+ctx = webapi.ctx
+storage = webapi.storage
+header = webapi.header
+badrequest = webapi.badrequest
+notfound = webapi.notfound
+internalerror = webapi.internalerror
 
-
+# Expose the database interface
+database = db.base.database
