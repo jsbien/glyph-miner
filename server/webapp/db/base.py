@@ -1,4 +1,5 @@
-from . import connection
+# from . import connection
+from .connection import MySQLDB
 
 # Registry of supported databases
 _databases = {}
