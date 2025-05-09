@@ -15,6 +15,7 @@ __contributors__ = "see http://webpy.org/changes"
 
 from . import webapi
 from . import db
+from .application import application
 
 # Re-export required webapi symbols for compatibility
 ctx = webapi.ctx
