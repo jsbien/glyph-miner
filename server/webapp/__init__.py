@@ -2,7 +2,7 @@ import server.webapp.utils as utils
 import server.webapp.db as db
 import server.webapp.net as net
 import server.webapp.wsgi as wsgi
-import server.webapp.http as http
+# import server.webapp.http as http
 import server.webapp.webapi as webapi
 import server.webapp.httpserver as httpserver
 import server.webapp.debugerror as debugerror
