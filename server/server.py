@@ -5,6 +5,8 @@ import server.webapp as web
 import os
 import time
 # from server.webapp import db
+from server.webapp.application import application  # web.application replacement
+from server.webapp.db import querying, inserting, transaction
 
 
 print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<", flush=True)
