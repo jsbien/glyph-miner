@@ -836,6 +836,7 @@ handler_map = {
     'collection_matches': collection_matches
 }
 
+print(f"[DEBUG] collections = {handler_map['collections']} (type: {type(handler_map['collections'])})", flush=True)
 
 import datetime
 ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
