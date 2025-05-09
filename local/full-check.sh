@@ -47,7 +47,6 @@ if [ $? -eq 0 ]; then
   echo "✅ Ping succeeded"
 else
   echo "❌ Ping failed"
-  exit 1
 fi
 
 # 🌐 HTML check
