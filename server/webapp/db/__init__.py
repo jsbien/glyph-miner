@@ -1,8 +1,10 @@
 # server/webapp/db/__init__.py
 
-from .base import database
+from .base import database, register_database
 from .querying import select, query
-from .transaction import insert, transaction
+from .inserting import insert
+from .transaction import transaction
+
 
 __all__ = [
     "database",
@@ -11,4 +13,5 @@ __all__ = [
     "insert",
     "transaction"
 ]
+
 
