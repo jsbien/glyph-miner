@@ -9,6 +9,9 @@ import time
 
 print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<", flush=True)
 
+print("[DEBUG] web.application:", hasattr(web, "application"))
+
+
 # server/server.py
 import server.webapp as web
 db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
