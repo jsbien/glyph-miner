@@ -13,6 +13,8 @@ __contributors__ = "see http://webpy.org/changes"
 
 # server/webapp/__init__.py
 
+print("[DEBUG] server.webapp.__init__.py loaded", flush=True)
+
 from . import webapi
 from . import db
 from .application import application
