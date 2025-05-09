@@ -29,12 +29,26 @@ fi
 echo "🟢 Node: $NODE_BIN"
 echo "🟢 Node version: $("$NODE_BIN" --version)"
 
+# Clean stale .pyc files before starting anything
+echo "🧹 Cleaning up stale .pyc files..."
+find server/ -name '*.pyc' -delete
+
 # 🔁 Restart the server
 echo "🔁 Restarting server..."
 local/restart-server.sh || {
   echo "❌ Server restart failed"
   exit 1
 }
+
+# Add ping test to confirm server is up
+echo "📶 Pinging server..."
+curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/ping | grep -q 200
+if [ $? -eq 0 ]; then
+  echo "✅ Ping succeeded"
+else
+  echo "❌ Ping failed"
+  exit 1
+fi
 
 # 🌐 HTML check
 echo "🔍 Running HTML check..."
