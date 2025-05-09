@@ -1,31 +1,13 @@
-#!/usr/bin/env python
-"""webapp.py: makes webapp apps (http://webpy.org)"""
+# server/webapp/db/__init__.py
 
+from .base import database
+from .querying import select
+from .inserting import insert
+from .transaction import transaction
 
-
-__version__ = "0.37"
-__author__ = [
-    "Aaron Swartz <me@aaronsw.com>",
-    "Anand Chitipothu <anandology@gmail.com>"
+__all__ = [
+    'database',
+    'select',
+    'insert',
+    'transaction'
 ]
-__license__ = "public domain"
-__contributors__ = "see http://webpy.org/changes"
-
-# server/webapp/__init__.py
-
-print("[DEBUG] server.webapp.__init__.py loaded", flush=True)
-
-from . import webapi
-from . import db
-from .application import application
-
-# Re-export required webapi symbols for compatibility
-ctx = webapi.ctx
-storage = webapi.storage
-header = webapi.header
-badrequest = webapi.badrequest
-notfound = webapi.notfound
-internalerror = webapi.internalerror
-
-# Expose the database interface
-database = db.base.database
