@@ -1,7 +1,13 @@
-from .querying import select, query
-from .transaction import transaction
+# server/webapp/db/__init__.py
+
+from .base import database
+from .querying import select
 from .inserting import insert
-from .base import database, register_database
+from .transaction import transaction
 
-__all__ = ['select', 'transaction', 'insert', 'database', 'register_database']
-
+__all__ = [
+    'database',
+    'select',
+    'insert',
+    'transaction'
+]
