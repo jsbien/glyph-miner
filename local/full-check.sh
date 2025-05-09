@@ -40,6 +40,10 @@ local/restart-server.sh || {
   exit 1
 }
 
+# Check if the ping endpoint responds correctly after restart
+echo "📡 Verifying uwsgi restart via /api/ping..."
+curl -s -w "\nHTTP Status: %{http_code}\n" http://localhost:8080/api/ping
+
 # Add ping test to confirm server is up
 echo "📶 Pinging server..."
 curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/ping | grep -q 200
