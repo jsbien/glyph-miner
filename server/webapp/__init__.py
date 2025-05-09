@@ -1,11 +1,22 @@
-# server/webapp/__init__.py
+import server.webapp.utils as utils
+import server.webapp.db as db
+import server.webapp.net as net
+import server.webapp.wsgi as wsgi
+import server.webapp.http as http
+import server.webapp.webapi as webapi
+import server.webapp.httpserver as httpserver
+import server.webapp.debugerror as debugerror
+import server.webapp.template as template
+import server.webapp.form as form
+import server.webapp.session as session
 
-from . import webapi
-from . import application
-from . import db
-
-__all__ = [
-    'webapi',
-    'application',
-    'db'
-]
+from server.webapp.utils import *
+from server.webapp.db import *
+from server.webapp.net import *
+from server.webapp.wsgi import *
+from server.webapp.http import *
+from server.webapp.webapi import *
+from server.webapp.httpserver import *
+from server.webapp.debugerror import *
+from server.webapp.application import *
+from server.webapp.browser import *
