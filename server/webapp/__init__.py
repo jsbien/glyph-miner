@@ -3,7 +3,7 @@
 print("✅ server.webapp.__init__.py loaded", flush=True)
 
 # from .webapi import *
-from server.webapp import web
+# from server.webapp import web
 from .db import database
 
 from . import web
