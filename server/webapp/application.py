@@ -60,8 +60,9 @@ class application:
                 return [b"Internal Server Error"]
 
             except (_NotFound, Redirect) as e:
-                return e  # ✅ compatible with web.py — e is a WSGI callable
+                return e(env, start_resp)  # ✅ this properly calls __call__
 
+            
             except Exception:
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
