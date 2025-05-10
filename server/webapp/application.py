@@ -3,9 +3,7 @@
 """
 application.py
 Updated: 2025-05-10
-Fix: Import proper webapi exceptions and use them in try/except blocks to avoid TypeError.
-Fix: Import correct exception classes (Redirect, _NotFound) from webapi to avoid TypeErrors when catching.
-Fix TypeError by ensuring handler is class before instantiation
+Fix: Prevent TypeError by checking handler type before instantiating in _delegate().
 """
 
 import sys
@@ -17,14 +15,13 @@ from server.webapp.webapi import _NotFound, Redirect  # ✅ Correct exception cl
 
 class application:
     def __init__(self, mapping, fvars):
-        self.mapping = mapping  # will be replaced by resolve_route()
+        self.mapping = mapping
         self.fvars = fvars
         self.args = []
 
     def resolve_route(self, path):
         print(f"[DEBUG] resolve_route() called with path: {path}")
         print(f"[DEBUG] self.mapping = {self.mapping} (type: {type(self.mapping)}, len: {len(self.mapping)})")
-        """Match the path against self.mapping and return (handler_key, args)."""
         for i in range(0, len(self.mapping), 2):
             regex, handler_key = self.mapping[i], self.mapping[i + 1]
             match = re.compile("^" + regex + "$").match(path)
@@ -45,9 +42,6 @@ class application:
 
             try:
                 result = self.handle_with_processors()
-
-                if not isinstance(result, (str, bytes, list, tuple)):
-                    raise TypeError(f"Invalid response type: {type(result)}, value: {result}")
 
                 if isinstance(result, list):
                     status = '200 OK'
@@ -86,7 +80,7 @@ class application:
     def _delegate(self, f, fvars, args=[]):
         def handle_class(cls):
             if not isinstance(cls, type):
-                raise TypeError(f"Expected class, got instance of {type(cls).__name__}")
+                raise TypeError(f"Expected class, got {type(cls).__name__}")
             meth = web.ctx.method
             if meth == 'HEAD' and not hasattr(cls, meth):
                 meth = 'GET'
@@ -95,19 +89,12 @@ class application:
             tocall = getattr(cls(), meth)
             return tocall(*args)
 
-        def is_class(o):
-            return isinstance(o, type)
-
         if f is None:
             raise web.notfound()
         elif isinstance(f, application):
             return f.handle_with_processors()
         elif isinstance(f, type):
             return handle_class(f)
-        elif hasattr(f, '__call__'):
-            return f(*args)
-        else:
-            raise web.notfound()
         elif isinstance(f, str):
             if f.startswith('redirect '):
                 url = f.split(' ', 1)[1]
@@ -121,10 +108,9 @@ class application:
                 mod = __import__(mod, None, None, [''])
                 cls = getattr(mod, cls)
             else:
-                print(f"[DEBUG] _delegate f = {f}, fvars keys = {list(fvars.keys())}", flush=True)
                 cls = fvars[f]
-            return handle_class(cls)
+            return self._delegate(cls, fvars, args)
         elif hasattr(f, '__call__'):
-            return f()
+            return f(*args)
         else:
             raise web.notfound()
