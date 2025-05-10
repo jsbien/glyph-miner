@@ -3,15 +3,16 @@
 """
 application.py
 Updated: 2025-05-10
-Fix: Prevent TypeError by checking handler type before instantiating in _delegate().
+Fixes:
+- Prevents TypeError by ensuring handler is class before instantiation.
+- Properly returns _NotFound and Redirect as WSGI responses, as in original web.py.
 """
 
 import sys
 import re
-import types
 import traceback
 import server.webapp as web
-from server.webapp.webapi import _NotFound, Redirect  # ✅ Correct exception classes
+from server.webapp.webapi import _NotFound, Redirect  # Original-style exceptions
 
 class application:
     def __init__(self, mapping, fvars):
@@ -58,8 +59,9 @@ class application:
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-            except (_NotFound, Redirect):
-                raise
+            except (_NotFound, Redirect) as e:
+                return e  # ✅ compatible with web.py — e is a WSGI callable
+
             except Exception:
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
@@ -99,14 +101,14 @@ class application:
             if f.startswith('redirect '):
                 url = f.split(' ', 1)[1]
                 if web.ctx.method == "GET":
-                    x = web.ctx.env.get('QUERY_STRING', '')
-                    if x:
-                        url += '?' + x
+                    q = web.ctx.env.get('QUERY_STRING', '')
+                    if q:
+                        url += '?' + q
                 raise web.redirect(url)
             elif '.' in f:
-                mod, cls = f.rsplit('.', 1)
-                mod = __import__(mod, None, None, [''])
-                cls = getattr(mod, cls)
+                modname, clsname = f.rsplit('.', 1)
+                mod = __import__(modname, None, None, [''])
+                cls = getattr(mod, clsname)
             else:
                 cls = fvars[f]
             return self._delegate(cls, fvars, args)
