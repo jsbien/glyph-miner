@@ -5,8 +5,8 @@ print("✅ server.webapp.__init__.py loaded", flush=True)
 #!/usr/bin/env python
 """webapp: adapted from original web.py clone."""
 
-import utils, net, wsgi, web_http as http, webapi, httpserver, debugerror
-import template, form, session, application, browser
+from . import utils, net, wsgi, web_http as http, webapi, httpserver, debugerror
+from . import template, form, session, application, browser
 
 from utils import *
 # from db import *
