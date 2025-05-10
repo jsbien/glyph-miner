@@ -4,6 +4,7 @@
 application.py
 Updated: 2025-05-10
 Fix: Import proper webapi exceptions and use them in try/except blocks to avoid TypeError.
+Fix: Import correct exception classes (Redirect, _NotFound) from webapi to avoid TypeErrors when catching.
 """
 
 import sys
@@ -11,7 +12,7 @@ import re
 import types
 import traceback
 import server.webapp as web
-from server.webapp.webapi import _NotFound, _Redirect  # ✅ Correct exception classes
+from server.webapp.webapi import _NotFound, Redirect  # ✅ Correct exception classes
 
 class application:
     def __init__(self, mapping, fvars):
@@ -62,7 +63,7 @@ class application:
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-            except (_NotFound, _Redirect):
+            except (_NotFound, Redirect):
                 raise
             except Exception:
                 print(traceback.format_exc())
