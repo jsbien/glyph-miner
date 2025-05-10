@@ -810,7 +810,16 @@ class DateTimeEncoder(json.JSONEncoder):
     
 # define ressource paths
 urls = (
-#     '/api/', 'index',
+'/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
+'/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
+'/api/images/(.*)/templates/(.*)/matches', 'matches',
+'/api/images/(.*)/templates/(.*)', 'template',
+'/api/images/(.*)/templates', 'templates',
+'/api/images/(.*)/synthetic_pages', 'synthetic_pages',
+'/api/images/(.*)/(color|binarized)', 'image_file',
+'/api/images/(.*)', 'image',
+'/api/images', 'images',
+#     '/api/', 'idex',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
