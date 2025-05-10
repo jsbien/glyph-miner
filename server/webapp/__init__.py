@@ -2,18 +2,40 @@
 
 print("✅ server.webapp.__init__.py loaded", flush=True)
 
-# from .webapi import *
-# from server.webapp import web
-# from .db import database
-from server.database import database
+#!/usr/bin/env python
+"""webapp: adapted from original web.py clone."""
 
-from . import web
+import utils, db, net, wsgi, web_http as http, webapi, httpserver, debugerror
+import template, form, session, application, browser
 
-# Sanity check: ensure we're importing the correct module and application is callable
-if hasattr(web, 'application') and callable(web.application):
-    print("✅ server.webapp.web.application is callable")
-else:
-    print("❌ ERROR: server.webapp.web.application is missing or not callable")
+from utils import *
+# from db import *
+from net import *
+from wsgi import *
+from web_http import *
+from webapi import *
+from httpserver import *
+from debugerror import *
+from application import *
+from browser import *
 
-# Optional: expose the webapi module itself if needed elsewhere
-# import server.webapp.webapi as webapi
+try:
+    import webopenid as openid
+except ImportError:
+    pass  # requires openid module
+
+from server.database import database, select, query, insert, transaction
+
+
+# from .base import database, register_database
+# from .querying import select, query
+# from .inserting import insert
+# from .transaction import transaction
+
+# __all__ = [
+#     "database",
+#     "select",
+#     "query",
+#     "insert",
+#     "transaction"
+# ]
