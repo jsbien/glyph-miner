@@ -1,12 +1,14 @@
 import requests
 import json
 
-with open("/tmp/uwsgi-wrapper.pid") as f:
-    pid = f.read().strip()
+from datetime import datetime
+timestamp = datetime.now().isoformat()
 
+
+    
 url = "http://localhost:9090/api/collections"
 headers = {"Content-Type": "application/json"}
-data = {"title": f"Debug Collection {pid}"}
+data = {"title": f"Debug Collection {timestamp}"}
 
 
 response = requests.post(url, headers=headers, data=json.dumps(data))
