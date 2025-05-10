@@ -5,6 +5,7 @@ application.py
 Updated: 2025-05-10
 Fix: Import proper webapi exceptions and use them in try/except blocks to avoid TypeError.
 Fix: Import correct exception classes (Redirect, _NotFound) from webapi to avoid TypeErrors when catching.
+Fix TypeError by ensuring handler is class before instantiation
 """
 
 import sys
@@ -84,6 +85,8 @@ class application:
 
     def _delegate(self, f, fvars, args=[]):
         def handle_class(cls):
+            if not isinstance(cls, type):
+                raise TypeError(f"Expected class, got instance of {type(cls).__name__}")
             meth = web.ctx.method
             if meth == 'HEAD' and not hasattr(cls, meth):
                 meth = 'GET'
@@ -99,8 +102,12 @@ class application:
             raise web.notfound()
         elif isinstance(f, application):
             return f.handle_with_processors()
-        elif is_class(f):
+        elif isinstance(f, type):
             return handle_class(f)
+        elif hasattr(f, '__call__'):
+            return f(*args)
+        else:
+            raise web.notfound()
         elif isinstance(f, str):
             if f.startswith('redirect '):
                 url = f.split(' ', 1)[1]
