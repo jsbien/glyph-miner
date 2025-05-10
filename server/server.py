@@ -816,7 +816,7 @@ print(f">>> collections_handler has methods: {dir(collections_handler)}", flush=
 handler_map = {
     'PingHandler': PingHandler,
     'index': index,
-    'collections': collections_handler(),
+    'collections': collections_handler,
     'collection': collection_handler,
     'collection_images': collection_images,
     'collection_templates': collection_templates,
@@ -868,6 +868,8 @@ if hasattr(collections_handler, "POST"):
 else:
     print(">>> NO: collections_handler.POST is missing", flush=True)
 
+print(f"[DEBUG] application = {application}")
+print(f"[DEBUG] application.__module__ = {application.__module__}")
 
 if __name__ == "__main__":
     app.run()
