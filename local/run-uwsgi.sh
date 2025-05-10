@@ -15,7 +15,7 @@ exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --protocol uwsgi \
   --chdir /home/jsbien/git/glyph-miner \
   --pythonpath /home/jsbien/git/glyph-miner \
-  --module server.server:app  \
+  --module server.server:application \
   --master \
   --processes 1 \
   --threads 2 \
