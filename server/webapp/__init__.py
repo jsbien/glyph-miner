@@ -17,6 +17,7 @@ from .httpserver import *
 from .debugerror import *
 from .application import *
 from .browser import *
+from .utils import storage
 
 try:
     import webopenid as openid
