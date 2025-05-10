@@ -25,7 +25,7 @@ from server.database.connection import MySQLDB
 db = MySQLDB(
     dbname="glyphminer",
     user="glyphminer",
-    password="glyphminer",
+    pw="glyphminer",
     host="localhost",  # or "127.0.0.1"
 #    port=3306          # or adjust to match your config
 )
