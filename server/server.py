@@ -23,7 +23,7 @@ print("[DEBUG] web.application:", hasattr(web, "application"))
 from server.database.connection import MySQLDB
 
 db = MySQLDB(
-    dbname="glyphminer",
+    db="glyphminer",
     user="glyphminer",
     pw="glyphminer",
     host="localhost",  # or "127.0.0.1"
