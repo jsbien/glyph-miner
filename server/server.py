@@ -17,8 +17,18 @@ print("[DEBUG] web.application:", hasattr(web, "application"))
 
 
 # server/server.py
-import server.webapp as web
-db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
+#import server.webapp as web
+#db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
+
+from server.database.connection import MySQLDB
+
+db = MySQLDB(
+    dbname="glyphminer",
+    user="glyphminer",
+    password="glyphminer",
+    host="localhost",  # or "127.0.0.1"
+#    port=3306          # or adjust to match your config
+)
 
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
@@ -79,8 +89,8 @@ with open(f"debug-web-{timestamp}.log", "w") as f:
     f.write(f"os.listdir(web.__path__[0]) = {os.listdir(web.__path__[0])}\n")
 
 
-# connect to database
-db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
+# connect to database - seems redundant
+# db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
 
 class index:
 
