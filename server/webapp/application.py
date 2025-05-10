@@ -2,8 +2,8 @@
 # encoding: utf-8
 """
 application.py
-Updated: 2025-05-06
-Fix: Restore GUI compatibility by using `webapi.notfound()` and `webapi.redirect()` wrappers.
+Updated: 2025-05-10
+Fix: Import proper webapi exceptions and use them in try/except blocks to avoid TypeError.
 """
 
 import sys
@@ -11,8 +11,7 @@ import re
 import types
 import traceback
 import server.webapp as web
-# import server.webapp.webapi as webapi
-# ⛔ Removed direct _NotFound and Redirect import
+from server.webapp.webapi import _NotFound, _Redirect  # ✅ Correct exception classes
 
 class application:
     def __init__(self, mapping, fvars):
@@ -37,11 +36,10 @@ class application:
             web.ctx.headers = []
             web.ctx.env = env
             web.ctx.path = env.get('PATH_INFO', '/')
+            web.ctx.fullpath = web.ctx.path
+            web.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
             handler_key, args = self.resolve_route(web.ctx.path)
-
-            web.ctx.fullpath = env.get('PATH_INFO', '/')
-            web.ctx.method = env.get('REQUEST_METHOD', 'GET')
 
             try:
                 result = self.handle_with_processors()
@@ -64,9 +62,7 @@ class application:
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-            # ✅ Use web-level error wrappers (important for correct GUI behavior)
-#            except (web.NotFound, web.Redirect):
-            except (web.notfound, web.redirect):
+            except (_NotFound, _Redirect):
                 raise
             except Exception:
                 print(traceback.format_exc())
@@ -79,7 +75,7 @@ class application:
         try:
             handler_key, args = self.resolve_route(web.ctx.path)
             return self._delegate(handler_key, self.fvars, args)
-        except web.NotFound:
+        except _NotFound:
             raise
         except Exception:
             print(traceback.format_exc())
