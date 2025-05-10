@@ -663,10 +663,13 @@ class ThreadedDict:
         self._threadlocal = threading.local()
 
     def __getattr__(self, key):
-        try:
-            return getattr(self._threadlocal, str(key))
-        except AttributeError:
-            raise KeyError(key)
+        if not hasattr(self._threadlocal, str(key)):
+        # initialize known safe defaults
+            if key == "headers":
+                setattr(self._threadlocal, "headers", [])
+            else:
+                raise KeyError(key)
+        return getattr(self._threadlocal, str(key))
 
     def __setattr__(self, key, value):
         if key == '_threadlocal':
