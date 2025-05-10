@@ -63,6 +63,15 @@ else
   HTML_RESULT=0
 fi
 
+# 🧹 Clear old collections via debug API
+echo "🧹 Clearing collections table..."
+if ! curl -X POST -s http://localhost:9090/api/debug/clear > /dev/null; then
+  echo "❌ Failed to clear collections via debug endpoint"
+else
+  echo "✅ Collections cleared"
+fi
+
+
 # 📡 POST check
 echo "📡 Running POST check..."
 if ! python3 local/post-check.py http://localhost:9090/api/collections; then
