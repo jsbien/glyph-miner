@@ -98,20 +98,32 @@ class index:
         return 'Glyph Miner API'
 
 
+# import json
+# import datetime
+
 class collections_handler:
     def GET(self):
         print(">>> ENTERED GET <<<", flush=True)
+
         try:
+            # Assuming this line fetches from DB
             collections = list(db.select('collections'))
-            print(f"[DEBUG] Retrieved collections: {collections}", flush=True)
-            web.header('Content-Type', 'application/json')
-            result = json.dumps(collections)
-            print(f"[DEBUG] Returning response: {result}", flush=True)
+            print(">>> FETCHED:", collections, flush=True)
+
+            # 👇 Add the serialize() function here
+            def serialize(obj):
+                if isinstance(obj, datetime.datetime):
+                    return obj.isoformat()
+                raise TypeError(f"Type {type(obj)} not serializable")
+
+            result = json.dumps(collections, default=serialize)
+            web.ctx.status = '200 OK'
+            web.ctx.headers = [('Content-Type', 'application/json')]
             return result
-#            return json.dumps(collections)
+
         except Exception as e:
             print(f"[ERROR] GET failed: {e}", flush=True)
-            raise web.internalerror("Database error.")
+            raise web.internalerror()
 
     def POST(self):
         print(">>> ENTERED POST <<<", flush=True)
