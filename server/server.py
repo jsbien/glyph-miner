@@ -141,6 +141,33 @@ class collections_handler:
     def POST(self):
         print(">>> ENTERED POST <<<", flush=True)
         try:
+            # ✅ SAFELY read raw POST body
+            content_length = int(web.ctx.env.get('CONTENT_LENGTH', 0) or 0)
+            raw = web.ctx.env.get('wsgi.input').read(content_length)
+
+            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+
+            decoded = raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else raw
+            print(f"[DEBUG] decoded input = {decoded}", flush=True)
+
+            payload = json.loads(decoded)
+            print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
+
+            db.insert('collections', title=payload["title"])
+            web.header('Content-Type', 'application/json')
+            return json.dumps({"status": "ok"})
+
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
+            raise web.badrequest("Invalid JSON payload.")
+        except Exception as e:
+            print(f"[ERROR] POST failed: {e}", flush=True)
+            raise web.internalerror("Database insertion error.")
+
+    
+    def POST(self):
+        print(">>> ENTERED POST <<<", flush=True)
+        try:
             raw = web.data()
             print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
 
