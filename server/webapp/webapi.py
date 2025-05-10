@@ -54,6 +54,28 @@ class HTTPError(Exception):
         for k, v in headers:
             header(k, v)
 
+    def __call__(self, environ, start_response):
+        start_response(self.status, list(self.headers))
+        if isinstance(self.data, str):
+            return [self.data.encode('utf-8')]
+        return [self.data]
+
+
+# class HTTPError(Exception):
+#     def __init__(self, status, headers=None, data=""):
+#         if headers is None:
+#             headers = []
+#         self.status = status
+#         self.headers = headers
+#         self.data = data
+
+#         # 📢 Add this debug BEFORE looping
+#         print("DEBUG FULL HEADERS LIST:", headers)
+#         print("DEBUG FULL HEADERS TYPES:", [(type(k), type(v)) for k, v in headers])
+
+#         for k, v in headers:
+#             header(k, v)
+
 
 def _status_code(status, data=None, classname=None, docstring=None):
     if data is None:
