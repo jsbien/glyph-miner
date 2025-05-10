@@ -59,6 +59,19 @@ from datetime import datetime
 
 import datetime
 
+class DebugClearHandler:
+    def POST(self):
+        try:
+            print(">>> CLEARING collections table <<<", flush=True)
+            cursor = db.connection.cursor()
+            cursor.execute("DELETE FROM collections")
+            db.connection.commit()
+            return "Collections table cleared.\n"
+        except Exception as e:
+            print(f"[ERROR] Failed to clear collections: {e}", flush=True)
+            raise web.internalerror()
+
+
 class PingHandler:
     def GET(self):
         web.header("Content-Type", "text/plain")
@@ -811,6 +824,8 @@ urls = (
 #     '/api/images/(.*)', 'image',
 #     '/api/images', 'images',
     '/api/collections', 'collections',
+    '/api/debug/clear', 'DebugClearHandler',
+    '/api/ping', 'PingHandler',
 #     '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
 #     '/api/collections/(.*)/templates/(.*)', 'collection_template',
 #     '/api/collections/(.*)/templates', 'collection_templates',
@@ -818,7 +833,6 @@ urls = (
 #     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
      '/api/collections/(.*)', 'collection',
 #     '/api/memberships', 'memberships',
-     '/api/ping', 'PingHandler'
 )
 
 # DEBUG: inspect the structure of urls
@@ -836,6 +850,7 @@ with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
 print(f">>> collections_handler has methods: {dir(collections_handler)}", flush=True)
 
 handler_map = {
+    'DebugClearHandler': DebugClearHandler,
     'PingHandler': PingHandler,
     'index': index,
     'collections': collections_handler,
