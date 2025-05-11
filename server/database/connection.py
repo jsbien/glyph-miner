@@ -3,8 +3,9 @@
 import datetime
 import MySQLdb
 import MySQLdb.cursors
+from contextlib import closing
 
-# Compatibility: web.py-style variable substitution
+# Web.py-compatible SQL value serialization
 def sqlify(obj):
     if obj is None:
         return 'NULL'
@@ -43,28 +44,10 @@ class MySQLDB:
         if vars:
             for key, value in vars.items():
                 sql = sql.replace(f"${key}", sqlify(value))
-        cur = self.get_cursor()
-        cur.execute(sql, params or ())
-        return cur.fetchall()  # ✅ Let garbage collection handle cleanup
 
-    def insert(self, table, **fields):
-        keys = ', '.join(fields.keys())
-        placeholders = ', '.join(['%s'] * len(fields))
-        sql = f"INSERT INTO {table} ({keys}) VALUES ({placeholders})"
-        params = list(fields.values())
-        cur = self.get_cursor()
-        cur.execute(sql, params)
-        self.connection.commit()
-        cur.close()
-
-    def update(self, table, where, **fields):
-        set_clause = ', '.join([f"{k}=%s" for k in fields])
-        sql = f"UPDATE {table} SET {set_clause} WHERE {where}"
-        params = list(fields.values())
-        cur = self.get_cursor()
-        cur.execute(sql, params)
-        self.connection.commit()
-        cur.close()
+        with closing(self.get_cursor()) as cur:
+            cur.execute(sql, params or ())
+            return cur.fetchall()
 
     def select(self, table, where=None, params=None, vars=None):
         sql = f"SELECT * FROM {table}"
@@ -73,6 +56,24 @@ class MySQLDB:
         if vars:
             for key, value in vars.items():
                 sql = sql.replace(f"${key}", sqlify(value))
-        cur = self.get_cursor()
-        cur.execute(sql, params or ())
-        return cur.fetchall()  # ✅ Let garbage collection handle cleanup
+
+        with closing(self.get_cursor()) as cur:
+            cur.execute(sql, params or ())
+            return cur.fetchall()
+
+    def insert(self, table, **fields):
+        keys = ', '.join(fields.keys())
+        placeholders = ', '.join(['%s'] * len(fields))
+        sql = f"INSERT INTO {table} ({keys}) VALUES ({placeholders})"
+        params = list(fields.values())
+        with closing(self.get_cursor()) as cur:
+            cur.execute(sql, params)
+            self.connection.commit()
+
+    def update(self, table, where, **fields):
+        set_clause = ', '.join([f"{k}=%s" for k in fields])
+        sql = f"UPDATE {table} SET {set_clause} WHERE {where}"
+        params = list(fields.values())
+        with closing(self.get_cursor()) as cur:
+            cur.execute(sql, params)
+            self.connection.commit()
