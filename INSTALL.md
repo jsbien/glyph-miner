@@ -4,7 +4,6 @@ In preparation
 
 [![Docker Image Version](https://img.shields.io/docker/v/glyphminer/glyphminer?sort=semver)](https://hub.docker.com/r/glyphminer/glyphminer)
 [![Image Size](https://img.shields.io/badge/size-203.6MB-lightgrey)](https://hub.docker.com/r/glyphminer/glyphminer) [![Layers](https://img.shields.io/badge/layers-18-blue)](https://hub.docker.com/r/glyphminer/glyphminer)
-
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 
 
@@ -22,8 +21,7 @@ writing); for other distributions, the process is similar.
 
 One port is needed to access the system, we use here 9090. Another one
 is used for the internal communication between the system components,
-we use for this purpose the same port 9090 [not yet fully tested,
-earlier the port 9091 was used]. Bothe can be changes, see below.
+we use for this purpose  9091. Both can be changes, see below.
 
 ### Required Packages
 First, make sure you have the following packages installed on your system:
@@ -85,7 +83,7 @@ database) will be accessible through an nginx web server (handling the static
 content).
 
 Let nginx know that calls to the API will be handled by the python server by
-copying the `local\default` file to /etc/nginx/sites-enabled/default.
+copying the `local/default` file to /etc/nginx/sites-enabled/default.
 
 Its content is given below:
 
@@ -106,26 +104,28 @@ Its content is given below:
         uwsgi_read_timeout 300;
         client_max_body_size 100M;
     }
-}
+	}
 
 
 
-If needed or desired change the port in `listen` and `uwsgi_pass`.
+If needed or desired, change the port(s) in `listen` and `uwsgi_pass`.
 
 Do not forget to restart nginx in order to make your changes work:
 `sudo service nginx restart`
 
 ### Setting up the database
-Glyph Miner uses a MySQL database to store its data. Create a new
-database and user `glyphminer` for Glyph Miner using
-`init_glyphminer_db.sql`. You have to run this as the root user (or any user
-with CREATE USER privilege):
+Glyph Miner uses a MySQLcompatible MariaDB database to store its
+data.
 
-mysql -u root -p < local/init_glyphminer_db.sql
+Create a new database and user `glyphminer` for Glyph Miner
+using `init_glyphminer_db.sql`. You have to run this as the root user
+(or any user with CREATE USER privilege):
+
+	mysql -u root -p < local/init_glyphminer_db.sql
 
 Than import the database structure into the new database:
 
-mysql -u glyphminer -pglyphminer < server/schema.sql
+	mysql -u glyphminer -pglyphminer < server/schema.sql
 
 You can configure the credentials that Glyph Miner will use in `server/server.py`,
 line 25.
