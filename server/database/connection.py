@@ -34,7 +34,8 @@ class MySQLDB:
             passwd=self.pw,
             host=self.host,
             port=self.port,
-            cursorclass=MySQLdb.cursors.DictCursor,
+            cursorclass=MySQLdb.cursors.SSCursor
+#            cursorclass=MySQLdb.cursors.DictCursor,
         )
 
     def get_cursor(self):
