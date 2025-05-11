@@ -1,9 +1,21 @@
-# server/webapp/db/connection.py
+# server/database/connection.py
 
-# server/webapp/db/connection.py
-
+import datetime
 import MySQLdb
 import MySQLdb.cursors
+
+# Compatibility: web.py-style variable substitution
+def sqlify(obj):
+    if obj is None:
+        return 'NULL'
+    elif obj is True:
+        return "'t'"
+    elif obj is False:
+        return "'f'"
+    elif isinstance(obj, datetime.datetime):
+        return repr(obj.isoformat())
+    else:
+        return repr(obj)
 
 class MySQLDB:
     def __init__(self, db=None, user=None, pw=None, host='localhost', port=3306, **kwargs):
@@ -27,7 +39,10 @@ class MySQLDB:
     def get_cursor(self):
         return self.connection.cursor()
 
-    def query(self, sql, params=None):
+    def query(self, sql, params=None, vars=None):
+        if vars:
+            for key, value in vars.items():
+                sql = sql.replace(f"${key}", sqlify(value))
         cur = self.get_cursor()
         cur.execute(sql, params or ())
         results = cur.fetchall()
@@ -53,10 +68,13 @@ class MySQLDB:
         self.connection.commit()
         cur.close()
 
-    def select(self, table, where=None, params=None):
+    def select(self, table, where=None, params=None, vars=None):
         sql = f"SELECT * FROM {table}"
         if where:
             sql += f" WHERE {where}"
+        if vars:
+            for key, value in vars.items():
+                sql = sql.replace(f"${key}", sqlify(value))
         cur = self.get_cursor()
         cur.execute(sql, params or ())
         results = cur.fetchall()
