@@ -22,3 +22,6 @@ test-*.log
 # Ignore virtual environments
 uwsgi-env/
 
+# Ignore private files
+hidden_JSB
+
