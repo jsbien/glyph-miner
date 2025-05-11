@@ -45,9 +45,7 @@ class MySQLDB:
                 sql = sql.replace(f"${key}", sqlify(value))
         cur = self.get_cursor()
         cur.execute(sql, params or ())
-        results = cur.fetchall()
-        cur.close()
-        return results
+        return cur.fetchall()  # ✅ Let garbage collection handle cleanup
 
     def insert(self, table, **fields):
         keys = ', '.join(fields.keys())
@@ -77,6 +75,4 @@ class MySQLDB:
                 sql = sql.replace(f"${key}", sqlify(value))
         cur = self.get_cursor()
         cur.execute(sql, params or ())
-        results = cur.fetchall()
-        cur.close()
-        return results
+        return cur.fetchall()  # ✅ Let garbage collection handle cleanup
