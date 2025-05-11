@@ -808,7 +808,7 @@ class DateTimeEncoder(json.JSONEncoder):
         return super().default(o)
 
     
-# define ressource paths
+# define resource paths
 urls = (
 '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
 '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
@@ -837,11 +837,12 @@ urls = (
     '/api/collections', 'collections',
     '/api/debug/clear', 'DebugClearHandler',
     '/api/ping', 'PingHandler',
-#     '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
-#     '/api/collections/(.*)/templates/(.*)', 'collection_template',
-#     '/api/collections/(.*)/templates', 'collection_templates',
-#     '/api/collections/(.*)/images', 'collection_images',
-#     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
+    '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
+    '/api/collections/(.*)/templates/(.*)', 'collection_template',
+    '/api/collections/(.*)/templates', 'collection_templates',
+    '/api/collections/(.*)/images', 'collection_images',
+    '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
+    '/api/collections/(.*)', 'collection',
      '/api/collections/(.*)', 'collection',
 #     '/api/memberships', 'memberships',
 )
