@@ -9,7 +9,7 @@ logfile="uwsgi-$timestamp.log"
 echo "Logging to $logfile"
 echo "Ctrl+C to stop."
 
-# Run uwsgi with timestamped log and show print() output
+# Run uWSGI with a timestamped log file (captures print() and error output)
 exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --socket 127.0.0.1:9091 \
   --protocol uwsgi \
