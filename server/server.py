@@ -907,9 +907,9 @@ app = web.application(urls, handler_map)
 application = app.wsgifunc()
 import datetime
 ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-with open(f"./debug-application-object-{ts}.log", "w") as debug_file:
-    debug_file.write(f"type(application): {type(application)}\n")
-    debug_file.write(f"dir(application): {dir(application)}\n")
+# with open(f"./debug-application-object-{ts}.log", "w") as debug_file:
+#     debug_file.write(f"type(application): {type(application)}\n")
+#     debug_file.write(f"dir(application): {dir(application)}\n")
 
 if hasattr(collections_handler, "POST"):
     print(">>> YES: collections_handler.POST exists", flush=True)
