@@ -1,11 +1,19 @@
 In preparation
 
+
+
 # The Glyph Miner version 0.2-alpha software package
-This is the port of the original Glyph Miner to Python 3 made by
-AsktheCode under the supervision of [Janusz
+
+![Web Interface](https://img.shields.io/badge/interface-web--based-brightgreen)
+![Fork](https://img.shields.io/badge/fork-Python3%20port-blue)
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+
+This is the port of the original Glyph Miner to Python 3 [not yet
+working] made by AsktheCode under the supervision of [Janusz
 S. Bień](https://orcid.org/0000-0001-5006-8183) (or vice versa ☺)) It
 is available in the present repository
-(https://github.com/jsbien/glyph-miner) and as a Docker image [not yet ready].
+(https://github.com/jsbien/glyph-miner) and as a Docker image [not yet
+ready].
 
 
 Glyph Miner is a software for rapidly extracting glyph occurrences from early
@@ -30,24 +38,7 @@ Installation instruction is available [*here*](INSTALL.md)
 
 The original README is available [*here*](README.md).
 
-[![Docker Image Version](https://img.shields.io/docker/v/glyphminer/glyphminer?sort=semver)](https://hub.docker.com/r/glyphminer/glyphminer)
-[![Image Size](https://img.shields.io/badge/size-203.6MB-lightgrey)](https://hub.docker.com/r/glyphminer/glyphminer) [![Layers](https://img.shields.io/badge/layers-18-blue)](https://hub.docker.com/r/glyphminer/glyphminer)
-
-![Version](https://img.shields.io/badge/version-1.1-blue)
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![Fork](https://img.shields.io/badge/fork-Python3%20port-blue)
-
-![Web Interface](https://img.shields.io/badge/interface-web--based-brightgreen)
-
-![Version](https://img.shields.io/badge/version-1.1-blue)
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![Fork](https://img.shields.io/badge/fork-Python3%20port-blue)
-![Web Interface](https://img.shields.io/badge/interface-web--based-brightgreen)
-
-[![Image Size](https://img.shields.io/badge/size-203.6MB-lightgrey)](https://hub.docker.com/r/glyphminer/glyphminer) [![Layers](https://imreg.shields.io/badge/layers-18-blue)](https://hub.docker.com/r/glyphminer/glyphminer)
-
-
-![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+Some user documentation is available [*here*](doc/).
 
 ## License
 Copyright (C) 2016 Benedikt Budig
