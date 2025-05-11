@@ -108,7 +108,8 @@ Its content is given below:
 
 
 
-If needed or desired, change the port(s) in `listen` and `uwsgi_pass`.
+If needed or desired, change the port(s) in `listen` and `uwsgi_pass`,
+and possibly in `local/run-uwsgi.sh` mentioned later.
 
 Do not forget to restart nginx in order to make your changes work:
 `sudo service nginx restart`
@@ -132,9 +133,10 @@ line 25.
 
 ### Starting it up
 
-Start the server with the `local/run-uwsgi.sh` script. This is its main  content:
+Start the server with the `local/run-uwsgi.sh` script
+to run uwsgi with timestamped log and show print() output.
+This is its main  content:
 
-# Run uwsgi with timestamped log and show print() output
 exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --socket 127.0.0.1:9091 \
   --protocol uwsgi \
