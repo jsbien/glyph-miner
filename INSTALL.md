@@ -133,9 +133,9 @@ line 25.
 
 ### Starting it up
 
-Start the server with the `local/run-uwsgi.sh` script
-to run uwsgi with timestamped log and show print() output.
-This is its main  content:
+Start the server with the `local/run-uwsgi.sh` script to run uwsgi
+with timestamped log capturing print() and erroroutput.  This is its
+main content:
 
 exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --socket 127.0.0.1:9091 \
@@ -149,8 +149,21 @@ exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --logto uwsgi-$(date +%Y%m%d-%H%M%S).log
 
 
+
 ### Testing
 
-local/debug_wsgi_runner.py
+#### 🔧 Development Server with Interactive Debugging
+
+To run the server with live code reloading and a browser-based debugger, use:
+
+$ python3 utils/debug_wsgi_runner.py
+
+This starts the server on http://localhost:9099.
+
+- When an error occurs, you’ll see an interactive traceback in the browser.
+- You can click into stack frames to inspect variables and evaluate expressions.
+
+> ⚠  Do not use this in production — it's for local development and debugging only.
+
 
 ### Additional utilities
