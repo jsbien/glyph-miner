@@ -104,10 +104,14 @@
     <div class="col-sm-10 col-sm-offset-2">
       <button type="submit"
               class="btn btn-primary btn-block"
-              ng-disabled="documentCRUD.collection.title === undefined ||
-                           documentCRUD.collection.title == ''">
-        Create collection
+              ng-disabled="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''"
+              title="Fill in the collection title before submitting">
+	Create Collection
       </button>
+      <p class="text-warning"
+	 ng-show="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''">
+	Please enter a collection title before submitting.
+      </p>
     </div>
   </div>
 </form>
