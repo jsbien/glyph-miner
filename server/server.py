@@ -167,7 +167,7 @@ class collections_handler:
     
 class collection_handler:
 
-    def GET(self):
+    def GET(self, collectionId):
         web.header('Access-Control-Allow-Origin', '*')
         collections = db.query('SELECT * FROM collections')
 #        collections = db.select('collections')
@@ -843,7 +843,6 @@ urls = (
     '/api/collections/(.*)/images', 'collection_images',
     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
     '/api/collections/(.*)', 'collection',
-     '/api/collections/(.*)', 'collection',
 #     '/api/memberships', 'memberships',
 )
 
