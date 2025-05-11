@@ -32,16 +32,16 @@ db = MySQLDB(
 
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
-debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
+# debug_path = os.path.join(os.getcwd(), f"debug-web-{timestamp}.log")
 
-try:
-    with open(debug_path, "w") as f:
-        f.write(f"web.__file__ = {web.__file__}\n")
-        f.write(f"dir(web) = {dir(web)}\n")
-        f.flush()  # ensure it writes immediately
-    print(f"✅ Debug log written to {debug_path}")
-except Exception as e:
-    print(f"❌ Failed to write debug log: {e}")
+# try:
+#     with open(debug_path, "w") as f:
+#         f.write(f"web.__file__ = {web.__file__}\n")
+#         f.write(f"dir(web) = {dir(web)}\n")
+#         f.flush()  # ensure it writes immediately
+#     print(f"✅ Debug log written to {debug_path}")
+# except Exception as e:
+#     print(f"❌ Failed to write debug log: {e}")
 
 import os
 import json
@@ -88,18 +88,18 @@ class PingHandler:
 
 imageList = {}
 
-with open("/tmp/debug-web.txt", "w") as f:
-    f.write(f"web.__file__ = {web.__file__}\n")
-    f.write(f"dir(web) = {dir(web)}\n")
+# with open("/tmp/debug-web.txt", "w") as f:
+#     f.write(f"web.__file__ = {web.__file__}\n")
+#     f.write(f"dir(web) = {dir(web)}\n")
 
 
 # web.config.debug = False
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
-with open(f"debug-web-{timestamp}.log", "w") as f:
-    f.write(f"web.__file__ = {web.__file__}\n")
-    f.write(f"sys.path = {sys.path}\n")
-    f.write(f"os.listdir(web.__path__[0]) = {os.listdir(web.__path__[0])}\n")
+# with open(f"debug-web-{timestamp}.log", "w") as f:
+#     f.write(f"web.__file__ = {web.__file__}\n")
+#     f.write(f"sys.path = {sys.path}\n")
+#     f.write(f"os.listdir(web.__path__[0]) = {os.listdir(web.__path__[0])}\n")
 
 
 # connect to database - seems redundant
