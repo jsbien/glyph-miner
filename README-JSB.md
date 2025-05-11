@@ -1,11 +1,11 @@
 In preparation
 
-# The Glyph Miner version 1.1 software package
+# The Glyph Miner version 0.2-alpha software package
 This is the port of the original Glyph Miner to Python 3 made by
 AsktheCode under the supervision of [Janusz
 S. Bień](https://orcid.org/0000-0001-5006-8183) (or vice versa ☺)) It
 is available in the present repository
-(https://github.com/jsbien/glyph-miner) and as a Docker image (???).
+(https://github.com/jsbien/glyph-miner) and as a Docker image [not yet ready].
 
 
 Glyph Miner is a software for rapidly extracting glyph occurrences from early
