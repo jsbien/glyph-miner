@@ -11,7 +11,7 @@ is available in the present repository
 Glyph Miner is a software for rapidly extracting glyph occurrences from early
 typeset prints. 
 
-The original Python2 version is available in the repository
+The original Python2 version 0.1-alpha is available in the repository
 https://github.com/benedikt-budig/glyph-miner and as a Docker image
 (https://hub.docker.com/r/glyphminer/glyphminer).
 
