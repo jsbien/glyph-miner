@@ -23,7 +23,7 @@ Conference on Digital Libraries (JCDL)
   * The slides from the conference available at https://www.informatik.uni-wuerzburg.de/fileadmin/10030100/Presentation-JCDL2016.pdf
 
 * The Youtube video at https://youtu.be/T-p_kIdsn6k The video has been
-transcribed with and converted into slides, which are available in
+transcribed with `whisper` and converted into slides, which are available in
 this repository.
 
 Installation instruction is available [*here*](INSTALL.md)
