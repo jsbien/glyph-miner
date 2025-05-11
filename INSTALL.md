@@ -1,14 +1,29 @@
-## Docker
+In preparation
 
-# on Linux
+# Docker
 
-# on Windows
+[![Docker Image Version](https://img.shields.io/docker/v/glyphminer/glyphminer?sort=semver)](https://hub.docker.com/r/glyphminer/glyphminer)
+[![Image Size](https://img.shields.io/badge/size-203.6MB-lightgrey)](https://hub.docker.com/r/glyphminer/glyphminer) [![Layers](https://img.shields.io/badge/layers-18-blue)](https://hub.docker.com/r/glyphminer/glyphminer)
+
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+
+
+## on Linux
+
+## on Windows
 
 ## Manual Installation
 The Glyph Miner software is preferably installed on a Linux
 machine. This guide shows how to install the software on GNU/Linux
 Debian bookworm (the stable distribution at the moment of this
 writing); for other distributions, the process is similar.
+
+### Select appropriate free ports
+
+One port is needed to access the system, we use here 9090. Another one
+is used for the internal communication between the system components,
+we use for this purpose the same port 9090 [not yet fully tested,
+earlier the port 9091 was used]. Bothe can be changes, see below.
 
 ### Required Packages
 First, make sure you have the following packages installed on your system:
@@ -70,52 +85,70 @@ database) will be accessible through an nginx web server (handling the static
 content).
 
 Let nginx know that calls to the API will be handled by the python server by
-adding the following lines in /etc/nginx/sites-enabled/default:
+copying the `local\default` file to /etc/nginx/sites-enabled/default.
 
-    root    /home/<username>/glyph-miner/web
+Its content is given below:
+
+	server {
+    listen 9090 default_server;
+    listen [::]:9090 default_server;
+
+    root /home/<user>/git/glyph-miner/web;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
 
     location /api/ {
-        root /home/<username>/glyph-miner/server;
-        client_max_body_size 100M;
-
         include uwsgi_params;
-        uwsgi_pass 127.0.0.1:9090;
+        uwsgi_pass 127.0.0.1:9091;
         uwsgi_read_timeout 300;
+        client_max_body_size 100M;
     }
+}
+
+
+
+If needed or desired change the port in `listen` and `uwsgi_pass`.
 
 Do not forget to restart nginx in order to make your changes work:
 `sudo service nginx restart`
 
-
 ### Setting up the database
-Glyph Miner uses a MySQL database to store its data. Create a new database and
-user `glyphminer` for Glyph Miner:
+Glyph Miner uses a MySQL database to store its data. Create a new
+database and user `glyphminer` for Glyph Miner using
+`init_glyphminer_db.sql`. You have to run this as the root user (or any user
+with CREATE USER privilege):
 
-    mysql -u root -p
-    mysql> create database glyphminer;
-    mysql> grant usage on *.* to glyphminer@localhost identified by 'glyphminer';
-    mysql> grant all privileges on glyphminer.* to glyphminer@localhost;
-
-Import the database structure into the new database:
-
-    mysql -u glyphminer -p glyphminer < server/schema.sql
-
-You can configure the credentials that Glyph Miner will use in `server/server.py`,
-line 49.
-
-Run as MySQL root user (or any user with CREATE USER privilege):
 mysql -u root -p < local/init_glyphminer_db.sql
-Run as MySQL root user (or any user with CREATE USER privilege):
+
+Than import the database structure into the new database:
+
 mysql -u glyphminer -pglyphminer < server/schema.sql
 
+You can configure the credentials that Glyph Miner will use in `server/server.py`,
+line 25.
 
 ### Starting it up
-You can start the python server using uwsgi using the following command:
 
-`/usr/local/bin/uwsgi --socket 127.0.0.1:9090 --chdir /home/<username>/glyph-miner/server/ --wsgi-file /home/<username>/glyph-miner/server/server.py --master --processes 4 --threads 2`
+Start the server with the `local/run-uwsgi.sh` script. This is its main  content:
 
-local/run-uwsgi.sh
+# Run uwsgi with timestamped log and show print() output
+exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
+  --socket 127.0.0.1:9091 \
+  --protocol uwsgi \
+  --chdir /home/jsbien/git/glyph-miner \
+  --pythonpath /home/jsbien/git/glyph-miner \
+  --module server.server:application \
+  --master \
+  --processes 1 \
+  --threads 2 \
+  --logto uwsgi-$(date +%Y%m%d-%H%M%S).log
+
 
 ### Testing
 
 local/debug_wsgi_runner.py
+
+### Additional utilities
