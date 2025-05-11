@@ -855,8 +855,8 @@ with open("/tmp/debug-urls.txt", "w") as f:
 
 # import datetime
 timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
-    f.write(f"'PingHandler' in globals(): {'PingHandler' in globals()}\n")
+# with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
+#     f.write(f"'PingHandler' in globals(): {'PingHandler' in globals()}\n")
     
 print(f">>> collections_handler has methods: {dir(collections_handler)}", flush=True)
 
