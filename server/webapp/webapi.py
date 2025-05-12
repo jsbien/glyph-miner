@@ -486,7 +486,7 @@ def cookies(*requireds, **defaults):
 import sys, pprint
 
 def debug(*args):
-"""Pretty-prints debug output to stderr or wsgi.errors, if enabled."""
+    """Pretty-prints debug output to stderr or wsgi.errors, if enabled."""
     if not getattr(debug, 'enabled', True):
         return ''
     try:
