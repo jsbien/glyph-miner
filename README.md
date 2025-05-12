@@ -36,13 +36,13 @@ Conference on Digital Libraries (JCDL)
 transcribed with `whisper` and converted into slides, which are available in
 this repository.
 
-The current installation instruction is available [*here*](INSTALL.md)
+The current installation instruction is available [*here*](INSTALL.md).
 
-Some debugging tools are available [*here*](local/)
+Some debugging tools are available [*here*](local/).
 
 Some preliminary user documentation is available [*here*](doc/).
 
-Some user utilities  are available [*here*](utils/)
+Some user utilities  are available [*here*](utils/).
 
 ## License
 Copyright (C) 2016 Benedikt Budig
