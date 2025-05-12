@@ -5,7 +5,7 @@ import MySQLdb
 import MySQLdb.cursors
 from contextlib import closing
 
-# Web.py-compatible SQL value serialization
+# Reintroduce sqlify to handle custom substitution
 def sqlify(obj):
     if obj is None:
         return 'NULL'
@@ -34,8 +34,7 @@ class MySQLDB:
             passwd=self.pw,
             host=self.host,
             port=self.port,
-            cursorclass=MySQLdb.cursors.SSCursor
-#            cursorclass=MySQLdb.cursors.DictCursor,
+            cursorclass=MySQLdb.cursors.DictCursor,
         )
 
     def get_cursor(self):
