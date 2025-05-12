@@ -82,7 +82,7 @@ class application:
 
     def _delegate(self, f, fvars, args=[]):
         print(f"[DEBUG] 🐒 f = {f} (type: {type(f)})", flush=True)
-        print(f"[DEBUG] 🐒 fvars keys = {list(fvars.keys())}", flush=True)
+#        print(f"[DEBUG] 🐒 fvars keys = {list(fvars.keys())}", flush=True)
 
         def handle_class(cls):
             if not isinstance(cls, type):
