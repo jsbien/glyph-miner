@@ -64,7 +64,7 @@ The LodePNG library used in this software is Copyright (C) 2005-2014 Lode
 Vandevenne.
 
 
-## Acknowledgements
+## Acknowledgements by  Benedikt Budig
 Special thanks go to [Dr. Thomas van Dijk](http://www1.informatik.uni-wuerzburg.de/en/staff/dijk_thomas_van/)
 for contributing his fast implementation for the template matching. In addition,
 I want to thank to Dr. Hans-Günter Schmidt and his team of the
