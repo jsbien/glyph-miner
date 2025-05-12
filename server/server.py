@@ -346,8 +346,8 @@ class image:
 
 class images:
 
-from server.webapp.webapi import debug
-import traceback
+    from server.webapp.webapi import debug
+    import traceback
 
     def GET(self):
         try:
