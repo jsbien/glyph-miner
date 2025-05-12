@@ -5,7 +5,6 @@ import MySQLdb
 import MySQLdb.cursors
 from contextlib import closing
 
-# Reintroduce sqlify to handle custom substitution
 def sqlify(obj):
     if obj is None:
         return 'NULL'
@@ -47,7 +46,10 @@ class MySQLDB:
 
         with closing(self.get_cursor()) as cur:
             cur.execute(sql, params or ())
-            return cur.fetchall()
+            result = cur.fetchall()
+            while cur.nextset():
+                pass
+            return result
 
     def select(self, table, where=None, params=None, vars=None):
         sql = f"SELECT * FROM {table}"
@@ -59,7 +61,10 @@ class MySQLDB:
 
         with closing(self.get_cursor()) as cur:
             cur.execute(sql, params or ())
-            return cur.fetchall()
+            result = cur.fetchall()
+            while cur.nextset():
+                pass
+            return result
 
     def insert(self, table, **fields):
         keys = ', '.join(fields.keys())
