@@ -482,17 +482,34 @@ def cookies(*requireds, **defaults):
         badrequest()
         raise StopIteration
 
+# server/webapp/webapi.py — overwrite or extend the original debug()
+import sys, pprint
+
 def debug(*args):
-    """
-    Prints a prettyprinted version of `args` to stderr.
-    """
-    try: 
+"""Pretty-prints debug output to stderr or wsgi.errors, if enabled."""
+    if not getattr(debug, 'enabled', True):
+        return ''
+    try:
         out = ctx.environ['wsgi.errors']
-    except: 
+    except:
         out = sys.stderr
     for arg in args:
         print(pprint.pformat(arg), file=out)
     return ''
+
+debug.enabled = True  # ✅ Add this toggle flag
+
+# def debug(*args):
+#     """
+#     Prints a prettyprinted version of `args` to stderr.
+#     """
+#     try: 
+#         out = ctx.environ['wsgi.errors']
+#     except: 
+#         out = sys.stderr
+#     for arg in args:
+#         print(pprint.pformat(arg), file=out)
+#     return ''
 
 def _debugwrite(x):
     try: 
