@@ -105,8 +105,10 @@
     <div title="Fill in the collection title before submitting">
       <button type="submit"
               class="btn btn-primary btn-block"
-              ng-disabled="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''">
-        Create Collection
+              ng-disabled="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''"
+              data-toggle="tooltip"
+              title="Fill in the collection title before submitting">
+	Create Collection
       </button>
     </div>
     <p class="text-warning"
