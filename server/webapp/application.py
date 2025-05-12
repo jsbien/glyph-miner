@@ -22,7 +22,7 @@ class application:
 
     def resolve_route(self, path):
         print(f"[DEBUG] resolve_route() called with path: {path}")
-        print(f"[DEBUG] self.mapping = {self.mapping} (type: {type(self.mapping)}, len: {len(self.mapping)})")
+#        print(f"[DEBUG] self.mapping = {self.mapping} (type: {type(self.mapping)}, len: {len(self.mapping)})")
         for i in range(0, len(self.mapping), 2):
             regex, handler_key = self.mapping[i], self.mapping[i + 1]
             match = re.compile("^" + regex + "$").match(path)
