@@ -100,18 +100,19 @@
       <input type="text" class="form-control" id="collectionSignature" ng-model="documentCRUD.collection.signature" placeholder="Signature">
     </div>
   </div>
-  <div class="form-group">
-    <div class="col-sm-10 col-sm-offset-2">
+<div class="form-group">
+  <div class="col-sm-10 col-sm-offset-2">
+    <div title="Fill in the collection title before submitting">
       <button type="submit"
               class="btn btn-primary btn-block"
-              ng-disabled="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''"
-              title="Fill in the collection title before submitting">
-	Create Collection
+              ng-disabled="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''">
+        Create Collection
       </button>
-      <p class="text-warning"
-	 ng-show="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''">
-	Please enter a collection title before submitting.
-      </p>
     </div>
+    <p class="text-warning"
+       ng-show="documentCRUD.collection.title === undefined || documentCRUD.collection.title == ''">
+      Please enter a collection title before submitting.
+    </p>
   </div>
+</div>
 </form>
