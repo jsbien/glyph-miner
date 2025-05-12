@@ -1,139 +1,68 @@
-# The Glyph Miner software package
+In preparation
 
-[This is the original README.md of Sep 29, 2016
-(https://github.com/benedikt-budig/glyph-miner). An updated version is
-under preparation.]
+
+
+# The Glyph Miner version 0.2-alpha software package
+
+![Web Interface](https://img.shields.io/badge/interface-web--based-brightgreen)
+![Fork](https://img.shields.io/badge/fork-Python3%20port-blue)
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
 Glyph Miner is a software for rapidly extracting glyph occurrences from early
-typeset prints.
+typeset prints. 
 
-[![Glyph Miner Video](video.png)](https://www.youtube.com/watch?v=T-p_kIdsn6k "Glyph Miner: A System for Efficiently Extracting Glyphs from Early Prints in the Context of OCR")
-
-**NOTE:** The software is currently in an early version that is meant for
-testing. In particular, there are known problems when using **Firefox**. We
-recommend using **Chrome/Chromium** when interacting with Glyph Miner.
-
-## Background
-While off-the-shelf OCR systems work well on many modern documents, they need to be
-specifically "trained" to achive good results on particular early prints. Employing
-efficient user interactions, Glyph Miner helps in this process by rapidly locating
-sample occurrences of glyphs (which can be used for the training).
-
-Glyph Miner and the algorithmic ideas behind it are currently being developed by
-[Benedikt Budig](http://www1.informatik.uni-wuerzburg.de/en/staff/budig_benedikt/)
-and [Thomas van Dijk](http://www1.informatik.uni-wuerzburg.de/en/staff/dijk_thomas_van/),
-University of Würzburg. The project is supported by Würzburg University Library
-and the [Kallimachos](http://kallimachos.de/) project.
-
-## Quick Start: Run it with Docker
-Glyph Miner is available through Docker for easy deployment and testing. Make sure
-you have installed a recent version of [Docker](https://www.docker.com/).
+This is the port of the original Glyph Miner to Python 3 [not yet
+working] made by AsktheCode under the supervision of [Janusz
+S. Bień](https://orcid.org/0000-0001-5006-8183) (or vice versa ☺)).
+The port with some minor improvements is available in the
+present repository (https://github.com/jsbien/glyph-miner) and as a
+Docker image [not yet ready].
 
 
-> **Note:** Some badges that appeared here are no longer available
-> because the original Microbadger service used by the project is no
-> longer operational. Instead the badges from [*Shields.io*](Shields.io)
-> are used.
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/glyphminer/glyphminer)](https://hub.docker.com/r/glyphminer/glyphminer)
-[![Docker Image Size](https://img.shields.io/docker/image-size/glyphminer/glyphminer/latest)](https://hub.docker.com/r/glyphminer/glyphminer)
-[![Docker Version](https://img.shields.io/docker/v/glyphminer/glyphminer?sort=semver)](https://hub.docker.com/r/glyphminer/glyphminer)
+The original Python2 version 0.1-alpha is available in the repository
+https://github.com/benedikt-budig/glyph-miner and as a Docker image
+(https://hub.docker.com/r/glyphminer/glyphminer).
+The original README is available also [*here*](original_README.md).
 
+The original documentation is rudimentary:
 
-### Recommended: Using Docker Hub
-This is the fastest way to get the system running on your machine. Just pull our
-official build from Docker Hub:
+* the presentation at 2016 IEEE/ACM Joint
+Conference on Digital Libraries (JCDL)
+  * The paper available in particular at https://www1.pub.informatik.uni-wuerzburg.de/pub/budig/papers/JCDL-2016_Budig_vanDijk_Kirchner.pdf
+  * The slides from the conference available at https://www.informatik.uni-wuerzburg.de/fileadmin/10030100/Presentation-JCDL2016.pdf
 
-    docker pull glyphminer/glyphminer
-    docker run -p 8080:80 -t -i glyphminer/glyphminer
+* The Youtube video at https://youtu.be/T-p_kIdsn6k The video has been
+transcribed with `whisper` and converted into slides, which are available in
+this repository.
 
-That's it! The Glyph Miner interface is now available at `http://localhost:8080`.
+The current installation instruction is available [*here*](INSTALL.md)
 
-### Using the shipped Dockerfile
-First, check out the repository and build the Glyph Miner Docker image:
+Some debugging tools are available [*here*](local/)
 
-    cd docker
-    docker build -t glyphminer .
+Some preliminary user documentation is available [*here*](doc/).
 
-You can run a new container based on this image using:
+Some user utilities  are available [*here*](utils/)
 
-    docker run -p 8080:80 --name glyphminer -t -i glyphminer
+## License
+Copyright (C) 2016 Benedikt Budig
 
-Once the container has been spun up, the Glyph Miner interface is available at
-	`http://localhost:8080`.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-**BEWARE**: In this default configuration, any changes
-you make to the system (like adding documents, mining glyphs, etc.) are not
-persistant and will be **lost** once the container is stopped.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-## Manual Installation
-The Glyph Miner software is preferably installed on a Linux machine. This guide
-shows how to install the software on Ubuntu 14.04 LTS; for other distributions,
-the process is similar.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-### Required Packages
-First, make sure you have the following packages installed on your system:
+The LodePNG library used in this software is Copyright (C) 2005-2014 Lode
+Vandevenne.
 
-`nginx mysql-server git python-numpy python-pil make g++ python-dev python-pip python-mysqldb`
-
-### Setting up nginx and uWSGI
-The python server (handling the image processing and the connection to the
-database) will be accessible through an nginx web server (handling the static
-content).
-
-You will need a recent version of uwsgi. Get the newest version through PIP:
-`sudo pip install uwsgi`
-
-Let nginx know that calls to the API will be handled by the python server by
-adding the following lines in /etc/nginx/sites-enabled/default:
-
-    root    /home/<username>/glyph-miner/web
-
-    location /api/ {
-        root /home/<username>/glyph-miner/server;
-        client_max_body_size 100M;
-
-        include uwsgi_params;
-        uwsgi_pass 127.0.0.1:9090;
-        uwsgi_read_timeout 300;
-    }
-
-Do not forget to restart nginx in order to make your changes work:
-`sudo service nginx restart`
-
-### Installing Glyph Miner
-To get the latest version of the software, clone the git repository:
-`git clone https://github.com/benedikt-budig/glyph-miner.git`
-
-Next, you need to compile the C++ library that handles the template matching:
-
-    cd glyph-miner/server
-    make standalone
-
-Last but not least, make sure the correct rights are set so that the server can
-write into `web/tiles`, `web/thumbnails`, `web/synthetic_pages`, `server/images`
-and `server/templates`.
-
-### Setting up the database
-Glyph Miner uses a MySQL database to store its data. Create a new database and
-user `glyphminer` for Glyph Miner:
-
-    mysql -u root -p
-    mysql> create database glyphminer;
-    mysql> grant usage on *.* to glyphminer@localhost identified by 'glyphminer';
-    mysql> grant all privileges on glyphminer.* to glyphminer@localhost;
-
-Import the database structure into the new database:
-
-    mysql -u glyphminer -p glyphminer < server/schema.sql
-
-You can configure the credentials that Glyph Miner will use in `server/server.py`,
-line 49.
-
-### Starting it up
-You can start the python server using uwsgi using the following command:
-
-`/usr/local/bin/uwsgi --socket 127.0.0.1:9090 --chdir /home/<username>/glyph-miner/server/ --wsgi-file /home/<username>/glyph-miner/server/server.py --master --processes 4 --threads 2`
 
 ## Acknowledgements
 Special thanks go to [Dr. Thomas van Dijk](http://www1.informatik.uni-wuerzburg.de/en/staff/dijk_thomas_van/)
