@@ -346,11 +346,29 @@ class image:
 
 class images:
 
+from server.webapp.webapi import debug
+import traceback
+
     def GET(self):
-        web.header('Access-Control-Allow-Origin', '*')
-        images = db.query('SELECT i.*, COUNT(ci.collection_id) AS collection_count FROM images i LEFT OUTER JOIN collections_images ci ON i.id = ci.image_id GROUP BY i.id')
-        output = [image for image in images]
-        return json.dumps(output, cls=DateTimeEncoder)
+        try:
+            debug("🔍 Attempting to fetch images with collection count")
+            images = db.query(
+                'SELECT i.*, COUNT(ci.collection_id) AS collection_count '
+                'FROM images i LEFT OUTER JOIN collections_images ci '
+                'ON i.id = ci.image_id GROUP BY i.id'
+            )
+            debug("✅ Images fetched successfully")
+            return json.dumps(images, cls=DateTimeEncoder)
+        except Exception as e:
+            debug("❌ Error in images GET:", str(e))
+            debug.write(traceback.format_exc())
+            raise web.internalerror()
+
+    # def GET(self):
+    #     web.header('Access-Control-Allow-Origin', '*')
+    #     images = db.query('SELECT i.*, COUNT(ci.collection_id) AS collection_count FROM images i LEFT OUTER JOIN collections_images ci ON i.id = ci.image_id GROUP BY i.id')
+    #     output = [image for image in images]
+    #     return json.dumps(output, cls=DateTimeEncoder)
 
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
