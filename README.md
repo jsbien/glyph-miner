@@ -66,11 +66,13 @@ Vandevenne.
 
 
 ## Acknowledgements by  Benedikt Budig
-Special thanks go to [Dr. Thomas van Dijk](http://www1.informatik.uni-wuerzburg.de/en/staff/dijk_thomas_van/)
-for contributing his fast implementation for the template matching. In addition,
-I want to thank to Dr. Hans-Günter Schmidt and his team of the
-[Würzburg University Library](http://www.bibliothek.uni-wuerzburg.de/en/ub_infos/contact/departments/digitization_centre/)
- for their generous support.
+Special thanks go to [Dr. Thomas van
+Dijk](https://web.archive.org/web/20170915184753/http://www1.informatik.uni-wuerzburg.de/en/staff/dijk_thomas_van/)
+for contributing his fast implementation for the template matching. In
+addition, I want to thank to Dr. Hans-Günter Schmidt and his team of
+the [Würzburg University
+Library](http://www.bibliothek.uni-wuerzburg.de/en/ub_infos/contact/departments/digitization_centre/)
+for their generous support.
 
 ## License
 Copyright (C) 2016 Benedikt Budig
