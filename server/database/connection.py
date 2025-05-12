@@ -47,8 +47,6 @@ class MySQLDB:
         with closing(self.get_cursor()) as cur:
             cur.execute(sql, params or ())
             result = cur.fetchall()
-            while cur.nextset():
-                pass
             return result
 
     def select(self, table, vars=None, where=None):
