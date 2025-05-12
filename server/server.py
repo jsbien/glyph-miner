@@ -1,24 +1,17 @@
-
 #!/usr/bin/env python
 import sys
 import server.webapp as web
 import os
 import time
 from server import database as db
-
-# from server.webapp import db
-# from server.webapp.application import application  # web.application replacement
-# from server.webapp.db import querying, inserting, transaction
+from server.webapp.webapi import debug
+import traceback
 
 
 print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<", flush=True)
 
 print("[DEBUG] web.application:", hasattr(web, "application"))
 
-
-# server/server.py
-#import server.webapp as web
-#db = web.database(dbn='mysql', user='glyphminer', pw='glyphminer', db='glyphminer')
 
 from server.database.connection import MySQLDB
 
@@ -345,9 +338,6 @@ class image:
 
 
 class images:
-
-    from server.webapp.webapi import debug
-    import traceback
 
     def GET(self):
         try:
