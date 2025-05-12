@@ -51,20 +51,20 @@ class MySQLDB:
                 pass
             return result
 
-        def select(self, table, vars=None, where=None):
-            sql = f"SELECT * FROM {table}"
-            params = ()
+    def select(self, table, vars=None, where=None):
+        sql = f"SELECT * FROM {table}"
+        params = ()
 
-            if where:
-                sql += f" WHERE {where}"
-                if vars:
-                    params = tuple(vars.values())
+        if where:
+            sql += f" WHERE {where}"
+            if vars:
+                params = tuple(vars.values())
 
-            with closing(self.get_cursor()) as cur:
-                cur.execute(sql, params)
-                result = cur.fetchall()
+        with closing(self.get_cursor()) as cur:
+            cur.execute(sql, params)
+            result = cur.fetchall()
 
-            return result
+        return result
 
     def insert(self, table, **fields):
         keys = ', '.join(fields.keys())
