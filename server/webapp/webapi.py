@@ -43,6 +43,9 @@ class HTTPError(Exception):
     def __init__(self, status, headers=None, data=""):
         if headers is None:
             headers = []
+
+        print(f"📦 HTTPError.init: headers = {headers} ({type(headers)})")
+
         self.status = status
         self.headers = headers
         self.data = data
@@ -290,6 +293,8 @@ internalerror = InternalError
 
 
 def header(hdr, value, unique=False):
+    print(f"📡 header() called with: {hdr}={value}, ctx.headers type: {type(ctx.headers)}")
+    
     # Ensure both header key and value are strings
     if not isinstance(hdr, str) or not isinstance(value, str):
         raise TypeError("HTTP header key and value must be strings")
