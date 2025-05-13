@@ -67,18 +67,9 @@ class MySQLDB:
 
     def select(self, table, vars=None, where=None):
         sql = f"SELECT * FROM {table}"
-        params = ()
-
         if where:
             sql += f" WHERE {where}"
-            if vars:
-                params = tuple(vars.values())
-
-        with closing(self.get_cursor()) as cur:
-            cur.execute(sql, params)
-            result = cur.fetchall()
-
-        return result
+        return self.query(sql, vars=vars)
 
     def insert(self, table, **fields):
         keys = ', '.join(fields.keys())
