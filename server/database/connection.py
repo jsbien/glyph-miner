@@ -48,6 +48,19 @@ class MySQLDB:
         )
 
     def get_cursor(self):
+        import MySQLdb.cursors
+        class PatchedCursor(MySQLdb.cursors.Cursor):
+            def close(self):
+                try:
+                    if not self._executed:
+                        return
+                    if hasattr(self, '_result') and self._result:
+                        self._result = None
+                except Exception:
+                    pass
+        return self.connection.cursor(PatchedCursor)
+
+def get_cursor(self):
         return self.connection.cursor(SafeCursor)
 
     def query(self, sql, params=None, vars=None):
