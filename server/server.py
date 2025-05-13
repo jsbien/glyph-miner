@@ -820,38 +820,38 @@ class DateTimeEncoder(json.JSONEncoder):
     
 # define resource paths
 urls = (
-'/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
-'/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
-'/api/images/(.*)/templates/(.*)/matches', 'matches',
-'/api/images/(.*)/templates/(.*)', 'template',
-'/api/images/(.*)/templates', 'templates',
-'/api/images/(.*)/synthetic_pages', 'synthetic_pages',
-'/api/images/(.*)/(color|binarized)', 'image_file',
-'/api/images/(.*)', 'image',
-'/api/images', 'images',
-#  '/api/', 'idex',
-#     '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
-#     '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
-#     '/api/images/(.*)/templates/(.*)/matches', 'matches',
-#     '/api/images/(.*)/templates/(.*)/model', 'model',
-#     '/api/images/(.*)/templates/(.*)/typography', 'typography',
-#     '/api/images/(.*)/templates/(.*)', 'template',
-#     '/api/images/(.*)/templates', 'templates',
-#     '/api/images/(.*)/crops', 'crop',
-#     '/api/images/(.*)/(color|binarized)', 'image_file',
-#     '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
-    '/api/images', 'images',
+    # Match labels, crops, matches
+    '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
+    '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
+    '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
+    '/api/images/(.*)/templates/(.*)/matches', 'matches',
+
+    # Templates and synthetic pages
+    '/api/images/(.*)/templates/(.*)', 'template',
+    '/api/images/(.*)/templates', 'templates',
+    '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
+
+    # Image uploads (color/binarized)
+    '/api/images/(.*)/(color|binarized)', 'image_file',
+
+    # Individual image
     '/api/images/(.*)', 'image',
-    '/api/collections', 'collections',
-    '/api/debug/clear', 'DebugClearHandler',
-    '/api/ping', 'PingHandler',
+
+    # Image list (must come after all /images/<id> routes)
+    '/api/images', 'images',
+
+    # Collections
     '/api/collections/(.*)/templates/(.*)/matches', 'collection_matches',
     '/api/collections/(.*)/templates/(.*)', 'collection_template',
     '/api/collections/(.*)/templates', 'collection_templates',
     '/api/collections/(.*)/images', 'collection_images',
     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
     '/api/collections/(.*)', 'collection',
-#     '/api/memberships', 'memberships',
+    '/api/collections', 'collections',
+
+    # Utility
+    '/api/debug/clear', 'DebugClearHandler',
+    '/api/ping', 'PingHandler',
 )
 
 # DEBUG: inspect the structure of urls
