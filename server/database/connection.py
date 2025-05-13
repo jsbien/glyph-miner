@@ -47,6 +47,11 @@ class MySQLDB:
         )
 
     def get_cursor(self):
+        try:
+            self.connection.ping(reconnect=True)
+        except Exception:
+            print(">>> Reconnecting to MySQL")
+            self.connection = self._connect()
         return self.connection.cursor(PatchedDictCursor)
 
     def query(self, sql, params=None, vars=None):
@@ -57,7 +62,7 @@ class MySQLDB:
                 for key, value in vars.items():
                     sql = sql.replace(f"${key}", sqlify(value))
             with closing(self.get_cursor()) as cur:
-                print(f">>> CURSOR CLASS: {type(cur)}")  # <== DEBUG: verify patched cursor is used
+                print(f">>> CURSOR CLASS: {type(cur)}")
                 cur.execute(sql, params or ())
                 result = cur.fetchall()
                 print(">>> QUERY SUCCESS")
