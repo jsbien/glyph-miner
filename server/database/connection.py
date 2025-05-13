@@ -104,3 +104,17 @@ class MySQLDB:
         with closing(self.get_cursor()) as cur:
             cur.execute(sql, params)
             self.connection.commit()
+
+            import MySQLdb.cursors
+
+def patched_close(self):
+    try:
+        if not self._executed:
+            return
+        # Intentionally do not call self.nextset()
+        if hasattr(self, '_result') and self._result:
+            self._result = None
+    except Exception:
+        pass
+
+MySQLdb.cursors.Cursor.close = patched_close
