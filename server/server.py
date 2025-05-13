@@ -347,8 +347,10 @@ class images:
                 'FROM images i LEFT OUTER JOIN collections_images ci '
                 'ON i.id = ci.image_id GROUP BY i.id'
             )
+            image_list = list(images)  # ✅ Force result consumption to avoid DB sync issues
             debug("✅ Images fetched successfully")
-            return json.dumps(images, cls=DateTimeEncoder)
+            return json.dumps(image_list, cls=DateTimeEncoder)
+
         except Exception as e:
             debug("❌ Error in images GET:", str(e))
             debug.write(traceback.format_exc())
@@ -827,9 +829,7 @@ urls = (
 '/api/images/(.*)/(color|binarized)', 'image_file',
 '/api/images/(.*)', 'image',
 '/api/images', 'images',
-#     '/api/', 'idex',
-#     '/api/images/(.*)/templates/(.*)/matches/(.*)/label', 'matchlabel',
-#     '/api/images/(.*)/templates/(.*)/matches/(.*)/crops', 'matchcrop',
+#  '/api/', 'idex',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)/select', 'matchselect',
 #     '/api/images/(.*)/templates/(.*)/matches/(.*)', 'match',
 #     '/api/images/(.*)/templates/(.*)/matches', 'matches',
