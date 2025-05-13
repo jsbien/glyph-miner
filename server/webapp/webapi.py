@@ -201,15 +201,17 @@ class NoMethod(HTTPError):
     """A `405 Method Not Allowed` error."""
     def __init__(self, cls=None):
         status = '405 Method Not Allowed'
-        headers = {}
+        headers = [('Content-Type', 'text/html')]  # ✅ fix here
+#        headers = {}
 #        headers['Content-Type'] = 'text/html'
-        headers.append(('Content-Type', 'text/html'))
+#        headers.append(('Content-Type', 'text/html'))
       
         methods = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE']
         if cls:
             methods = [method for method in methods if hasattr(cls, method)]
 
-        headers['Allow'] = ', '.join(methods)
+        headers.append(('Allow', ', '.join(methods)))
+#        headers['Allow'] = ', '.join(methods)
         data = None
         HTTPError.__init__(self, status, headers, data)
         
