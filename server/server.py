@@ -124,7 +124,8 @@ class collections_handler:
 
             result = json.dumps(collections, default=serialize)
             web.ctx.status = '200 OK'
-            web.ctx.headers = [('Content-Type', 'application/json')]
+            web.header('Content-Type', 'application/json')
+#            web.ctx.headers = [('Content-Type', 'application/json')]
             return result
 
         except Exception as e:
