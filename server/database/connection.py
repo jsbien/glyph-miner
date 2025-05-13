@@ -40,6 +40,19 @@ class MySQLDB:
         return self.connection.cursor()
 
     def query(self, sql, params=None, vars=None):
+        print(f">>> QUERY: {sql}")
+        try:
+            with closing(self.get_cursor()) as cur:
+                cur.execute(sql, params or ())
+                result = cur.fetchall()
+                print(">>> QUERY SUCCESS")
+                return result
+        except Exception as e:
+            print(">>> QUERY FAILED:", e)
+            raise
+
+    
+    def query(self, sql, params=None, vars=None):
         if vars:
             for key, value in vars.items():
                 sql = sql.replace(f"${key}", sqlify(value))
