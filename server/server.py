@@ -109,7 +109,7 @@ class index:
 
 class collections_handler:
     def GET(self):
-        print(">>> ENTERED GET <<<", flush=True)
+        print(">>> ENTERED collection_handler GET <<<", flush=True)
 
         try:
             # Assuming this line fetches from DB
@@ -341,6 +341,7 @@ class images:
 
     def GET(self):
         try:
+            print(">>> ENTERED images.GET()")  # 🔍 Simple runtime trace
             debug("🔍 Attempting to fetch images with collection count")
             images = db.query(
                 'SELECT i.*, COUNT(ci.collection_id) AS collection_count '
