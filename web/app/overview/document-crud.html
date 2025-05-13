@@ -54,6 +54,7 @@
   </div>
   <div class="form-group">
     <div class="col-sm-10 col-sm-offset-2">
+         <div title="Please provide title, color image, and B/W image before submitting">
       <button type="submit" class="btn btn-primary btn-block"
         ng-disabled="documentCRUD.docForm.imageColor[0] === undefined ||
                      documentCRUD.docForm.imageBinarized[0] === undefined ||
@@ -62,6 +63,13 @@
         <span class="glyphicon glyphicon-refresh spinning" ng-show="documentCRUD.processingUpload"></span>
         Upload document
       </button>
+    </div>
+    <p class="text-warning"
+       ng-show="documentCRUD.docForm.imageColor[0] === undefined ||
+                documentCRUD.docForm.imageBinarized[0] === undefined ||
+                documentCRUD.document.title == ''">
+      Please fill in the required fields (title, color and B/W images) before submitting.
+    </p>
     </div>
   </div>
 </form>
