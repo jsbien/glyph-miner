@@ -62,16 +62,6 @@ class MySQLDB:
             print(">>> QUERY FAILED:", e)
             raise
 
-    
-    def query(self, sql, params=None, vars=None):
-        if vars:
-            for key, value in vars.items():
-                sql = sql.replace(f"${key}", sqlify(value))
-
-        with closing(self.get_cursor()) as cur:
-            cur.execute(sql, params or ())
-            result = cur.fetchall()
-            return result
 
     def select(self, table, vars=None, where=None):
         sql = f"SELECT * FROM {table}"
