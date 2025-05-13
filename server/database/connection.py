@@ -5,6 +5,17 @@ import MySQLdb
 import MySQLdb.cursors
 from contextlib import closing
 
+class SafeCursor(MySQLdb.cursors.Cursor):
+    def close(self):
+        try:
+            super(MySQLdb.cursors.Cursor, self).close()
+        except MySQLdb.ProgrammingError as e:
+            if "commands out of sync" in str(e).lower():
+                pass  # swallow the sync error on close
+            else:
+                raise
+
+
 def sqlify(obj):
     if obj is None:
         return 'NULL'
@@ -37,7 +48,7 @@ class MySQLDB:
         )
 
     def get_cursor(self):
-        return self.connection.cursor()
+        return self.connection.cursor(SafeCursor)
 
     def query(self, sql, params=None, vars=None):
         print(f">>> QUERY: {sql}")
