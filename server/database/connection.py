@@ -57,6 +57,7 @@ class MySQLDB:
                 for key, value in vars.items():
                     sql = sql.replace(f"${key}", sqlify(value))
             with closing(self.get_cursor()) as cur:
+                print(f">>> CURSOR CLASS: {type(cur)}")  # <== DEBUG: verify patched cursor is used
                 cur.execute(sql, params or ())
                 result = cur.fetchall()
                 print(">>> QUERY SUCCESS")
