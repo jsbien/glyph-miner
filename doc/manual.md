@@ -16,7 +16,7 @@ To create a new collection, go to the **Overview** page and use the **Add new co
 
 ## Add New Document
 
-When adding a document, several fields and image uploads are involved. The form requires the following:
+When adding a new document, you will need to fill out several metadata fields and upload image files. The form will only allow submission once the required fields are completed.
 
 | Field                | Required | Description                                                                 |
 |----------------------|----------|-----------------------------------------------------------------------------|
@@ -25,12 +25,12 @@ When adding a document, several fields and image uploads are involved. The form 
 | Author               | No       | Name of the author or source.                                               |
 | Year                 | No       | Year of publication.                                                        |
 | Signature            | No       | Optional identifier for the document.                                       |
-| Collection           | No       | A collection this document belongs to (selectable from existing ones).      |
+| Collection           | Optional | Select the collection this document belongs to from existing ones. While not enforced as mandatory by the form, associating documents with a collection is recommended for proper organization and downstream processing. |
 | **Image (Color)**    | Yes      | Color image file of the document.                                           |
 | **Image (B/W)**      | Yes      | Binarized (black & white) image file of the document.                      |
 
-The submit button is disabled unless the title is filled and both image files are selected.
+> The **submit button** remains disabled until the **Title**, **Image (Color)**, and **Image (B/W)** fields are provided.
 
 ---
 
-*Generated using source analysis of `document-crud.controller.js` and `document-crud.html`.*
+*Generated using source analysis of `document-crud.controller.js` and `document-crud.html`. Validation behavior may be subject to future changes in the implementation.*
