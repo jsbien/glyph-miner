@@ -34,11 +34,13 @@
     }
 
     function postDocument(document) {
-      jsonData = angular.toJson(document);
-      return $http.post(apiBasePath + '/images', jsonData)
-        .then(getComplete)
-        .catch(errorHandler);
-    }
+	jsonData = angular.toJson(document);
+	return $http.post(apiBasePath + '/images', jsonData, {
+	    headers: { 'Content-Type': 'application/json' }
+	})
+       .then(getComplete)
+       .catch(errorHandler);
+   }
 
     function getCollections() {
       return $http.get(apiBasePath + '/collections')
