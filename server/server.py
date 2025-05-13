@@ -399,7 +399,8 @@ class image_file:
         form = web.input()
 
         # save files at correct locations for the web tools and the server
-        im = Image.open(io.StringIO(form.file))
+      im = Image.open(form.file.file)
+#      im = Image.open(io.StringIO(form.file))
         (width, height) = im.size
         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
 
