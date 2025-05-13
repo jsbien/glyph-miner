@@ -52,6 +52,7 @@ class MySQLDB:
 
     def query(self, sql, params=None, vars=None):
         print(f">>> QUERY: {sql}")
+        print(f">>> VARS: {vars}")
         try:
             with closing(self.get_cursor()) as cur:
                 cur.execute(sql, params or ())
