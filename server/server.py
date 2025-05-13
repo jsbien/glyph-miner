@@ -393,52 +393,110 @@ class images:
 
 
 class image_file:
-
     def POST(self, imageId, imageType):
+        import os
+        import json
+        import subprocess
+        from PIL import Image, ImageOps
+
         web.header('Access-Control-Allow-Origin', '*')
         form = web.input()
 
-        # save files at correct locations for the web tools and the server
+        # ✅ Read uploaded image from binary stream
         im = Image.open(form.file.file)
-#      im = Image.open(io.StringIO(form.file))
         (width, height) = im.size
+
         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
 
         if imageType == "color":
-            db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path_color=(imageId + "-color.png"))
+            db.update('images', vars=dict(iid=imageId), where="id = $iid",
+                      web_path_color=(imageId + "-color.png"))
 
-            # save full image
+            # ✅ Save full image
             with open('./images/' + imageId + "-color.png", 'wb') as f:
                 im.convert('RGB').save(f)
 
-            # dispatch tile creation
-            subprocess.Popen(["./img2tiles.py", "./images/" + imageId + "-color.png", "../web/tiles/" +
-                              imageId + "-color.png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
+            # ✅ Dispatch tile creation
+            subprocess.Popen([
+                "./img2tiles.py",
+                "./images/" + imageId + "-color.png",
+                "../web/tiles/" + imageId + "-color.png",
+                "0"
+            ], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
 
-            # create thumbnail
+            # ✅ Create thumbnail
             thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
             with open("../web/thumbnails/thumb-" + imageId + "-color.png", 'wb') as f:
                 thumb.convert('RGB').save(f)
-        else:
-            db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path=(imageId + ".png"))
 
-            # save full image
+        else:  # binarized
+            db.update('images', vars=dict(iid=imageId), where="id = $iid",
+                      web_path=(imageId + ".png"))
+
+            # ✅ Save full image
             with open('./images/' + imageId + ".png", 'wb') as f:
                 im.save(f)
 
-            # dispatch tile creation
-            subprocess.Popen(["./img2tiles.py", "./images/" + imageId + ".png", "../web/tiles/" +
-                              imageId + ".png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
+            # ✅ Dispatch tile creation
+            subprocess.Popen([
+                "./img2tiles.py",
+                "./images/" + imageId + ".png",
+                "../web/tiles/" + imageId + ".png",
+                "0"
+            ], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
 
-            db.update('images', vars=dict(iid=imageId), where="id = $iid", path=(imageId + ".png"))
-        return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0], cls=DateTimeEncoder)
+            db.update('images', vars=dict(iid=imageId), where="id = $iid",
+                      path=(imageId + ".png"))
 
-    def OPTIONS(self, imageId):
-        web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Origin', '*')
-        web.header('Access-Control-Allow-Credentials', 'true')
-        web.header('Access-Control-Allow-Headers', 'Content-Type')
-        return
+        return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0],
+                          cls=DateTimeEncoder)
+# class image_file:
+
+#     def POST(self, imageId, imageType):
+#         web.header('Access-Control-Allow-Origin', '*')
+#         form = web.input()
+
+#         # save files at correct locations for the web tools and the server
+#         im = Image.open(form.file.file)
+# #      im = Image.open(io.StringIO(form.file))
+#         (width, height) = im.size
+#         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
+
+#         if imageType == "color":
+#             db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path_color=(imageId + "-color.png"))
+
+#             # save full image
+#             with open('./images/' + imageId + "-color.png", 'wb') as f:
+#                 im.convert('RGB').save(f)
+
+#             # dispatch tile creation
+#             subprocess.Popen(["./img2tiles.py", "./images/" + imageId + "-color.png", "../web/tiles/" +
+#                               imageId + "-color.png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
+
+#             # create thumbnail
+#             thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
+#             with open("../web/thumbnails/thumb-" + imageId + "-color.png", 'wb') as f:
+#                 thumb.convert('RGB').save(f)
+#         else:
+#             db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path=(imageId + ".png"))
+
+#             # save full image
+#             with open('./images/' + imageId + ".png", 'wb') as f:
+#                 im.save(f)
+
+#             # dispatch tile creation
+#             subprocess.Popen(["./img2tiles.py", "./images/" + imageId + ".png", "../web/tiles/" +
+#                               imageId + ".png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
+
+#             db.update('images', vars=dict(iid=imageId), where="id = $iid", path=(imageId + ".png"))
+#         return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0], cls=DateTimeEncoder)
+
+#     def OPTIONS(self, imageId):
+#         web.header('Content-Type', 'application/json')
+#         web.header('Access-Control-Allow-Origin', '*')
+#         web.header('Access-Control-Allow-Credentials', 'true')
+#         web.header('Access-Control-Allow-Headers', 'Content-Type')
+#         return
 
 
 class templates:
