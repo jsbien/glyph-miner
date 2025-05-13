@@ -60,9 +60,6 @@ class MySQLDB:
                     pass
         return self.connection.cursor(PatchedCursor)
 
-def get_cursor(self):
-        return self.connection.cursor(SafeCursor)
-
     def query(self, sql, params=None, vars=None):
         print(f">>> QUERY: {sql}")
         print(f">>> VARS: {vars}")
