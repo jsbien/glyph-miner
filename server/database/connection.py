@@ -5,16 +5,15 @@ import MySQLdb
 import MySQLdb.cursors
 from contextlib import closing
 
-class SafeCursor(MySQLdb.cursors.Cursor):
+class PatchedDictCursor(MySQLdb.cursors.DictCursor):
     def close(self):
         try:
-            super(MySQLdb.cursors.Cursor, self).close()
-        except MySQLdb.ProgrammingError as e:
-            if "commands out of sync" in str(e).lower():
-                pass  # swallow the sync error on close
-            else:
-                raise
-
+            if not self._executed:
+                return
+            if hasattr(self, '_result') and self._result:
+                self._result = None
+        except Exception:
+            pass
 
 def sqlify(obj):
     if obj is None:
@@ -48,22 +47,15 @@ class MySQLDB:
         )
 
     def get_cursor(self):
-        import MySQLdb.cursors
-        class PatchedCursor(MySQLdb.cursors.Cursor):
-            def close(self):
-                try:
-                    if not self._executed:
-                        return
-                    if hasattr(self, '_result') and self._result:
-                        self._result = None
-                except Exception:
-                    pass
-        return self.connection.cursor(PatchedCursor)
+        return self.connection.cursor(PatchedDictCursor)
 
     def query(self, sql, params=None, vars=None):
         print(f">>> QUERY: {sql}")
         print(f">>> VARS: {vars}")
         try:
+            if vars:
+                for key, value in vars.items():
+                    sql = sql.replace(f"${key}", sqlify(value))
             with closing(self.get_cursor()) as cur:
                 cur.execute(sql, params or ())
                 result = cur.fetchall()
@@ -72,7 +64,6 @@ class MySQLDB:
         except Exception as e:
             print(">>> QUERY FAILED:", e)
             raise
-
 
     def select(self, table, vars=None, where=None):
         sql = f"SELECT * FROM {table}"
@@ -105,17 +96,3 @@ class MySQLDB:
         with closing(self.get_cursor()) as cur:
             cur.execute(sql, params)
             self.connection.commit()
-
-            import MySQLdb.cursors
-
-def patched_close(self):
-    try:
-        if not self._executed:
-            return
-        # Intentionally do not call self.nextset()
-        if hasattr(self, '_result') and self._result:
-            self._result = None
-    except Exception:
-        pass
-
-MySQLdb.cursors.Cursor.close = patched_close
