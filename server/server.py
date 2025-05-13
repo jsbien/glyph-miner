@@ -363,26 +363,35 @@ class images:
     #     output = [image for image in images]
     #     return json.dumps(output, cls=DateTimeEncoder)
 
-    def POST(self):
-        web.header('Access-Control-Allow-Origin', '*')
+def POST(self):
+    web.header('Access-Control-Allow-Origin', '*')
+    try:
         data = json.loads(web.data())
-        if not "title" in data:
+        if "title" not in data:
             data["title"] = None
-        if not "subtitle" in data:
+        if "subtitle" not in data:
             data["subtitle"] = None
-        if not "author" in data:
+        if "author" not in data:
             data["author"] = None
-        if not "year" in data:
+        if "year" not in data:
             data["year"] = None
-        if not "signature" in data:
+        if "signature" not in data:
             data["signature"] = None
 
-        dbId = db.insert('images', title=data["title"],
-                                   subtitle=data["subtitle"],
-                                   author=data["author"],
-                                   year=data["year"],
-                                   signature=data["signature"])
+        dbId = db.insert('images',
+                         title=data["title"],
+                         subtitle=data["subtitle"],
+                         author=data["author"],
+                         year=data["year"],
+                         signature=data["signature"])
         return json.dumps(db.select('images', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
+
+    except json.JSONDecodeError as e:
+        print(f"[ERROR] Invalid JSON in POST /api/images: {e}", flush=True)
+        raise web.badrequest("Expected valid JSON payload.")
+    except Exception as e:
+        print(f"[ERROR] Failed to insert image metadata: {e}", flush=True)
+        raise web.internalerror("Database insertion error.")
 
     def OPTIONS(self, imageId):
         web.header('Content-Type', 'application/json')
