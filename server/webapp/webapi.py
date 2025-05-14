@@ -366,20 +366,15 @@ def input(*requireds, **defaults):
         raise badrequest()
 
 def data():
-        if 'data' not in ctx:  # ✅ won't raise KeyError
-            try:
-                length = int(ctx.env.get('CONTENT_LENGTH', 0))
-            except (ValueError, TypeError):
-                length = 0
-            ctx.data = ctx.env['wsgi.input'].read(length)
+    try:
         return ctx.data
-
-# def data():
-#     """Returns the data sent with the request."""
-#     if 'data' not in ctx:
-#         cl = intget(ctx.env.get('CONTENT_LENGTH'), 0)
-#         ctx.data = ctx.env['wsgi.input'].read(cl)
-#     return ctx.data
+    except KeyError:
+        try:
+            length = int(ctx.env.get('CONTENT_LENGTH', 0))
+        except (ValueError, TypeError):
+            length = 0
+        ctx.data = ctx.env['wsgi.input'].read(length)
+        return ctx.data
 
 def setcookie(name, value, expires='', domain=None,
               secure=False, httponly=False, path=None):
