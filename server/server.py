@@ -368,48 +368,93 @@ class images:
 
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
-        print("🔍 [POST /api/images] Handler entered")
+        print("🔍 [POST /api/images] Handler entered", flush=True)
 
         try:
-            raw_data = web.data()
-            print(f"🔍 [POST /api/images] Raw request body (first 200 chars): {raw_data[:200]}")
+            # ✅ Expect multipart form with image file
+            i = web.input(image={})
+            imagefile = i.get('image')
+
+            if not imagefile or not hasattr(imagefile, 'file'):
+                raise web.badrequest("No image uploaded or missing 'file' attribute")
+
+            # Optional metadata from the form
+            title = i.get("title")
+            subtitle = i.get("subtitle")
+            author = i.get("author")
+            year = i.get("year")
+            signature = i.get("signature")
+
+            print(f"[DEBUG] Uploaded metadata: title={title}, subtitle={subtitle}", flush=True)
+
+            # Save image metadata
+            image_id = db.insert('images',
+                             title=title,
+                             subtitle=subtitle,
+                             author=author,
+                             year=year,
+                             signature=signature)
+
+            print(f"[DEBUG] Saved image metadata, image_id={image_id}", flush=True)
+
+            # Save image file to disk (example logic)
+            filepath = f"uploads/image_{image_id}.jpg"
+            with open(filepath, "wb") as f:
+                f.write(imagefile.file.read())
+            print(f"[DEBUG] Saved file to {filepath}", flush=True)
+
+            web.header('Content-Type', 'application/json')
+            return json.dumps({"status": "ok", "image_id": image_id})
+
         except Exception as e:
-            print(f"❌ [POST /api/images] Error reading request body: {repr(e)}", flush=True)
-            raise web.badrequest("Unable to read request body.")
+            print(f"[ERROR] Upload failed: {e}", flush=True)
+            raise web.internalerror("Image upload failed.")
 
-        try:
-            data = json.loads(raw_data)
-            print(f"🔍 [POST /api/images] Parsed JSON: {data}")
-        except Exception as e:
-            print(f"❌ [POST /api/images] JSON decode failed: {repr(e)}", flush=True)
-            raise web.badrequest("Malformed JSON.")
+    
+    # def POST(self):
+    #     web.header('Access-Control-Allow-Origin', '*')
+    #     print("🔍 [POST /api/images] Handler entered")
 
-        # ✅ Preserve original logic structure for setting defaults
-        if "title" not in data:
-            data["title"] = None
-        if "subtitle" not in data:
-            data["subtitle"] = None
-        if "author" not in data:
-            data["author"] = None
-        if "year" not in data:
-            data["year"] = None
-        if "signature" not in data:
-            data["signature"] = None
+    #     try:
+    #         raw_data = web.data()
+    #         print(f"🔍 [POST /api/images] Raw request body (first 200 chars): {raw_data[:200]}")
+    #     except Exception as e:
+    #         print(f"❌ [POST /api/images] Error reading request body: {repr(e)}", flush=True)
+    #         raise web.badrequest("Unable to read request body.")
 
-        try:
-            dbId = db.insert('images',
-                             title=data["title"],
-                             subtitle=data["subtitle"],
-                             author=data["author"],
-                             year=data["year"],
-                             signature=data["signature"])
-            print(f"✅ [POST /api/images] Inserted image metadata with id {dbId}")
+    #     try:
+    #         data = json.loads(raw_data)
+    #         print(f"🔍 [POST /api/images] Parsed JSON: {data}")
+    #     except Exception as e:
+    #         print(f"❌ [POST /api/images] JSON decode failed: {repr(e)}", flush=True)
+    #         raise web.badrequest("Malformed JSON.")
 
-            return json.dumps(db.select('images', vars=dict(dbId=dbId), where="id = $dbId")[0], cls=DateTimeEncoder)
+    #     # ✅ Preserve original logic structure for setting defaults
+    #     if "title" not in data:
+    #         data["title"] = None
+    #     if "subtitle" not in data:
+    #         data["subtitle"] = None
+    #     if "author" not in data:
+    #         data["author"] = None
+    #     if "year" not in data:
+    #         data["year"] = None
+    #     if "signature" not in data:
+    #         data["signature"] = None
 
-        except Exception as e:
-            print(f"❌ [POST /api/images] Failed to insert image: {repr(e)}", flush=True)
-            raise web.internalerror("Database insertion failed.")
+    #     try:
+    #         dbId = db.insert('images',
+    #                          title=data["title"],
+    #                          subtitle=data["subtitle"],
+    #                          author=data["author"],
+    #                          year=data["year"],
+    #                          signature=data["signature"])
+    #         print(f"✅ [POST /api/images] Inserted image metadata with id {dbId}")
+
+    #         return json.dumps(db.select('images', vars=dict(dbId=dbId), where="id = $dbId")[0], cls=DateTimeEncoder)
+
+    #     except Exception as e:
+    #         print(f"❌ [POST /api/images] Failed to insert image: {repr(e)}", flush=True)
+    #         raise web.internalerror("Database insertion failed.")
 
         def OPTIONS(self, imageId):
             web.header('Content-Type', 'application/json')
