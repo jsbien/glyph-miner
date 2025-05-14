@@ -343,6 +343,7 @@ class image:
 class images:
 
     def GET(self):
+        web.header('Access-Control-Allow-Origin', '*')
         try:
             print(">>> ENTERED images.GET()")  # 🔍 Simple runtime trace
             debug("🔍 Attempting to fetch images with collection count")
