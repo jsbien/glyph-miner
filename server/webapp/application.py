@@ -33,11 +33,14 @@ class application:
     def wsgifunc(self):
         def wsgi(env, start_resp):
             web.ctx = web.storage()
+            web.ctx.env = env.copy()  # ✅ important: use .copy()
+            web.ctx.status = '200 OK'
             web.ctx.headers = []
-            web.ctx.env = env
             web.ctx.path = env.get('PATH_INFO', '/')
             web.ctx.fullpath = web.ctx.path
             web.ctx.method = env.get('REQUEST_METHOD', 'GET')
+            web.ctx.query = env.get('QUERY_STRING', '')
+            web.ctx.input = None  # will be filled later by web.input()
 
             handler_key, args = self.resolve_route(web.ctx.path)
 
@@ -45,30 +48,29 @@ class application:
                 result = self.handle_with_processors()
 
                 if isinstance(result, list):
-                    status = '200 OK'
+                    status = web.ctx.status
                     headers = [('Content-Type', 'text/html')] + web.ctx.headers
                     start_resp(status, headers)
                     return result
                 elif isinstance(result, str):
-                    start_resp('200 OK', [('Content-Type', 'text/html')])
+                    start_resp(web.ctx.status, [('Content-Type', 'text/html')])
                     return [result.encode('utf-8')]
                 elif isinstance(result, bytes):
-                    start_resp('200 OK', [('Content-Type', 'text/html')])
+                    start_resp(web.ctx.status, [('Content-Type', 'text/html')])
                     return [result]
 
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
             except (_NotFound, Redirect) as e:
-                return e(env, start_resp)  # ✅ this properly calls __call__
+                return e(env, start_resp)
 
-            
             except Exception:
                 print(traceback.format_exc())
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-        return wsgi
+            return wsgi
 
     def handle_with_processors(self):
         try:
