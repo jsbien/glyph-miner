@@ -370,6 +370,8 @@ class images:
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
         print("🔍 [POST /api/images] Handler entered", flush=True)
+        print("📡 DEBUG: ctx.env exists?", hasattr(web.ctx, "env"))
+        print("📡 DEBUG: ctx keys:", dir(web.ctx))
 
         try:
             # ✅ Expect multipart form with image file
