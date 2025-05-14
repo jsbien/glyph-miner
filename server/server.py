@@ -148,6 +148,9 @@ class collections_handler:
             print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
 
             db.insert('collections', title=payload["title"])
+
+            # ✅ Ensure response is explicitly treated as JSON
+            web.ctx.status = '200 OK'
             web.header('Content-Type', 'application/json')
             return json.dumps({"status": "ok"})
 
@@ -157,7 +160,6 @@ class collections_handler:
         except Exception as e:
             print(f"[ERROR] POST failed: {e}", flush=True)
             raise web.internalerror("Database insertion error.")
-
     
 class collection_handler:
 
