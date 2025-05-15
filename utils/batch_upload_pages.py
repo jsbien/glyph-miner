@@ -63,20 +63,27 @@ def create_document(title, dry_run=False):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-c", "--collection", type=str, default="Polonia Typographica",
+        "--collection", "-c", type=str, default="Polonia Typographica",
         help="Name of the collection to use or create"
+    )
+    parser.add_argument(
+        "--title", "-t", type=str, required=True,
+        help="Title of the document to create"
+    )
+    parser.add_argument(
+        "--input-dir", "-i", type=str, required=True,
+        help="Directory containing input images (currently unused)"
     )
     parser.add_argument("--dry-run", action="store_true", help="Dry run without POSTing")
     args = parser.parse_args()
 
-    print(f"[INFO] Using input directory: {os.getcwd()}")
+    print(f"[INFO] Using input directory: {args.input_dir}")
     print(f"[INFO] Found 1 image(s) to process.")
     print(f"[INFO] [+] Creating collection: {args.collection}")
     
     collection_id = find_or_create_collection(args.collection, args.dry_run)
 
-    title = "Sample Document"
-    doc_id = create_document(title, args.dry_run)
+    doc_id = create_document(args.title, args.dry_run)
     print(f"[INFO] Created document ID: {doc_id}")
 
 if __name__ == "__main__":
