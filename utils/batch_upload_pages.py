@@ -94,7 +94,8 @@ def main():
     
     collection_id = find_or_create_collection(args.collection, args.dry_run)
 
-    doc_id = create_document(args.title, collection_id, args.dry_run)
+    doc_id = create_document(args.title, args.dry_run)
+#    doc_id = create_document(args.title, collection_id, args.dry_run)
     print(f"[INFO] Created document ID: {doc_id}")
 
 if __name__ == "__main__":
