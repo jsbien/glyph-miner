@@ -130,31 +130,28 @@ class collections_handler:
     def POST(self):
         print(">>> ENTERED POST <<<", flush=True)
         try:
-            # ✅ SAFELY read raw POST body
-            content_length = int(web.ctx.env.get('CONTENT_LENGTH', 0) or 0)
-            raw = web.ctx.env.get('wsgi.input').read(content_length)
+            raw_data = web.data()
+            print(f"[DEBUG] raw input = {raw_data!r}", flush=True)
 
-            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+            data = json.loads(raw_data.decode("utf-8"))
+            print(f"[DEBUG] decoded input = {data}", flush=True)
 
-            decoded = raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else raw
-            print(f"[DEBUG] decoded input = {decoded}", flush=True)
+            title = data.get("title")
+            if not title:
+                raise web.badrequest()
 
-            payload = json.loads(decoded)
-            print(f"[DEBUG] POST /collections - Payload: {payload}", flush=True)
+            print(f"[DEBUG] POST /collections - Payload: {data}", flush=True)
+            db.insert('collections', title=title)
+            db_result = db.select('collections', where='title=$title', vars={'title': title})
+            collection = list(db_result)[-1]  # Get the most recent matching entry
 
-            db.insert('collections', title=payload["title"])
-
-            # ✅ Ensure response is explicitly treated as JSON
             web.ctx.status = '200 OK'
             web.header('Content-Type', 'application/json')
-            return json.dumps({"status": "ok"})
+            return json.dumps({'status': 'ok', 'id': collection['id']})
 
-        except json.JSONDecodeError as e:
-            print(f"[ERROR] Failed to parse JSON: {e}", flush=True)
-            raise web.badrequest("Invalid JSON payload.")
         except Exception as e:
             print(f"[ERROR] POST failed: {e}", flush=True)
-            raise web.internalerror("Database insertion error.")
+            raise web.internalerror()
     
 class collection_handler:
 
