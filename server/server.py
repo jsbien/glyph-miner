@@ -110,7 +110,6 @@ class index:
 class collections_handler:
     def GET(self):
         print(">>> ENTERED collection_handler GET <<<", flush=True)
-
         try:
             collections = list(db.select('collections'))
             print(">>> FETCHED:", collections, flush=True)
@@ -120,15 +119,9 @@ class collections_handler:
                     return obj.isoformat()
                 raise TypeError(f"Type {type(obj)} not serializable")
 
-            if collections:
-                collection_id = collections[0]['id']
-                web.ctx.status = '200 OK'
-                web.header('Content-Type', 'application/json')
-                return json.dumps({'status': 'ok', 'id': collection_id})
-            else:
-                web.ctx.status = '200 OK'
-                web.header('Content-Type', 'application/json')
-                return json.dumps({'status': 'ok', 'id': None})
+            web.ctx.status = '200 OK'
+            web.header('Content-Type', 'application/json')
+            return json.dumps(collections, default=serialize)
 
         except Exception as e:
             print(f"[ERROR] GET failed: {e}", flush=True)
