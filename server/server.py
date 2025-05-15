@@ -125,8 +125,8 @@ class collections_handler:
             result = json.dumps(collections, default=serialize)
             web.ctx.status = '200 OK'
             web.header('Content-Type', 'application/json')
-#            web.ctx.headers = [('Content-Type', 'application/json')]
-            return result
+            collection_id = result['id']
+            return json.dumps({'status': 'ok', 'id': collection_id})
 
         except Exception as e:
             print(f"[ERROR] GET failed: {e}", flush=True)
