@@ -20,6 +20,7 @@ db = MySQLDB(
     user="glyphminer",
     pw="glyphminer",
     host="localhost",  # or "127.0.0.1"
+#    autocommit=True
 #    port=3306          # or adjust to match your config
 )
 
@@ -143,6 +144,7 @@ class collections_handler:
             print(f"[DEBUG] POST /collections - Payload: {data}", flush=True)
 
             db.insert('collections', title=title)
+            db.connection.commit()  # ✅ Ensures visibility of the insert
 
             db_result = db.select('collections', where='title=$title', vars={'title': title})
             collection_list = list(db_result)
@@ -157,7 +159,7 @@ class collections_handler:
         except Exception as e:
             print(f"[ERROR] POST failed: {e}", flush=True)
             raise web.internalerror()
-    
+          
 class collection_handler:
 
     def GET(self, collectionId):
