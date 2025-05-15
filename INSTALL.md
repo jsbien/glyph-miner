@@ -65,7 +65,8 @@ Clone the git repository:
 
 Make sure the correct rights are set so that the server can
 write into `web/tiles`, `web/thumbnails`, `web/synthetic_pages`, `server/images`
-and `server/templates`.
+and `server/templates`. Use `chmod` or `chown` if needed.
+
 
 
 ### Compiling binaries
@@ -91,7 +92,7 @@ Its content is given below:
     listen 9090 default_server;
     listen [::]:9090 default_server;
 
-    root /home/<user>/git/glyph-miner/web;
+    root /home/jsbien/git/glyph-miner/web;
     index index.html;
 
     location / {
@@ -106,6 +107,7 @@ Its content is given below:
     }
 	}
 
+> Modify the paths to root appropriately!
 
 
 If needed or desired, change the port(s) in `listen` and `uwsgi_pass`,
@@ -114,15 +116,19 @@ and possibly in `local/run-uwsgi.sh` mentioned later.
 Do not forget to restart nginx in order to make your changes work:
 `sudo service nginx restart`
 
+> Be aware that this change affects the entire nginx setup!
+
 ### Setting up the database
 Glyph Miner uses a MySQLcompatible MariaDB database to store its
 data.
 
 Create a new database and user `glyphminer` for Glyph Miner
-using `init_glyphminer_db.sql`. You have to run this as the root user
-(or any user with CREATE USER privilege):
+using `init_glyphminer_db.sql`:
 
 	mysql -u root -p < local/init_glyphminer_db.sql
+
+> Note that you have to run this as the root user (or any user with
+CREATE USER privilege)!
 
 Than import the database structure into the new database:
 
@@ -130,6 +136,8 @@ Than import the database structure into the new database:
 
 You can configure the credentials that Glyph Miner will use in `server/server.py`,
 line 25.
+
+For the debugging purposes it may be useful to access logs ...
 
 ### Starting it up
 
@@ -148,9 +156,29 @@ exec /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi \
   --threads 2 \
   --logto uwsgi-$(date +%Y%m%d-%H%M%S).log
 
+> Modify the paths appropriately!
 
+You can also (re)start server with `local/restart-server.sh` or
+`local/run-uwsgi.sh`. In both cases you can kill the server cleanly
+with `kill-uwsgi.sh` (for this purpose the PID is stored in
+`/tmp/uwsgi-wrapper.pid`).
+
+To validate server startup use one of the testing tools described
+below.
 
 ### Testing
+
+Various testing tools are available in the `local/` directory.
+
+#### Regressions testing
+
+The primary tool is `local/full-check.sh`. 
+
+#### Database testing
+
+You can test the database with the commands like this:
+
+	mysql -u glyphminer -pglyphminer -e 'SHOW TABLES FROM glyphminer'
 
 #### 🔧 Development Server with Interactive Debugging
 
@@ -166,4 +194,9 @@ This starts the server on http://localhost:9099.
 > ⚠  Do not use this in production — it's for local development and debugging only.
 
 
-### Additional utilities
+### User utilities
+
+The directory `utils/` is dedicated for user-oriented utilities.
+
+At the moment only `batch_upload_pages.py` is provided (not yet
+working!).
