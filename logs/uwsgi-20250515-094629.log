@@ -363,3 +363,6 @@ Traceback (most recent call last):
 server.webapp.webapi._InternalError
 
 [pid: 1700755|app: 0|req: 9/9] ::1 () {36 vars in 457 bytes} [Thu May 15 09:46:32 2025] GET /api/collections => generated 21 bytes in 1 msecs (HTTP/1.1 500) 1 headers in 64 bytes (1 switches on core 1)
+SIGINT/SIGTERM received...killing workers...
+worker 1 buried after 1 seconds
+goodbye to uWSGI.

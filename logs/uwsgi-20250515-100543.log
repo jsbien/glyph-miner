@@ -1,0 +1,155 @@
+*** Starting uWSGI 2.0.29 (64bit) on [Thu May 15 10:05:43 2025] ***
+compiled with version: 12.2.0 on 29 April 2025 11:17:30
+os: Linux-6.1.0-27-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.115-1 (2024-11-01)
+nodename: jsbdebian
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 12
+current working directory: /home/jsbien/git/glyph-miner
+detected binary path: /home/jsbien/git/glyph-miner/uwsgi-env/bin/uwsgi
+chdir() to /home/jsbien/git/glyph-miner
+your processes number limit is 62262
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:9091 fd 3
+Python version: 3.11.2 (main, Nov 30 2024, 21:22:50) [GCC 12.2.0]
+Python main interpreter initialized at 0x7f0703b60018
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 166752 bytes (162 KB) for 2 cores
+*** Operational MODE: threaded ***
+added /home/jsbien/git/glyph-miner/ to pythonpath.
+✅ server.webapp.__init__.py loaded
+>>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<
+[DEBUG] web.application: True
+>>> collections_handler has methods: ['GET', 'POST', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__']
+[DEBUG] collections = <class 'server.server.collections_handler'> (type: <class 'type'>)
+>>> collections_handler has POST: True
+>>> YES: collections_handler.POST exists
+[DEBUG] application = <function application.wsgifunc.<locals>.wsgi at 0x7f07002fa340>
+[DEBUG] application.__module__ = server.webapp.application
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x7f0703b60018 pid: 1703360 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 1703360)
+spawned uWSGI worker 1 (pid: 1703376, cores: 2)
+[DEBUG] resolve_route() called with path: /api/ping
+[DEBUG] resolve_route() called with path: /api/ping
+[DEBUG] 🐒 f = PingHandler (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.PingHandler'> (type: <class 'type'>)
+📡 header() called with: Content-Type=text/plain, ctx.headers type: <class 'list'>
+[pid: 1703376|app: 0|req: 1/1] 127.0.0.1 () {32 vars in 368 bytes} [Thu May 15 10:05:44 2025] GET /api/ping => generated 4 bytes in 2 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[DEBUG] resolve_route() called with path: /api/ping
+[DEBUG] resolve_route() called with path: /api/ping
+[DEBUG] 🐒 f = PingHandler (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.PingHandler'> (type: <class 'type'>)
+📡 header() called with: Content-Type=text/plain, ctx.headers type: <class 'list'>
+[pid: 1703376|app: 0|req: 2/2] 127.0.0.1 () {32 vars in 368 bytes} [Thu May 15 10:05:44 2025] GET /api/ping => generated 4 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[DEBUG] resolve_route() called with path: /api/images
+[DEBUG] resolve_route() called with path: /api/images
+[DEBUG] 🐒 f = images (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.images'> (type: <class 'type'>)
+📡 header() called with: Access-Control-Allow-Origin=*, ctx.headers type: <class 'list'>
+>>> ENTERED images.GET()
+'🔍 Attempting to fetch images with collection count'
+>>> QUERY: SELECT i.*, COUNT(ci.collection_id) AS collection_count FROM images i LEFT OUTER JOIN collections_images ci ON i.id = ci.image_id GROUP BY i.id
+>>> VARS: None
+>>> Reconnecting to MySQL
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] 🐒 f = collections (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
+>>> ENTERED collection_handler GET <<<
+>>> QUERY: SELECT * FROM collections
+>>> VARS: None
+>>> Reconnecting to MySQL
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> QUERY SUCCESS
+>>> FETCHED: [{'id': 67, 'author': None, 'title': 'Debug Collection 2025-05-15T09:46:31.863547', 'subtitle': None, 'year': None, 'signature': None, 'timestamp': datetime.datetime(2025, 5, 15, 9, 46, 31)}]
+📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
+>>> QUERY SUCCESS
+[pid: 1703376|app: 0|req: 4/3] ::1 () {52 vars in 864 bytes} [Thu May 15 10:05:44 2025] GET /api/collections => generated 26 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+'✅ Images fetched successfully'
+[pid: 1703376|app: 0|req: 4/4] ::1 () {52 vars in 854 bytes} [Thu May 15 10:05:44 2025] GET /api/images => generated 2 bytes in 2 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] 🐒 f = collections (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
+>>> ENTERED collection_handler GET <<<
+>>> QUERY: SELECT * FROM collections
+>>> VARS: None
+>>> Reconnecting to MySQL
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> QUERY SUCCESS
+>>> FETCHED: [{'id': 67, 'author': None, 'title': 'Debug Collection 2025-05-15T09:46:31.863547', 'subtitle': None, 'year': None, 'signature': None, 'timestamp': datetime.datetime(2025, 5, 15, 9, 46, 31)}]
+📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
+[pid: 1703376|app: 0|req: 5/5] ::1 () {52 vars in 864 bytes} [Thu May 15 10:05:44 2025] GET /api/collections => generated 26 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[DEBUG] resolve_route() called with path: /api/collections/undefined/images
+[DEBUG] resolve_route() called with path: /api/collections/undefined/images
+[DEBUG] 🐒 f = collection_images (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collection_images'> (type: <class 'type'>)
+📡 header() called with: Access-Control-Allow-Origin=*, ctx.headers type: <class 'list'>
+>>> QUERY: SELECT i.* FROM images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid
+>>> VARS: {'cid': 'undefined'}
+>>> Reconnecting to MySQL
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> QUERY SUCCESS
+[pid: 1703376|app: 0|req: 6/6] ::1 () {52 vars in 898 bytes} [Thu May 15 10:05:44 2025] GET /api/collections/undefined/images => generated 2 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[DEBUG] resolve_route() called with path: /api/collections/undefined/images
+[DEBUG] resolve_route() called with path: /api/collections/undefined/images
+[DEBUG] 🐒 f = collection_images (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collection_images'> (type: <class 'type'>)
+📡 header() called with: Access-Control-Allow-Origin=*, ctx.headers type: <class 'list'>
+>>> QUERY: SELECT i.* FROM images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid
+>>> VARS: {'cid': 'undefined'}
+>>> Reconnecting to MySQL
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> QUERY SUCCESS
+[pid: 1703376|app: 0|req: 7/7] ::1 () {52 vars in 898 bytes} [Thu May 15 10:05:44 2025] GET /api/collections/undefined/images => generated 2 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[DEBUG] resolve_route() called with path: /api/debug/clear
+[DEBUG] resolve_route() called with path: /api/debug/clear
+[DEBUG] 🐒 f = DebugClearHandler (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.DebugClearHandler'> (type: <class 'type'>)
+>>> CLEARING collections table <<<
+[pid: 1703376|app: 0|req: 8/8] 127.0.0.1 () {32 vars in 383 bytes} [Thu May 15 10:05:45 2025] POST /api/debug/clear => generated 27 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] 🐒 f = collections (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
+>>> ENTERED POST <<<
+[DEBUG] raw input = b'{"title": "Debug Collection 2025-05-15T10:05:46.092138"}'
+[DEBUG] decoded input = {"title": "Debug Collection 2025-05-15T10:05:46.092138"}
+[DEBUG] POST /collections - Payload: {'title': 'Debug Collection 2025-05-15T10:05:46.092138'}
+>>> Reconnecting to MySQL
+📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
+[pid: 1703376|app: 0|req: 9/9] ::1 () {40 vars in 538 bytes} [Thu May 15 10:05:46 2025] POST /api/collections => generated 16 bytes in 2 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] 🐒 f = collections (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
+>>> ENTERED collection_handler GET <<<
+>>> QUERY: SELECT * FROM collections
+>>> VARS: None
+>>> Reconnecting to MySQL
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> QUERY SUCCESS
+>>> FETCHED: [{'id': 68, 'author': None, 'title': 'Debug Collection 2025-05-15T10:05:46.092138', 'subtitle': None, 'year': None, 'signature': None, 'timestamp': datetime.datetime(2025, 5, 15, 10, 5, 46)}]
+📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
+[pid: 1703376|app: 0|req: 10/10] ::1 () {36 vars in 457 bytes} [Thu May 15 10:05:46 2025] GET /api/collections => generated 26 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] 🐒 f = collections (type: <class 'str'>)
+[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
+>>> ENTERED collection_handler GET <<<
+>>> QUERY: SELECT * FROM collections
+>>> VARS: None
+>>> Reconnecting to MySQL
+>>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
+>>> QUERY SUCCESS
+>>> FETCHED: [{'id': 68, 'author': None, 'title': 'Debug Collection 2025-05-15T10:05:46.092138', 'subtitle': None, 'year': None, 'signature': None, 'timestamp': datetime.datetime(2025, 5, 15, 10, 5, 46)}]
+📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
+[pid: 1703376|app: 0|req: 11/11] ::1 () {36 vars in 457 bytes} [Thu May 15 10:05:46 2025] GET /api/collections => generated 26 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
