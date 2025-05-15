@@ -141,9 +141,14 @@ class collections_handler:
                 raise web.badrequest()
 
             print(f"[DEBUG] POST /collections - Payload: {data}", flush=True)
+
             db.insert('collections', title=title)
+
             db_result = db.select('collections', where='title=$title', vars={'title': title})
-            collection = list(db_result)[-1]  # Get the most recent matching entry
+            collection_list = list(db_result)
+            if not collection_list:
+                raise RuntimeError("Collection insert succeeded but lookup failed")
+            collection = collection_list[-1]
 
             web.ctx.status = '200 OK'
             web.header('Content-Type', 'application/json')
