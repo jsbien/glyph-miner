@@ -49,7 +49,11 @@ def create_document(title, collection_id, dry_run=False):
     url = f"{API_BASE}/api/images"
     payload = {
         "title": title,
-        "collection_id": collection_id
+        "subtitle": None,
+        "author": None,
+        "year": None,
+        "signature": None
+#        "collection_id": collection_id
     }
     headers = {"Content-Type": "application/json"}
 
