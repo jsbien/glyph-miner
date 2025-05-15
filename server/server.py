@@ -390,8 +390,10 @@ class images:
                 subtitle=data.get("subtitle"),
                 author=data.get("author"),
 #                collection_id=data.get("collection_id"),
-                image_path=data.get("image_path"),
-                binarized_path=data.get("binarized_path"),
+#                image_path=data.get("image_path"),
+                year=data.get("year"),
+                signature=data.get("signature"),
+#                 binarized_path=data.get("binarized_path"),
             )
             db.connection.commit()
 
