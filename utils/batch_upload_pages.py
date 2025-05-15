@@ -45,17 +45,24 @@ def find_or_create_collection(title, dry_run=False):
         print(f"[ERROR] Failed to create collection: {e}")
         raise
 
-def create_document(title, dry_run=False):
-    """Create a document with only the title field."""
+def create_document(title, collection_id, dry_run=False):
     url = f"{API_BASE}/api/images"
-    payload = {"title": title}
+    payload = {
+        "title": title,
+        "collection_id": collection_id
+    }
     headers = {"Content-Type": "application/json"}
 
     if dry_run:
-        print(f"[DRY RUN] Would create document with title: {title}")
+        print(f"[DRY RUN] Would create document with title: {title}, collection ID: {collection_id}")
         return -1
 
     res = requests.post(url, data=json.dumps(payload), headers=headers)
+
+    # 🔍 Add this
+    print(f"[DEBUG] Status Code: {res.status_code}")
+    print(f"[DEBUG] Response Body: {res.text}")
+
     res.raise_for_status()
     data = res.json()
     return data.get("id")
@@ -83,7 +90,7 @@ def main():
     
     collection_id = find_or_create_collection(args.collection, args.dry_run)
 
-    doc_id = create_document(args.title, args.dry_run)
+    doc_id = create_document(args.title, collection_id, args.dry_run)
     print(f"[INFO] Created document ID: {doc_id}")
 
 if __name__ == "__main__":
