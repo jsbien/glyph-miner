@@ -70,7 +70,7 @@ class application:
                 start_resp('500 Internal Server Error', [('Content-Type', 'text/plain')])
                 return [b"Internal Server Error"]
 
-            return wsgi
+        return wsgi
 
     def handle_with_processors(self):
         try:
