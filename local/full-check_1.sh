@@ -93,7 +93,7 @@ fi
 
 # 🧪 Batch upload test (new)
 echo "🧪 Running batch_upload_pages_TEST.sh..."
-if ! utils/batch_upload_pages_TEST.sh; then
+if ! (cd utils && ./batch_upload_pages_TEST.sh); then
   echo "❌ Batch upload test failed"
   BATCH_RESULT=1
 else
