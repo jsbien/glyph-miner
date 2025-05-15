@@ -112,21 +112,23 @@ class collections_handler:
         print(">>> ENTERED collection_handler GET <<<", flush=True)
 
         try:
-            # Assuming this line fetches from DB
             collections = list(db.select('collections'))
             print(">>> FETCHED:", collections, flush=True)
 
-            # 👇 Add the serialize() function here
             def serialize(obj):
                 if isinstance(obj, datetime.datetime):
                     return obj.isoformat()
                 raise TypeError(f"Type {type(obj)} not serializable")
 
-            result = json.dumps(collections, default=serialize)
-            web.ctx.status = '200 OK'
-            web.header('Content-Type', 'application/json')
-            collection_id = result['id']
-            return json.dumps({'status': 'ok', 'id': collection_id})
+            if collections:
+                collection_id = collections[0]['id']
+                web.ctx.status = '200 OK'
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'status': 'ok', 'id': collection_id})
+            else:
+                web.ctx.status = '200 OK'
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'status': 'ok', 'id': None})
 
         except Exception as e:
             print(f"[ERROR] GET failed: {e}", flush=True)
