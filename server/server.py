@@ -389,7 +389,7 @@ class images:
                 title=data.get("title"),
                 subtitle=data.get("subtitle"),
                 author=data.get("author"),
-                collection_id=data.get("collection_id"),
+#                collection_id=data.get("collection_id"),
                 image_path=data.get("image_path"),
                 binarized_path=data.get("binarized_path"),
             )
