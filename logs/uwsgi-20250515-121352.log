@@ -1,4 +1,4 @@
-*** Starting uWSGI 2.0.29 (64bit) on [Thu May 15 11:45:43 2025] ***
+*** Starting uWSGI 2.0.29 (64bit) on [Thu May 15 12:13:52 2025] ***
 compiled with version: 12.2.0 on 29 April 2025 11:17:30
 os: Linux-6.1.0-27-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.115-1 (2024-11-01)
 nodename: jsbdebian
@@ -16,7 +16,7 @@ lock engine: pthread robust mutexes
 thunder lock: disabled (you can enable it with --thunder-lock)
 uwsgi socket 0 bound to TCP address 127.0.0.1:9091 fd 3
 Python version: 3.11.2 (main, Nov 30 2024, 21:22:50) [GCC 12.2.0]
-Python main interpreter initialized at 0x7f264ab60018
+Python main interpreter initialized at 0x7f33d7560018
 python threads support enabled
 your server socket listen backlog is limited to 100 connections
 your mercy for graceful operations on workers is 60 seconds
@@ -30,51 +30,51 @@ added /home/jsbien/git/glyph-miner/ to pythonpath.
 [DEBUG] collections = <class 'server.server.collections_handler'> (type: <class 'type'>)
 >>> collections_handler has POST: True
 >>> YES: collections_handler.POST exists
-[DEBUG] application = <function application.wsgifunc.<locals>.wsgi at 0x7f26472c22a0>
+[DEBUG] application = <function application.wsgifunc.<locals>.wsgi at 0x7f33d3cc22a0>
 [DEBUG] application.__module__ = server.webapp.application
-WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x7f264ab60018 pid: 1709477 (default app)
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x7f33d7560018 pid: 1711344 (default app)
 *** uWSGI is running in multiple interpreter mode ***
-spawned uWSGI master process (pid: 1709477)
-spawned uWSGI worker 1 (pid: 1709493, cores: 2)
+spawned uWSGI master process (pid: 1711344)
+spawned uWSGI worker 1 (pid: 1711360, cores: 2)
 [DEBUG] resolve_route() called with path: /api/ping
 [DEBUG] resolve_route() called with path: /api/ping
 [DEBUG] 🐒 f = PingHandler (type: <class 'str'>)
 [DEBUG] 🐒 f = <class 'server.server.PingHandler'> (type: <class 'type'>)
 📡 header() called with: Content-Type=text/plain, ctx.headers type: <class 'list'>
-[pid: 1709493|app: 0|req: 1/1] 127.0.0.1 () {32 vars in 368 bytes} [Thu May 15 11:45:43 2025] GET /api/ping => generated 4 bytes in 2 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[pid: 1711360|app: 0|req: 1/1] 127.0.0.1 () {32 vars in 368 bytes} [Thu May 15 12:13:52 2025] GET /api/ping => generated 4 bytes in 2 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
 [DEBUG] resolve_route() called with path: /api/ping
 [DEBUG] resolve_route() called with path: /api/ping
 [DEBUG] 🐒 f = PingHandler (type: <class 'str'>)
 [DEBUG] 🐒 f = <class 'server.server.PingHandler'> (type: <class 'type'>)
 📡 header() called with: Content-Type=text/plain, ctx.headers type: <class 'list'>
-[pid: 1709493|app: 0|req: 2/2] 127.0.0.1 () {32 vars in 368 bytes} [Thu May 15 11:45:43 2025] GET /api/ping => generated 4 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[pid: 1711360|app: 0|req: 2/2] 127.0.0.1 () {32 vars in 368 bytes} [Thu May 15 12:13:52 2025] GET /api/ping => generated 4 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
 [DEBUG] resolve_route() called with path: /api/images
 [DEBUG] resolve_route() called with path: /api/images
 [DEBUG] 🐒 f = images (type: <class 'str'>)
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] resolve_route() called with path: /api/collections
+[DEBUG] 🐒 f = collections (type: <class 'str'>)
 [DEBUG] 🐒 f = <class 'server.server.images'> (type: <class 'type'>)
 📡 header() called with: Access-Control-Allow-Origin=*, ctx.headers type: <class 'list'>
+[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
 >>> ENTERED images.GET()
+>>> ENTERED collection_handler GET <<<
 '🔍 Attempting to fetch images with collection count'
+>>> QUERY: SELECT * FROM collections
 >>> QUERY: SELECT i.*, COUNT(ci.collection_id) AS collection_count FROM images i LEFT OUTER JOIN collections_images ci ON i.id = ci.image_id GROUP BY i.id
 >>> VARS: None
->>> Reconnecting to MySQL
-[DEBUG] resolve_route() called with path: /api/collections
-[DEBUG] resolve_route() called with path: /api/collections
-[DEBUG] 🐒 f = collections (type: <class 'str'>)
-[DEBUG] 🐒 f = <class 'server.server.collections_handler'> (type: <class 'type'>)
->>> ENTERED collection_handler GET <<<
->>> QUERY: SELECT * FROM collections
 >>> VARS: None
+>>> Reconnecting to MySQL
 >>> Reconnecting to MySQL
 >>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
 >>> CURSOR CLASS: <class 'server.database.connection.PatchedDictCursor'>
 >>> QUERY SUCCESS
 >>> FETCHED: []
 📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
-[pid: 1709493|app: 0|req: 4/3] ::1 () {52 vars in 864 bytes} [Thu May 15 11:45:44 2025] GET /api/collections => generated 2 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[pid: 1711360|app: 0|req: 4/3] ::1 () {52 vars in 864 bytes} [Thu May 15 12:13:53 2025] GET /api/collections => generated 2 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
 >>> QUERY SUCCESS
 '✅ Images fetched successfully'
-[pid: 1709493|app: 0|req: 4/4] ::1 () {52 vars in 854 bytes} [Thu May 15 11:45:44 2025] GET /api/images => generated 2 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[pid: 1711360|app: 0|req: 4/4] ::1 () {52 vars in 854 bytes} [Thu May 15 12:13:53 2025] GET /api/images => generated 2 bytes in 2 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] 🐒 f = collections (type: <class 'str'>)
@@ -87,13 +87,13 @@ spawned uWSGI worker 1 (pid: 1709493, cores: 2)
 >>> QUERY SUCCESS
 >>> FETCHED: []
 📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
-[pid: 1709493|app: 0|req: 5/5] ::1 () {52 vars in 864 bytes} [Thu May 15 11:45:44 2025] GET /api/collections => generated 2 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[pid: 1711360|app: 0|req: 5/5] ::1 () {52 vars in 864 bytes} [Thu May 15 12:13:53 2025] GET /api/collections => generated 2 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
 [DEBUG] resolve_route() called with path: /api/debug/clear
 [DEBUG] resolve_route() called with path: /api/debug/clear
 [DEBUG] 🐒 f = DebugClearHandler (type: <class 'str'>)
 [DEBUG] 🐒 f = <class 'server.server.DebugClearHandler'> (type: <class 'type'>)
 >>> CLEARING collections table <<<
-[pid: 1709493|app: 0|req: 6/6] 127.0.0.1 () {32 vars in 383 bytes} [Thu May 15 11:45:45 2025] POST /api/debug/clear => generated 27 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[pid: 1711360|app: 0|req: 6/6] 127.0.0.1 () {32 vars in 383 bytes} [Thu May 15 12:13:54 2025] POST /api/debug/clear => generated 27 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] 🐒 f = collections (type: <class 'str'>)
@@ -115,7 +115,7 @@ KeyError: 'data'
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 133, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 134, in POST
     raw_data = web.data()
                ^^^^^^^^^^
   File "/home/jsbien/git/glyph-miner/server/webapp/webapi.py", line 373, in data
@@ -140,7 +140,7 @@ Traceback (most recent call last):
   File "/home/jsbien/git/glyph-miner/server/webapp/application.py", line 98, in handle_class
     return tocall(*args)
            ^^^^^^^^^^^^^
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 159, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 161, in POST
     raise web.internalerror()
 server.webapp.webapi._InternalError
 
@@ -155,7 +155,7 @@ KeyError: 'data'
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 133, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 134, in POST
     raw_data = web.data()
                ^^^^^^^^^^
   File "/home/jsbien/git/glyph-miner/server/webapp/webapi.py", line 373, in data
@@ -183,11 +183,11 @@ Traceback (most recent call last):
   File "/home/jsbien/git/glyph-miner/server/webapp/application.py", line 98, in handle_class
     return tocall(*args)
            ^^^^^^^^^^^^^
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 159, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 161, in POST
     raise web.internalerror()
 server.webapp.webapi._InternalError
 
-[pid: 1709493|app: 0|req: 7/7] ::1 () {40 vars in 538 bytes} [Thu May 15 11:45:45 2025] POST /api/collections => generated 21 bytes in 2 msecs (HTTP/1.1 500) 1 headers in 64 bytes (1 switches on core 1)
+[pid: 1711360|app: 0|req: 7/7] ::1 () {40 vars in 538 bytes} [Thu May 15 12:13:54 2025] POST /api/collections => generated 21 bytes in 2 msecs (HTTP/1.1 500) 1 headers in 64 bytes (1 switches on core 1)
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] 🐒 f = collections (type: <class 'str'>)
@@ -200,7 +200,7 @@ server.webapp.webapi._InternalError
 >>> QUERY SUCCESS
 >>> FETCHED: []
 📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
-[pid: 1709493|app: 0|req: 8/8] ::1 () {36 vars in 457 bytes} [Thu May 15 11:45:45 2025] GET /api/collections => generated 2 bytes in 0 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
+[pid: 1711360|app: 0|req: 8/8] ::1 () {36 vars in 457 bytes} [Thu May 15 12:13:54 2025] GET /api/collections => generated 2 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 0)
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] 🐒 f = collections (type: <class 'str'>)
@@ -213,7 +213,7 @@ server.webapp.webapi._InternalError
 >>> QUERY SUCCESS
 >>> FETCHED: []
 📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
-[pid: 1709493|app: 0|req: 9/9] ::1 () {36 vars in 457 bytes} [Thu May 15 11:45:45 2025] GET /api/collections => generated 2 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+[pid: 1711360|app: 0|req: 9/9] ::1 () {36 vars in 457 bytes} [Thu May 15 12:13:54 2025] GET /api/collections => generated 2 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] resolve_route() called with path: /api/collections
 [DEBUG] 🐒 f = collections (type: <class 'str'>)
@@ -235,7 +235,7 @@ KeyError: 'data'
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 133, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 134, in POST
     raw_data = web.data()
                ^^^^^^^^^^
   File "/home/jsbien/git/glyph-miner/server/webapp/webapi.py", line 373, in data
@@ -260,7 +260,7 @@ Traceback (most recent call last):
   File "/home/jsbien/git/glyph-miner/server/webapp/application.py", line 98, in handle_class
     return tocall(*args)
            ^^^^^^^^^^^^^
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 159, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 161, in POST
     raise web.internalerror()
 server.webapp.webapi._InternalError
 
@@ -275,7 +275,7 @@ KeyError: 'data'
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 133, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 134, in POST
     raw_data = web.data()
                ^^^^^^^^^^
   File "/home/jsbien/git/glyph-miner/server/webapp/webapi.py", line 373, in data
@@ -303,11 +303,8 @@ Traceback (most recent call last):
   File "/home/jsbien/git/glyph-miner/server/webapp/application.py", line 98, in handle_class
     return tocall(*args)
            ^^^^^^^^^^^^^
-  File "/home/jsbien/git/glyph-miner/server/server.py", line 159, in POST
+  File "/home/jsbien/git/glyph-miner/server/server.py", line 161, in POST
     raise web.internalerror()
 server.webapp.webapi._InternalError
 
-[pid: 1709493|app: 0|req: 10/10] ::1 () {40 vars in 538 bytes} [Thu May 15 11:45:45 2025] POST /api/collections => generated 21 bytes in 1 msecs (HTTP/1.1 500) 1 headers in 64 bytes (1 switches on core 0)
-SIGINT/SIGTERM received...killing workers...
-worker 1 buried after 1 seconds
-goodbye to uWSGI.
+[pid: 1711360|app: 0|req: 10/10] ::1 () {40 vars in 538 bytes} [Thu May 15 12:13:54 2025] POST /api/collections => generated 21 bytes in 1 msecs (HTTP/1.1 500) 1 headers in 64 bytes (1 switches on core 0)
