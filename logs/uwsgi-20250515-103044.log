@@ -153,3 +153,6 @@ spawned uWSGI worker 1 (pid: 1704711, cores: 2)
 >>> Reconnecting to MySQL
 📡 header() called with: Content-Type=application/json, ctx.headers type: <class 'list'>
 [pid: 1704711|app: 0|req: 11/11] ::1 () {40 vars in 538 bytes} [Thu May 15 10:30:47 2025] POST /api/collections => generated 16 bytes in 1 msecs (HTTP/1.1 200) 1 headers in 44 bytes (1 switches on core 1)
+SIGINT/SIGTERM received...killing workers...
+worker 1 buried after 1 seconds
+goodbye to uWSGI.
