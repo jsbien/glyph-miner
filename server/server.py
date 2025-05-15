@@ -131,20 +131,23 @@ class collections_handler:
     def POST(self):
         print(">>> ENTERED POST <<<", flush=True)
         try:
-            raw_data = web.data()
-            print(f"[DEBUG] raw input = {raw_data!r}", flush=True)
+            # ✅ SAFELY read raw POST body without relying on web.data()
+            content_length = int(web.ctx.env.get('CONTENT_LENGTH', 0) or 0)
+            raw = web.ctx.env.get('wsgi.input').read(content_length)
+            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
 
-            data = json.loads(raw_data.decode("utf-8"))
-            print(f"[DEBUG] decoded input = {data}", flush=True)
+            decoded = raw.decode("utf-8", errors="replace")
+            print(f"[DEBUG] decoded input = {decoded}", flush=True)
+
+            data = json.loads(decoded)
+            print(f"[DEBUG] POST /collections - Payload: {data}", flush=True)
 
             title = data.get("title")
             if not title:
                 raise web.badrequest()
 
-            print(f"[DEBUG] POST /collections - Payload: {data}", flush=True)
-
             db.insert('collections', title=title)
-            db.connection.commit()  # ✅ Ensures visibility of the insert
+            db.connection.commit()
 
             db_result = db.select('collections', where='title=$title', vars={'title': title})
             collection_list = list(db_result)
