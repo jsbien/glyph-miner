@@ -37,6 +37,10 @@ Conference on Digital Libraries (JCDL)
 transcribed with `whisper` and converted into slides, which are available in
 this repository.
 
+* Some mentions in [Extracting Spatial Information from Historical
+  Maps](urn:nbn:de:bvb:20-opus-160955) by Benedikt Budig (Würzburg
+  2018).
+
 The current installation instruction is available [*here*](INSTALL.md).
 
 Some debugging tools are available [*here*](local/).
