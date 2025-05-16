@@ -6,6 +6,7 @@ import time
 import sys
 import logging
 from pathlib import Path
+from datetime import datetime
 
 CONTAINER_NAME = "glyphminer"
 IMAGE_NAME = "glyphminer/glyphminer"
@@ -16,9 +17,20 @@ MYSQL_PW = "glyphminer"
 MYSQL_DB = "glyphminer"
 
 
-def setup_logging(logfile):
+def generate_logfile_name(base="restart-server_docker"):
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    return f"{base}-{timestamp}.log"
+
+
+def setup_logging(logfile, verbosity):
+    level = logging.INFO
+    if verbosity == "quiet":
+        level = logging.ERROR
+    elif verbosity == "verbose":
+        level = logging.DEBUG
+
     logging.basicConfig(
-        level=logging.INFO,
+        level=level,
         format="%(asctime)s %(levelname)s: %(message)s",
         handlers=[
             logging.FileHandler(logfile),
@@ -161,11 +173,16 @@ def main():
                         help="Also remove the Docker image to wipe the database")
     parser.add_argument("--running-action", choices=["kill", "clean"], default="kill",
                         help="What to do if the container is already running (default: kill)")
-    parser.add_argument("--logfile", default="restart-server_docker.log",
-                        help="Path to logfile (default: restart-server_docker.log)")
+    parser.add_argument("--logfile", default=None,
+                        help="Path to logfile (default: timestamped .log file)")
+    parser.add_argument("--verbosity", choices=["quiet", "info", "verbose"], default="info",
+                        help="Logging verbosity (quiet, info [default], verbose)")
+
     args = parser.parse_args()
 
-    setup_logging(args.logfile)
+    logfile = args.logfile or generate_logfile_name()
+    setup_logging(logfile, args.verbosity)
+    log(f"Log started → {logfile}")
 
     if container_is_running(CONTAINER_NAME):
         log(f"Container '{CONTAINER_NAME}' is already running.")
@@ -192,3 +209,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
