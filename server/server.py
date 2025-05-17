@@ -436,27 +436,61 @@ class images:
             return
 
 
-class image_file:
-    def POST(self, imageId, imageType):
-        import os
-        import json
-        import subprocess
-        from PIL import Image, ImageOps
+# class image_file:
+#     def POST(self, imageId, imageType):
+#         import os
+#         import json
+#         import subprocess
+#         from PIL import Image, ImageOps
 
-        web.header('Access-Control-Allow-Origin', '*')
-        # content_length = int(web.ctx.env.get("CONTENT_LENGTH", 0) or 0)
-        # raw = web.ctx.env.get("wsgi.input").read(content_length)
-        # with open(f"debug-upload-{imageId}-{imageType}.bin", "wb") as f:
-        #     f.write(raw)
-        # raise web.internalerror("Raw upload not parsed — logged manually for debug")
+#         # web.header('Access-Control-Allow-Origin', '*')
+#         # content_length = int(web.ctx.env.get("CONTENT_LENGTH", 0) or 0)
+#         # raw = web.ctx.env.get("wsgi.input").read(content_length)
+#         # with open(f"debug-upload-{imageId}-{imageType}.bin", "wb") as f:
+#         #     f.write(raw)
+#         # raise web.internalerror("Raw upload not parsed — logged manually for debug")
 
-        print("[DEBUG] ctx.env exists:", hasattr(web.ctx, "env"))
-        print("[DEBUG] ctx keys:", dir(web.ctx))
-        print("[DEBUG] web.ctx.env =", getattr(web.ctx, "env", {}), flush=True)
+#         print("[DEBUG] ctx.env exists:", hasattr(web.ctx, "env"))
+#         print("[DEBUG] ctx keys:", dir(web.ctx))
+#         print("[DEBUG] web.ctx.env =", getattr(web.ctx, "env", {}), flush=True)
 
-        form = web.input(file={})
-#        form = web.input()
 
+        def POST(self, imageId, imageType):
+            web.header("Access-Control-Allow-Origin", "*")
+            print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", flush=True)
+
+        try:
+            form = web.input(file={})
+            print(f"[DEBUG] form keys: {form.keys()}", flush=True)
+
+            if not hasattr(form, "file"):
+                print("❌ [ERROR] 'file' field missing in form", flush=True)
+                raise web.badrequest("Missing file field")
+
+            if not hasattr(form.file, "filename"):
+                print("❌ [ERROR] 'file' has no filename attribute", flush=True)
+                raise web.badrequest("Invalid file upload")
+
+            if not hasattr(form.file, "file"):
+                print("❌ [ERROR] 'file' has no file-like object", flush=True)
+                raise web.badrequest("Invalid file content")
+
+            filename = form.file.filename
+            filedata = form.file.file.read()
+            print(f"[DEBUG] Uploaded filename: {filename}", flush=True)
+            print(f"[DEBUG] Uploaded file size: {len(filedata)} bytes", flush=True)
+
+            # Optionally: write file to disk temporarily
+            with open(f"debug-upload-{imageId}-{imageType}.dat", "wb") as out:
+                out.write(filedata)
+                print(f"[DEBUG] File written to debug-upload-{imageId}-{imageType}.dat", flush=True)
+
+           return json.dumps({"status": "success", "filename": filename})
+
+    except Exception as e:
+        print(f"[ERROR] Upload failed: {e}", flush=True)
+        raise web.internalerror()
+       
         # ✅ Read uploaded image from binary stream
         im = Image.open(form.file.file)
         (width, height) = im.size
