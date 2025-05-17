@@ -484,8 +484,10 @@ class image_file:
 #            db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
 
             if imageType == "color":
-                db.update('images', vars=dict(iid=imageId), where="id = $iid",
-                          web_path_color=(imageId + "-color.png"))
+                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
+                         (f"{imageId}-color.png", imageId))
+                # db.update('images', vars=dict(iid=imageId), where="id = $iid",
+                #           web_path_color=(imageId + "-color.png"))
 
                 path = f'./images/{imageId}-color.png'
                 with open(path, 'wb') as f:
@@ -503,10 +505,12 @@ class image_file:
                     thumb.convert('RGB').save(f)
 
             else:  # binarized
-                db.update('images', vars=dict(iid=imageId), where="id = $iid",
+
+                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
+#                db.update('images', vars=dict(iid=imageId), where="id = $iid",
                           web_path=(imageId + ".png"))
 
-                path = f'./images/{imageId}.png'
+                path = f'server/images/{imageId}.png'
                 with open(path, 'wb') as f:
                     im.save(f)
 
@@ -517,7 +521,8 @@ class image_file:
                     "0"
                 ], close_fds=True)
 
-                db.update('images', vars=dict(iid=imageId), where="id = $iid",
+                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
+#                db.update('images', vars=dict(iid=imageId), where="id = $iid",
                           path=(imageId + ".png"))
 
             result = db.select('images', dict(iid=imageId), where="id = $iid")[0]
