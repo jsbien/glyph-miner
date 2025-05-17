@@ -458,9 +458,28 @@ class image_file:
     def POST(self, imageId, imageType):
         web.header("Access-Control-Allow-Origin", "*")
         print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", flush=True)
+        print("[DEBUG] hasattr(web.ctx, 'env') =", hasattr(web.ctx, "env"), flush=True)
+        print("[DEBUG] keys(web.ctx.__dict__) =", list(web.ctx.__dict__.keys()), flush=True)
 
         try:
-            form = web.input(file={})
+            import cgi
+
+            # use web.ctx.environ instead of web.ctx.env
+            fs = cgi.FieldStorage(
+                fp=web.ctx.environ['wsgi.input'],
+                environ=web.ctx.environ,
+                keep_blank_values=True
+            )
+
+            if "file" not in fs:
+                raise web.badrequest("Missing uploaded file")
+
+            field = fs["file"]
+            filename = field.filename
+            filedata = field.file.read()
+            print(f"[DEBUG] Uploaded: {filename}, size={len(filedata)}", flush=True)
+
+        #    form = web.input(file={})
             print(f"[DEBUG] form keys: {form.keys()}", flush=True)
 
             if not hasattr(form, "file"):
