@@ -435,8 +435,7 @@ class images:
             web.header('Access-Control-Allow-Headers', 'Content-Type')
             return
 
-
-# class image_file:
+class image_file:
 #     def POST(self, imageId, imageType):
 #         import os
 #         import json
@@ -454,10 +453,11 @@ class images:
 #         print("[DEBUG] ctx keys:", dir(web.ctx))
 #         print("[DEBUG] web.ctx.env =", getattr(web.ctx, "env", {}), flush=True)
 
+    
 
-        def POST(self, imageId, imageType):
-            web.header("Access-Control-Allow-Origin", "*")
-            print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", flush=True)
+    def POST(self, imageId, imageType):
+        web.header("Access-Control-Allow-Origin", "*")
+        print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", flush=True)
 
         try:
             form = web.input(file={})
@@ -487,9 +487,9 @@ class images:
 
             return json.dumps({"status": "success", "filename": filename})
 
-    except Exception as e:
-        print(f"[ERROR] Upload failed: {e}", flush=True)
-        raise web.internalerror()
+        except Exception as e:
+            print(f"[ERROR] Upload failed: {e}", flush=True)
+            raise web.internalerror()
        
         # ✅ Read uploaded image from binary stream
         im = Image.open(form.file.file)
