@@ -438,6 +438,7 @@ class images:
 
 class image_file:
 
+        
     def POST(self, imageId, imageType):
         import cgi
         from PIL import Image, ImageOps
@@ -490,20 +491,21 @@ class image_file:
                  db.update('images', vars=dict(iid=imageId), where="id = $iid",
                            web_path_color=(imageId + "-color.png"))
 
-                path = f'./images/{imageId}-color.png'
-                with open(path, 'wb') as f:
-                    im.convert('RGB').save(f)
+                 path = f'./images/{imageId}-color.png'
+                 with open(path, 'wb') as f:
+                     im.convert('RGB').save(f)
 
-                subprocess.Popen([
+                 subprocess.Popen([
                     "./img2tiles.py",
                     path,
                     f"../web/tiles/{imageId}-color.png",
                     "0"
                 ], close_fds=True)
 
-                thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS)
-                with open(f"../web/thumbnails/thumb-{imageId}-color.png", 'wb') as f:
-                    thumb.convert('RGB').save(f)
+#                 thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
+                 thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS)
+                 with open(f"../web/thumbnails/thumb-{imageId}-color.png", 'wb') as f:
+                     thumb.convert('RGB').save(f)
 
             else:  # binarized
 
