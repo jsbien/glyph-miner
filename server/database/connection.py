@@ -85,6 +85,7 @@ class MySQLDB:
         with closing(self.get_cursor()) as cur:
             cur.execute(sql, params)
             self.connection.commit()
+            return cur.lastrowid 
 
     def update(self, table, where, **fields):
         set_clause = ', '.join([f"{k}=%s" for k in fields])
