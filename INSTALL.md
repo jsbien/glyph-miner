@@ -193,7 +193,26 @@ This starts the server on http://localhost:9099.
 
 > ⚠  Do not use this in production — it's for local development and debugging only.
 
+#### Comparing with the original system.
 
+The original system is still available as a Docker image.
+
+After pulling the image from Docker Hub  with the command
+
+    docker pull glyphminer/glyphminer
+
+you can (re)start it with
+
+	local/restart-server_docker.py
+	
+In principle the current version should work identically as the
+original one, the only exception are the tooltips of the overview
+page.
+
+The code, besides adapting to Python 3 and current Maria DB, has only
+one cosmetic change, the large `db.py` file was split into smaller
+ones place in the `sever/database` directory.
+	
 ### User utilities
 
 The directory `utils/` is dedicated for user-oriented utilities.
