@@ -389,15 +389,36 @@ class images:
                 title=data.get("title"),
                 subtitle=data.get("subtitle"),
                 author=data.get("author"),
-#                collection_id=data.get("collection_id"),
-#                image_path=data.get("image_path"),
                 year=data.get("year"),
-                signature=data.get("signature"),
-#                 binarized_path=data.get("binarized_path"),
+                signature=data.get("signature")
             )
+            print(f"[DEBUG] db.insert(...) returned doc_id={doc_id}", flush=True)
+
+            if not doc_id:
+                print("❌ db.insert() returned None — insert failed", flush=True)
+                raise web.internalerror("Could not insert document into 'images'")
+
             db.connection.commit()
 
-            doc = list(db.select("images", where="id=$doc_id", vars=locals()))[0]
+            doc_list = list(db.select("images", where="id=$doc_id", vars={"doc_id": doc_id}))
+            if not doc_list:
+                print(f"❌ No document found after insert for id={doc_id}", flush=True)
+                raise web.internalerror("Document inserted but not found")
+
+            doc = doc_list[0]
+
+            # # Insert into DB
+            # doc_id = db.insert(
+            #     "images",
+            #     title=data.get("title"),
+            #     subtitle=data.get("subtitle"),
+            #     author=data.get("author"),
+            #     year=data.get("year"),
+            #     signature=data.get("signature")
+            # )
+            # db.connection.commit()
+
+            # doc = list(db.select("images", where="id=$doc_id", vars=locals()))[0]
 
             web.ctx.status = "200 OK"
             web.header("Content-Type", "application/json")
