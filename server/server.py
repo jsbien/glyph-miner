@@ -444,7 +444,8 @@ class image_file:
         from PIL import Image, ImageOps
 
         web.header('Access-Control-Allow-Origin', '*')
-        form = web.input()
+        form = web.input(file={})
+#        form = web.input()
 
         # ✅ Read uploaded image from binary stream
         im = Image.open(form.file.file)
