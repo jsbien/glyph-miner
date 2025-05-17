@@ -444,6 +444,16 @@ class image_file:
         from PIL import Image, ImageOps
 
         web.header('Access-Control-Allow-Origin', '*')
+        # content_length = int(web.ctx.env.get("CONTENT_LENGTH", 0) or 0)
+        # raw = web.ctx.env.get("wsgi.input").read(content_length)
+        # with open(f"debug-upload-{imageId}-{imageType}.bin", "wb") as f:
+        #     f.write(raw)
+        # raise web.internalerror("Raw upload not parsed — logged manually for debug")
+
+        print("[DEBUG] ctx.env exists:", hasattr(web.ctx, "env"))
+        print("[DEBUG] ctx keys:", dir(web.ctx))
+        print("[DEBUG] web.ctx.env =", getattr(web.ctx, "env", {}), flush=True)
+
         form = web.input(file={})
 #        form = web.input()
 
