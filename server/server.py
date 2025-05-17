@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 import sys
 import server.webapp as web
@@ -479,15 +480,15 @@ class image_file:
             # Load image and update DB
             im = Image.open(io.BytesIO(filedata))
             width, height = im.size
-            db.query("UPDATE images SET w = %s, h = %s WHERE id = %s", (width, height, imageId))
+            #db.query("UPDATE images SET w = %s, h = %s WHERE id = %s", (width, height, imageId))
 #            db.update('images', where="id = %s", params=(imageId,), w=width, h=height)
-#            db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
+            db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
 
             if imageType == "color":
-                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
-                         (f"{imageId}-color.png", imageId))
-                # db.update('images', vars=dict(iid=imageId), where="id = $iid",
-                #           web_path_color=(imageId + "-color.png"))
+##                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
+#                         (f"{imageId}-color.png", imageId))
+                 db.update('images', vars=dict(iid=imageId), where="id = $iid",
+                           web_path_color=(imageId + "-color.png"))
 
                 path = f'./images/{imageId}-color.png'
                 with open(path, 'wb') as f:
@@ -506,8 +507,8 @@ class image_file:
 
             else:  # binarized
 
-                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
-#                db.update('images', vars=dict(iid=imageId), where="id = $iid",
+#                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
+                db.update('images', vars=dict(iid=imageId), where="id = $iid",
                           web_path=(imageId + ".png"))
 
                 path = f'server/images/{imageId}.png'
@@ -521,8 +522,8 @@ class image_file:
                     "0"
                 ], close_fds=True)
 
-                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
-#                db.update('images', vars=dict(iid=imageId), where="id = $iid",
+#                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
+                db.update('images', vars=dict(iid=imageId), where="id = $iid",
                           path=(imageId + ".png"))
 
             result = db.select('images', dict(iid=imageId), where="id = $iid")[0]
@@ -533,176 +534,6 @@ class image_file:
             raise web.internalerror()
 
         
-# class image_file:
-#     def POST(self, imageId, imageType):
-#         import os
-#         import json
-#         import subprocess
-#         from PIL import Image, ImageOps
-
-#         # web.header('Access-Control-Allow-Origin', '*')
-#         # content_length = int(web.ctx.env.get("CONTENT_LENGTH", 0) or 0)
-#         # raw = web.ctx.env.get("wsgi.input").read(content_length)
-#         # with open(f"debug-upload-{imageId}-{imageType}.bin", "wb") as f:
-#         #     f.write(raw)
-#         # raise web.internalerror("Raw upload not parsed — logged manually for debug")
-
-#         print("[DEBUG] ctx.env exists:", hasattr(web.ctx, "env"))
-#         print("[DEBUG] ctx keys:", dir(web.ctx))
-#         print("[DEBUG] web.ctx.env =", getattr(web.ctx, "env", {}), flush=True)
-
-    
-
-  #   def POST(self, imageId, imageType):
-#         web.header("Access-Control-Allow-Origin", "*")
-#         print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", flush=True)
-#         print("[DEBUG] hasattr(web.ctx, 'env') =", hasattr(web.ctx, "env"), flush=True)
-#         print("[DEBUG] keys(web.ctx.__dict__) =", list(web.ctx.__dict__.keys()), flush=True)
-
-#         try:
-#             import cgi
-
-#             # use web.ctx.environ instead of web.ctx.env
-#             fs = cgi.FieldStorage(
-#                 fp=web.ctx.environ['wsgi.input'],
-#                 environ=web.ctx.environ,
-#                 keep_blank_values=True
-#             )
-
-#             if "file" not in fs:
-#                 raise web.badrequest("Missing uploaded file")
-
-#             field = fs["file"]
-#             filename = field.filename
-#             filedata = field.file.read()
-#             print(f"[DEBUG] Uploaded: {filename}, size={len(filedata)}", flush=True)
-
-#         #    form = web.input(file={})
-#             print(f"[DEBUG] form keys: {form.keys()}", flush=True)
-
-#             if not hasattr(form, "file"):
-#                 print("❌ [ERROR] 'file' field missing in form", flush=True)
-#                 raise web.badrequest("Missing file field")
-
-#             if not hasattr(form.file, "filename"):
-#                 print("❌ [ERROR] 'file' has no filename attribute", flush=True)
-#                 raise web.badrequest("Invalid file upload")
-
-#             if not hasattr(form.file, "file"):
-#                 print("❌ [ERROR] 'file' has no file-like object", flush=True)
-#                 raise web.badrequest("Invalid file content")
-
-#             filename = form.file.filename
-#             filedata = form.file.file.read()
-#             print(f"[DEBUG] Uploaded filename: {filename}", flush=True)
-#             print(f"[DEBUG] Uploaded file size: {len(filedata)} bytes", flush=True)
-
-#             # Optionally: write file to disk temporarily
-#             with open(f"debug-upload-{imageId}-{imageType}.dat", "wb") as out:
-#                 out.write(filedata)
-#                 print(f"[DEBUG] File written to debug-upload-{imageId}-{imageType}.dat", flush=True)
-
-# #            return json.dumps({"status": "success", "filename": filename})
-
-#         except Exception as e:
-#             print(f"[ERROR] Upload failed: {e}", flush=True)
-#             raise web.internalerror()
-       
-#         # ✅ Read uploaded image from binary stream
-#         im = Image.open(form.file.file)
-#         (width, height) = im.size
-
-#         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
-
-#         if imageType == "color":
-#             db.update('images', vars=dict(iid=imageId), where="id = $iid",
-#                       web_path_color=(imageId + "-color.png"))
-
-#             # ✅ Save full image
-#             with open('./images/' + imageId + "-color.png", 'wb') as f:
-#                 im.convert('RGB').save(f)
-
-#             # ✅ Dispatch tile creation
-#             subprocess.Popen([
-#                 "./img2tiles.py",
-#                 "./images/" + imageId + "-color.png",
-#                 "../web/tiles/" + imageId + "-color.png",
-#                 "0"
-#             ], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
-
-#             # ✅ Create thumbnail
-#             thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
-#             with open("../web/thumbnails/thumb-" + imageId + "-color.png", 'wb') as f:
-#                 thumb.convert('RGB').save(f)
-
-#         else:  # binarized
-#             db.update('images', vars=dict(iid=imageId), where="id = $iid",
-#                       web_path=(imageId + ".png"))
-
-#             # ✅ Save full image
-#             with open('./images/' + imageId + ".png", 'wb') as f:
-#                 im.save(f)
-
-#             # ✅ Dispatch tile creation
-#             subprocess.Popen([
-#                 "./img2tiles.py",
-#                 "./images/" + imageId + ".png",
-#                 "../web/tiles/" + imageId + ".png",
-#                 "0"
-#             ], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
-
-#             db.update('images', vars=dict(iid=imageId), where="id = $iid",
-#                       path=(imageId + ".png"))
-
-#         return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0],
-#                          cls=DateTimeEncoder)
-# class image_file:
-
-#     def POST(self, imageId, imageType):
-#         web.header('Access-Control-Allow-Origin', '*')
-#         form = web.input()
-
-#         # save files at correct locations for the web tools and the server
-#         im = Image.open(form.file.file)
-# #      im = Image.open(io.StringIO(form.file))
-#         (width, height) = im.size
-#         db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
-
-#         if imageType == "color":
-#             db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path_color=(imageId + "-color.png"))
-
-#             # save full image
-#             with open('./images/' + imageId + "-color.png", 'wb') as f:
-#                 im.convert('RGB').save(f)
-
-#             # dispatch tile creation
-#             subprocess.Popen(["./img2tiles.py", "./images/" + imageId + "-color.png", "../web/tiles/" +
-#                               imageId + "-color.png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
-
-#             # create thumbnail
-#             thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
-#             with open("../web/thumbnails/thumb-" + imageId + "-color.png", 'wb') as f:
-#                 thumb.convert('RGB').save(f)
-#         else:
-#             db.update('images', vars=dict(iid=imageId), where="id = $iid", web_path=(imageId + ".png"))
-
-#             # save full image
-#             with open('./images/' + imageId + ".png", 'wb') as f:
-#                 im.save(f)
-
-#             # dispatch tile creation
-#             subprocess.Popen(["./img2tiles.py", "./images/" + imageId + ".png", "../web/tiles/" +
-#                               imageId + ".png", "0"], shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
-
-#             db.update('images', vars=dict(iid=imageId), where="id = $iid", path=(imageId + ".png"))
-#         return json.dumps(db.select('images', dict(iid=imageId), where="id = $iid")[0], cls=DateTimeEncoder)
-
-#     def OPTIONS(self, imageId):
-#         web.header('Content-Type', 'application/json')
-#         web.header('Access-Control-Allow-Origin', '*')
-#         web.header('Access-Control-Allow-Credentials', 'true')
-#         web.header('Access-Control-Allow-Headers', 'Content-Type')
-#         return
 
 
 class templates:
