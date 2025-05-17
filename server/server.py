@@ -485,7 +485,7 @@ class image_file:
                 out.write(filedata)
                 print(f"[DEBUG] File written to debug-upload-{imageId}-{imageType}.dat", flush=True)
 
-            return json.dumps({"status": "success", "filename": filename})
+#            return json.dumps({"status": "success", "filename": filename})
 
         except Exception as e:
             print(f"[ERROR] Upload failed: {e}", flush=True)
