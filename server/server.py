@@ -512,7 +512,7 @@ class image_file:
                 ], close_fds=True)
 
 #                 thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
-                 thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS)
+                 thumb = ImageOps.fit(im, (500, 300), Image.LANCZOS)
                  with open(f"../web/thumbnails/thumb-{imageId}-color.png", 'wb') as f:
                      thumb.convert('RGB').save(f)
 
