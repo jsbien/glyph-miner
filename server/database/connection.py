@@ -87,10 +87,14 @@ class MySQLDB:
             self.connection.commit()
             return cur.lastrowid 
 
-    def update(self, table, where, **fields):
-        set_clause = ', '.join([f"{k}=%s" for k in fields])
+#    def update(self, table, where, **fields):
+    def update(self, table, where, vars=None, **fields):    
+        set_clause = ', '.join([f"{k} = {sqlify(v)}" for k, v in fields.items()])
         sql = f"UPDATE {table} SET {set_clause} WHERE {where}"
-        params = list(fields.values())
-        with closing(self.get_cursor()) as cur:
-            cur.execute(sql, params)
-            self.connection.commit()
+        return self.query(sql, vars=vars)
+        # set_clause = ', '.join([f"{k}=%s" for k in fields])
+        # sql = f"UPDATE {table} SET {set_clause} WHERE {where}"
+        # params = list(fields.values())
+        # with closing(self.get_cursor()) as cur:
+        #     cur.execute(sql, params)
+        #     self.connection.commit()
