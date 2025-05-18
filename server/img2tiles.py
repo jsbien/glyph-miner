@@ -58,22 +58,22 @@ def create_tiles(image_path, base_path, verbose):
         
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2) + '/' + str(y * 2) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.ANTIALIAS), (0,0))
+          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCHOS), (0,0))
         except:
           pass
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2 + 1) + '/' + str(y * 2) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.ANTIALIAS), (tile_width / 2,0))
+          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCHOS), (tile_width / 2,0))
         except:
           pass
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2) + '/' + str(y * 2 + 1) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.ANTIALIAS), (0, tile_height / 2))
+          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCHOS), (0, tile_height / 2))
         except:
           pass     
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2 + 1) + '/' + str(y * 2 + 1) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.ANTIALIAS), (tile_width / 2, tile_height / 2))
+          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCHOS), (tile_width / 2, tile_height / 2))
         except:
           pass
                   
