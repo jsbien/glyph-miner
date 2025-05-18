@@ -317,7 +317,10 @@ class memberships:
 
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+#        data = json.loads(web.data())
+        content_length = int(web.ctx.env.get("CONTENT_LENGTH", 0) or 0)
+        raw = web.ctx.env.get("wsgi.input").read(content_length)
+        data = json.loads(raw.decode("utf-8"))
         if not "image_id" in data:
             return web.badrequest("No image given.")
         if not "collection_id" in data:
@@ -948,6 +951,8 @@ urls = (
     '/api/collections/(.*)/synthetic_pages', 'collection_synthetic_pages',
     '/api/collections/(.*)', 'collection',
     '/api/collections', 'collections',
+
+    '/api/memberships', 'memberships',
 
     # Utility
     '/api/debug/clear', 'DebugClearHandler',
