@@ -497,7 +497,7 @@ class image_file:
 
                  subprocess.Popen([
                     "./img2tiles.py",
-                    path,
+                     path,
                     f"../web/tiles/{imageId}-color.png",
                     "0"
                 ], close_fds=True)
@@ -513,7 +513,8 @@ class image_file:
                 db.update('images', vars=dict(iid=imageId), where="id = $iid",
                           web_path=(imageId + ".png"))
 
-                path = f'server/images/{imageId}.png'
+                path = f'images/{imageId}.png'
+                print(f"[DEBUG] Saving binarized image to {path}", flush=True)
                 with open(path, 'wb') as f:
                     im.save(f)
 
