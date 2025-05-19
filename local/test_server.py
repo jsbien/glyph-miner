@@ -20,12 +20,46 @@ def run_and_log(command, cwd=None, log_path=None):
         raise subprocess.CalledProcessError(process.returncode, command)
 
 def main():
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_path = Path(f"logs/test_both_{timestamp}.log")
+    VERSION = "test-server.py v1.0"
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_path = Path(f"logs/test_server_{timestamp}.log")
     log_path.parent.mkdir(exist_ok=True)
+
+    # Log to both file and console
+    log_file = open(log_path, "w", encoding="utf-8")
+    tee = lambda text: (print(text), log_file.write(text + "\n"))
+    tee(f"📄 Logging to: {log_path}")
+    tee(f"🧪 {VERSION}")
+    tee(f"🕒 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    # Get current commit hash (short)
+    try:
+        commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+        tee(f"🔢 Commit: {commit}")
+    except Exception as e:
+        tee(f"❌ Could not get commit hash: {e}")
+
+    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # log_path = Path(f"logs/test_server1_{timestamp}.log")
+    # log_path.parent.mkdir(exist_ok=True)
 
     print("=== Restarting Python 3 port via restart-server.sh (port 9090) ===")
     run_and_log(["bash", "local/restart-server.sh"], log_path=log_path)
+
+    print("🧹 Clearing collections table...")
+
+    try:
+        result = subprocess.run(
+            ["curl", "-X", "POST", "-s", "http://localhost:9090/api/debug/clear"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        if result.returncode != 0:
+            print("❌ Failed to clear collections via debug endpoint")
+        else:
+            print("✅ Collections cleared")
+    except Exception as e:
+        print(f"❌ Error during curl request: {e}")
 
     
     print("=== Uploading to port 9090 ===")
