@@ -57,14 +57,47 @@ import datetime
 class DebugClearHandler:
     def POST(self):
         try:
-            print(">>> CLEARING collections table <<<", flush=True)
+            print(">>> FULL RESET: collections, images, templates, etc. <<<", flush=True)
             cursor = db.connection.cursor()
+
+            # Disable FK checks to avoid constraint violations
+            cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+
+            # Clear all relevant tables
+            cursor.execute("DELETE FROM collections_images")
+            cursor.execute("DELETE FROM labels")
+            cursor.execute("DELETE FROM matches")
+            cursor.execute("DELETE FROM templates")
+            cursor.execute("DELETE FROM images")
             cursor.execute("DELETE FROM collections")
+
+            # Reset auto-increment counters
+            for table in [
+                "collections", "collections_images", "images",
+                "labels", "matches", "templates"
+            ]:
+                cursor.execute(f"ALTER TABLE {table} AUTO_INCREMENT = 1")
+
+            # Re-enable FK checks
+            cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+
             db.connection.commit()
-            return "Collections table cleared.\n"
+            return "✅ All tables cleared and counters reset.\n"
+
         except Exception as e:
-            print(f"[ERROR] Failed to clear collections: {e}", flush=True)
+            print(f"[ERROR] Failed to reset database: {e}", flush=True)
             raise web.internalerror()
+# class DebugClearHandler:
+#     def POST(self):
+#         try:
+#             print(">>> CLEARING collections table <<<", flush=True)
+#             cursor = db.connection.cursor()
+#             cursor.execute("DELETE FROM collections")
+#             db.connection.commit()
+#             return "Collections table cleared.\n"
+#         except Exception as e:
+#             print(f"[ERROR] Failed to clear collections: {e}", flush=True)
+#             raise web.internalerror()
 
 
 class PingHandler:
@@ -508,7 +541,7 @@ class image_file:
                  subprocess.Popen([
                     "./img2tiles.py",
                      path,
-                     f"../web/tiles/tiles_{imageId}-color",
+                     f"../web/tiles/tiles_{imageId}-color.png",
 #                    f"../web/tiles/{imageId}-color.png",
                     "0"
                 ], close_fds=True)
@@ -534,7 +567,7 @@ class image_file:
                     "./img2tiles.py",
                     path,
                     f"../web/tiles/tiles_{imageId}",
-#                    f"../web/tiles/{imageId}.png",
+#                    f"../web/tiles/{imageId}",
                     "0"
                 ], close_fds=True)
 
