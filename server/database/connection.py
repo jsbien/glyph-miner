@@ -96,5 +96,6 @@ class MySQLDB:
                 where = where.replace(placeholder, sqlify(value))
         sql = f"UPDATE {table} SET {set_clause} WHERE {where}"
 
-        return self.query(sql)
-
+        result = self.query(sql)
+        self.connection.commit()
+        return result
