@@ -507,7 +507,7 @@ class image_file:
                  subprocess.Popen([
                     "./img2tiles.py",
                      path,
-                     f"../web/tiles/tiles_{imageId}-color"
+                     f"../web/tiles/tiles_{imageId}-color",
 #                    f"../web/tiles/{imageId}-color.png",
                     "0"
                 ], close_fds=True)
@@ -531,7 +531,7 @@ class image_file:
                 subprocess.Popen([
                     "./img2tiles.py",
                     path,
-                    f"../web/tiles/tiles_{imageId}"
+                    f"../web/tiles/tiles_{imageId}",
 #                    f"../web/tiles/{imageId}.png",
                     "0"
                 ], close_fds=True)
