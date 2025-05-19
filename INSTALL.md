@@ -84,7 +84,7 @@ database) will be accessible through an nginx web server (handling the static
 content).
 
 Let nginx know that calls to the API will be handled by the python server by
-copying the `local/default` file to /etc/nginx/sites-enabled/default.
+copying the `local/nginx.conf` file to `/etc/nginx/sites-enabled/default`.
 
 Its content is given below:
 
