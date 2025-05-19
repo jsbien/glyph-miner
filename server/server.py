@@ -498,7 +498,8 @@ class image_file:
 ##                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
 #                         (f"{imageId}-color.png", imageId))
                  db.update('images', vars=dict(iid=imageId), where="id = $iid",
-                           web_path_color=(imageId + "-color.png"))
+                           web_path_color=f"tiles_{imageId}-color.png")
+#                          web_path_color=(imageId + "-color"))
 
                  path = f'./images/{imageId}-color.png'
                  with open(path, 'wb') as f:
@@ -521,7 +522,8 @@ class image_file:
 
 #                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
                 db.update('images', vars=dict(iid=imageId), where="id = $iid",
-                          web_path=(imageId + ".png"))
+#                          web_path=(imageId + ".png"))
+                          web_path=f"tiles_{imageId}")
 
                 path = f'images/{imageId}.png'
                 print(f"[DEBUG] Saving binarized image to {path}", flush=True)
