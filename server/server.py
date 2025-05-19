@@ -531,8 +531,8 @@ class image_file:
 ##                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
 #                         (f"{imageId}-color.png", imageId))
                  db.update('images', vars=dict(iid=imageId), where="id = $iid",
-                           web_path_color=f"tiles_{imageId}-color.png")
-#                          web_path_color=(imageId + "-color"))
+#                           web_path_color=f"tiles_{imageId}-color.png")
+                          web_path_color=(imageId + "-color.png"))
 
                  path = f'./images/{imageId}-color.png'
                  with open(path, 'wb') as f:
