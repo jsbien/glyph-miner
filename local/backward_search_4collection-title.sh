@@ -6,7 +6,7 @@ set -e
 REPO_DIR="${1:-.}"
 COMMIT_LIST="commit-list.txt"
 LOGFILE="scan-history.log"
-TEST_SCRIPT="./local/test_server.py"
+TEST_SCRIPT="./test_server.py"
 # TEST_URL="http://localhost:9090/api/collections"  # optional if needed by test_server.py
 
 echo "🔍 Scanning commits listed in: $COMMIT_LIST"
