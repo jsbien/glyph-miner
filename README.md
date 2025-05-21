@@ -41,7 +41,7 @@ this repository.
   Maps* by Benedikt Budig (Würzburg 2018,
   urn:nbn:de:bvb:20-opus-160955).
 
-The system is designed as a Web server accessible both form a desktop
+The system is designed as a Web server accessible both from a desktop
 and a mobile.
 
 The current installation instruction is available [*here*](INSTALL.md).
