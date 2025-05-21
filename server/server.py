@@ -543,7 +543,8 @@ class image_file:
                      path,
                      f"../web/tiles/tiles_{imageId}-color.png",
 #                    f"../web/tiles/{imageId}-color.png",
-                    "0"
+                     "0",
+                     "--verbose"
                 ], close_fds=True)
 
 #                 thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
@@ -567,8 +568,8 @@ class image_file:
                     "./img2tiles.py",
                     path,
                     f"../web/tiles/tiles_{imageId}",
-#                    f"../web/tiles/{imageId}",
-                    "0"
+                    "0",
+                     "--verbose"
                 ], close_fds=True)
 
 #                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
