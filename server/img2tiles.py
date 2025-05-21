@@ -58,25 +58,25 @@ def create_tiles(image_path, base_path, verbose):
         
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2) + '/' + str(y * 2) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCZOS), (0,0))
+          tile.paste(partim.resize((tile_width // 2, tile_height // 2), Image.LANCZOS), (0,0))
         except:
           pass
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2 + 1) + '/' + str(y * 2) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCZOS), (tile_width / 2,0))
+          tile.paste(partim.resize((tile_width // 2, tile_height // 2), Image.LANCZOS), (tile_width // 2,0))
         except:
           pass
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2) + '/' + str(y * 2 + 1) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCZOS), (0, tile_height / 2))
+          tile.paste(partim.resize((tile_width // 2, tile_height // 2), Image.LANCZOS), (0, tile_height // 2))
         except:
           pass     
         try:
           partim = Image.open(base_path + '/' + str(z + 1) + '/' + str(x * 2 + 1) + '/' + str(y * 2 + 1) + ".png")
-          tile.paste(partim.resize((tile_width / 2, tile_height / 2), Image.LANCZOS), (tile_width / 2, tile_height / 2))
+          tile.paste(partim.resize((tile_width // 2, tile_height // 2), Image.LANCZOS), (tile_width // 2, tile_height // 2))
         except:
           pass
-                  
+                
         tile.save(filename)
         if verbose:
           sys.stdout.write("\r%i / %i" % (x * rows + y + 1, rows * cols))
@@ -88,4 +88,3 @@ def create_tiles(image_path, base_path, verbose):
 
 if __name__ == "__main__":
   create_tiles(sys.argv[1], sys.argv[2], sys.argv[3])
-
