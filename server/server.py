@@ -596,7 +596,19 @@ class templates:
 
     def POST(self, imageId):
         web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        try:
+            env = getattr(web.ctx, "env", None)
+            if not env or "wsgi.input" not in env:
+                raise KeyError("Missing wsgi.input in ctx.env")
+
+            length = int(env.get("CONTENT_LENGTH", 0))
+            body = env["wsgi.input"].read(length) if length > 0 else b"{}"
+            data = json.loads(body.decode("utf-8"))
+
+        except Exception as e:
+            print(f"[ERROR] Failed to parse POST body: {e}", flush=True)
+            return "400 Bad Request"
+#        data = json.loads(web.data())
         if (int(data["w"]) == 0 or int(data["h"]) == 0):
             return web.badrequest("Template has no width or height.")
         imageId = imageId
