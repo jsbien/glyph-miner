@@ -841,14 +841,21 @@ class collection_matches:
                 continue
 
             matches = json.loads(out)
-            t = db.transaction()
+
             for match in matches:
                 db.insert('matches',
-                    image_id=image["id"], template_id=templateId,
-                    x=match["x"], y=match["y"], w=match["w"], h=match["h"],
-                    score=match["score"], rank=match["rank"]
+                          image_id=image["id"], template_id=templateId,
+                          x=match["x"], y=match["y"], w=match["w"], h=match["h"],
+                          score=match["score"], rank=match["rank"]
                 )
-            t.commit()
+            # t = db.transaction()
+            # for match in matches:
+            #     db.insert('matches',
+            #         image_id=image["id"], template_id=templateId,
+            #         x=match["x"], y=match["y"], w=match["w"], h=match["h"],
+            #         score=match["score"], rank=match["rank"]
+            #     )
+            # t.commit()
 
         # Return all matches
         finalMatches = list(db.query(
