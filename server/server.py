@@ -977,6 +977,7 @@ urls = (
     '/api/images/(.*)/templates/(.*)', 'template',
     '/api/images/(.*)/templates', 'templates',
     '/api/images/(.*)/synthetic_pages', 'synthetic_pages',
+    '/api/images/(.*)/crops', 'crop',
 
     # Image uploads (color/binarized)
     '/api/images/(.*)/(color|binarized)', 'image_file',
