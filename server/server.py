@@ -885,29 +885,68 @@ class matchselect:
 
 class crop:
 
-    def GET(self, imageId):
-        args = web.input()
-        web.header('Access-Control-Allow-Origin', '*')
-        if (int(args.x2) - int(args.x1) <= 0 or int(args.y2) - int(args.y1) <= 0):
-            return web.badrequest("Requested crop has no width or height.")
+    def GET(self, image_id):
+        from PIL import Image
+        from io import BytesIO
+        import web
+        import os
+        import json
 
-        web.header('Content-type', 'image/png')
+        # Manually parse query string from web.ctx.env
+        try:
+            qs = web.ctx.env['QUERY_STRING']
+            params = dict(qc.split("=") for qc in qs.split("&"))
+            x1 = int(params["x1"])
+            y1 = int(params["y1"])
+            x2 = int(params["x2"])
+            y2 = int(params["y2"])
+        except Exception as e:
+            return web.badrequest()
 
-        # get image from database
-        image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+        # Load metadata to resolve image path (this mimics the original code behavior)
+        with open("data/documents.json") as f:
+            documents = json.load(f)
+            image_path = None
+        for doc in documents:
+            if str(doc["id"]) == image_id:
+                image_path = os.path.join("data", "images", doc["path"])
+                break
 
-        # saving image to global dict to speed things up
-        if (imageId not in imageList):
-            im = Image.open('./images/' + image.path)
-            im.load()
-            imageList[imageId] = im
-            print(("adding " + imageId + " to dict"))
-        im = imageList[imageId]
-        buf = io.StringIO()
-        im.crop((int(args.x1), int(args.y1), int(
-            args.x2), int(args.y2))).save(buf, "PNG")
-        contents = buf.getvalue()
-        return contents
+        if image_path is None or not os.path.exists(image_path):
+            return web.notfound()
+
+        im = Image.open(image_path)
+        crop_box = (x1, y1, x2, y2)
+        cropped = im.crop(crop_box)
+
+        web.header("Content-Type", "image/png")
+        output = BytesIO()
+        cropped.save(output, format="PNG")
+        return output.getvalue()
+
+#    def GET(self, class crop:
+        # args = web.input()
+        # web.header('Access-Control-Allow-Origin', '*')
+        # if (int(args.x2) - int(args.x1) <= 0 or int(args.y2) - int(args.y1) <= 0):
+        #     return web.badrequest("Requested crop has no width or height.")
+
+        # web.header('Content-type', 'image/png')
+
+        # # get image from database
+        # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+
+        # # saving image to global dict to speed things up
+        # if (imageId not in imageList):
+        #     im = Image.open('./images/' + image.path)
+        #     im.load()
+        #     imageList[imageId] = im
+        #     print(("adding " + imageId + " to dict"))
+        # im = imageList[imageId]
+        # buf = io.StringIO()
+        # im.crop((int(args.x1), int(args.y1), int(
+        #     args.x2), int(args.y2))).save(buf, "PNG")
+        # contents = buf.getvalue()
+        # return contents
 
 
 class matchcrop:
