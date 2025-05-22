@@ -770,10 +770,20 @@ class collection_matches:
     def GET(self, collectionId, templateId):
         web.header('Access-Control-Allow-Origin', '*')
         maxResults = 300  # TODO: make this a request parameter
-        args = web.input()
+#        args = web.input()
+        try:
+            env = getattr(web.ctx, "env", {})
+            qs = env.get("QUERY_STRING", "")
+            params = dict(q.split("=") for q in qs.split("&") if "=" in q)
+            print(f"[DEBUG] Parsed query string: {params}", flush=True)
+        except Exception as e:
+            print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+            params = {}
+
 
         # check if we have to predict labels
-        if (hasattr(args, "predict") and args.predict == "true"):
+#        if (hasattr(args, "predict") and args.predict == "true"):
+        if params.get("predict") == "true":
             templ = db.select('templates', dict(tid=templateId), where="id = $tid")[0]
             tid = templateId
             # TODO: check for correct collection?
@@ -794,16 +804,27 @@ class collection_matches:
         templ = db.select('templates', dict(tid=templateId), where="id = $tid")[0]
 
         # save template to disk, if not external
-        if templ.x != None and templ.y != None:
-            template_image = db.select('images', dict(iid=templ.image_id), where="id = $iid")[0]
+        if templ["x"] is not None and templ["y"] is not None:
+            template_image = db.select('images', dict(iid=templ["image_id"]), where="id = $iid")[0]
             # saving image to global dict to speed things up. BEWARE: race conditions?
-            if (template_image.id not in imageList):
-                im = Image.open('./images/' + template_image.path)
+            if template_image["id"] not in imageList:
+                im = Image.open('./images/' + template_image["path"])
                 im.load()
-                imageList[template_image.id] = im
-                print(("adding " + str(template_image.id) + " to dict"))
-            im = imageList[template_image.id]
-            im.crop((templ.x, templ.y, templ.x + templ.w, templ.y + templ.h)).save("templates/" + str(templ.id) + ".png", "PNG")
+                imageList[template_image["id"]] = im
+                print("adding " + str(template_image["id"]) + " to dict")
+            im = imageList[template_image["id"]]
+            im.crop((templ["x"], templ["y"], templ["x"] + templ["w"], templ["y"] + templ["h"])).save("templates/" + str(templ["id"]) + ".png", "PNG")
+
+        # if templ.x != None and templ.y != None:
+        #     template_image = db.select('images', dict(iid=templ.image_id), where="id = $iid")[0]
+        #     # saving image to global dict to speed things up. BEWARE: race conditions?
+        #     if (template_image.id not in imageList):
+        #         im = Image.open('./images/' + template_image.path)
+        #         im.load()
+        #         imageList[template_image.id] = im
+        #         print(("adding " + str(template_image.id) + " to dict"))
+        #     im = imageList[template_image.id]
+        #     # im.crop((templ.x, templ.y, templ.x + templ.w, templ.y + templ.h)).save("templates/" + str(templ.id) + ".png", "PNG")
 
         # run template matching processes in separate thread
         processes = {}
