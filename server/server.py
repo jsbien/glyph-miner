@@ -770,7 +770,8 @@ class collection_matches:
     def GET(self, collectionId, templateId):
         web.header('Access-Control-Allow-Origin', '*')
         maxResults = 300  # TODO: make this a request parameter
-#        args = web.input()
+
+        # Safely parse query string (instead of web.input())
         try:
             env = getattr(web.ctx, "env", {})
             qs = env.get("QUERY_STRING", "")
@@ -780,83 +781,174 @@ class collection_matches:
             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
             params = {}
 
-
-        # check if we have to predict labels
-#        if (hasattr(args, "predict") and args.predict == "true"):
+        # Predict mode
         if params.get("predict") == "true":
             templ = db.select('templates', dict(tid=templateId), where="id = $tid")[0]
-            tid = templateId
-            # TODO: check for correct collection?
-            matchesAndLabels = db.query("SELECT m.*, t.glyph, l.label_value FROM templates t, matches m LEFT OUTER JOIN labels l ON l.match_id = m.id " +
-                                        "WHERE m.template_id = t.id AND t.id = $tid",
-                                        vars=locals())
-            matches = [match for match in matchesAndLabels]
+            matchesAndLabels = db.query(
+                "SELECT m.*, t.glyph, l.label_value FROM templates t, matches m "
+                "LEFT OUTER JOIN labels l ON l.match_id = m.id "
+                "WHERE m.template_id = t.id AND t.id = $tid",
+                vars=dict(tid=templateId)
+            )
+            matches = list(matchesAndLabels)
             for match in matches:
-                if templ.thresh_score == None:
-                    match.label_value = None
-                elif match.label_value != "user_positive" and match.label_value != "user_negative":
-                    match.label_value = (0 if templ.thresh_score <= match.score else 1)
+                if templ["thresh_score"] is None:
+                    match["label_value"] = None
+                elif match["label_value"] not in ["user_positive", "user_negative"]:
+                    match["label_value"] = 0 if templ["thresh_score"] <= match["score"] else 1
             return json.dumps(matches, cls=DateTimeEncoder)
 
-        # else, do template matching
-        images = [image for image in db.query(
-            "SELECT i.* FROM images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid", vars=dict(cid=collectionId))]
+        # Else: perform template matching
+        images = list(db.query(
+            "SELECT i.* FROM images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid",
+            vars=dict(cid=collectionId)
+        ))
+
         templ = db.select('templates', dict(tid=templateId), where="id = $tid")[0]
 
-        # save template to disk, if not external
+        # Save template image to disk (if not external)
         if templ["x"] is not None and templ["y"] is not None:
             template_image = db.select('images', dict(iid=templ["image_id"]), where="id = $iid")[0]
-            # saving image to global dict to speed things up. BEWARE: race conditions?
             if template_image["id"] not in imageList:
                 im = Image.open('./images/' + template_image["path"])
                 im.load()
                 imageList[template_image["id"]] = im
-                print("adding " + str(template_image["id"]) + " to dict")
+                print("adding " + str(template_image["id"]) + " to dict", flush=True)
             im = imageList[template_image["id"]]
-            im.crop((templ["x"], templ["y"], templ["x"] + templ["w"], templ["y"] + templ["h"])).save("templates/" + str(templ["id"]) + ".png", "PNG")
+            im.crop((
+                templ["x"], templ["y"],
+                templ["x"] + templ["w"],
+                templ["y"] + templ["h"]
+            )).save("templates/" + str(templ["id"]) + ".png", "PNG")
 
-        # if templ.x != None and templ.y != None:
-        #     template_image = db.select('images', dict(iid=templ.image_id), where="id = $iid")[0]
-        #     # saving image to global dict to speed things up. BEWARE: race conditions?
-        #     if (template_image.id not in imageList):
-        #         im = Image.open('./images/' + template_image.path)
-        #         im.load()
-        #         imageList[template_image.id] = im
-        #         print(("adding " + str(template_image.id) + " to dict"))
-        #     im = imageList[template_image.id]
-        #     # im.crop((templ.x, templ.y, templ.x + templ.w, templ.y + templ.h)).save("templates/" + str(templ.id) + ".png", "PNG")
-
-        # run template matching processes in separate thread
-        processes = {}
+        # Perform matching (only if not already matched)
         for image in images:
-                # check whether we have matches for this template and this image already
-            if (db.query("SELECT COUNT(*) FROM matches WHERE image_id = $iid AND template_id = $tid", vars=dict(iid=image.id, tid=templateId))[0]['COUNT(*)'] > 0):
+            count = db.query(
+                "SELECT COUNT(*) FROM matches WHERE image_id = $iid AND template_id = $tid",
+                vars=dict(iid=image["id"], tid=templateId)
+            )[0]["COUNT(*)"]
+            if count > 0:
                 continue
 
-            # otherwise, do the actual template matching by calling the external library
             process = subprocess.Popen(
-                ["./match", './images/' + image.path, './templates/' +
-                    str(templ.id) + ".png", str(maxResults)],
-                shell=False,
+                ["./match", f'./images/{image["path"]}', f'./templates/{templ["id"]}.png', str(maxResults)],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+                stderr=subprocess.PIPE
+            )
             out, err = process.communicate()
-            errcode = process.returncode
-            if errcode != 0:
-                print("Error during template matching")
+            if process.returncode != 0:
+                print(f"[ERROR] match failed on image {image['id']}: {err.decode()}", flush=True)
                 continue
+
             matches = json.loads(out)
             t = db.transaction()
             for match in matches:
-                db.insert('matches', image_id=image.id, template_id=templateId, x=match["x"], y=match["y"],
-                          w=match["w"], h=match["h"], score=match["score"], rank=match["rank"])
+                db.insert('matches',
+                    image_id=image["id"], template_id=templateId,
+                    x=match["x"], y=match["y"], w=match["w"], h=match["h"],
+                    score=match["score"], rank=match["rank"]
+                )
             t.commit()
 
-        # get matches again from DB so we return all the ids (and all matches that have been there before)
-        finalMatches = [finalMatch for finalMatch in db.query(
-            "SELECT DISTINCT m.* FROM matches m, images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid AND m.template_id = $tid",
-            vars=dict(cid=collectionId, tid=templateId))]
+        # Return all matches
+        finalMatches = list(db.query(
+            "SELECT DISTINCT m.* FROM matches m, images i, collections_images ci "
+            "WHERE i.id = ci.image_id AND ci.collection_id = $cid AND m.template_id = $tid",
+            vars=dict(cid=collectionId, tid=templateId)
+        ))
         return json.dumps(finalMatches, cls=DateTimeEncoder)
+
+    
+#     def GET(self, collectionId, templateId):
+#         web.header('Access-Control-Allow-Origin', '*')
+#         maxResults = 300  # TODO: make this a request parameter
+# #        args = web.input()
+#         try:
+#             env = getattr(web.ctx, "env", {})
+#             qs = env.get("QUERY_STRING", "")
+#             params = dict(q.split("=") for q in qs.split("&") if "=" in q)
+#             print(f"[DEBUG] Parsed query string: {params}", flush=True)
+#         except Exception as e:
+#             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+#             params = {}
+
+
+#         # check if we have to predict labels
+# #        if (hasattr(args, "predict") and args.predict == "true"):
+#         if params.get("predict") == "true":
+#             templ = db.select('templates', dict(tid=templateId), where="id = $tid")[0]
+#             tid = templateId
+#             # TODO: check for correct collection?
+#             matchesAndLabels = db.query("SELECT m.*, t.glyph, l.label_value FROM templates t, matches m LEFT OUTER JOIN labels l ON l.match_id = m.id " +
+#                                         "WHERE m.template_id = t.id AND t.id = $tid",
+#                                         vars=locals())
+#             matches = [match for match in matchesAndLabels]
+#             for match in matches:
+#                 if templ.thresh_score == None:
+#                     match.label_value = None
+#                 elif match.label_value != "user_positive" and match.label_value != "user_negative":
+#                     match.label_value = (0 if templ.thresh_score <= match.score else 1)
+#             return json.dumps(matches, cls=DateTimeEncoder)
+
+#         # else, do template matching
+#         images = [image for image in db.query(
+#             "SELECT i.* FROM images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid", vars=dict(cid=collectionId))]
+#         templ = db.select('templates', dict(tid=templateId), where="id = $tid")[0]
+
+#         # save template to disk, if not external
+#         if templ["x"] is not None and templ["y"] is not None:
+#             template_image = db.select('images', dict(iid=templ["image_id"]), where="id = $iid")[0]
+#             # saving image to global dict to speed things up. BEWARE: race conditions?
+#             if template_image["id"] not in imageList:
+#                 im = Image.open('./images/' + template_image["path"])
+#                 im.load()
+#                 imageList[template_image["id"]] = im
+#                 print("adding " + str(template_image["id"]) + " to dict")
+#             im = imageList[template_image["id"]]
+#             im.crop((templ["x"], templ["y"], templ["x"] + templ["w"], templ["y"] + templ["h"])).save("templates/" + str(templ["id"]) + ".png", "PNG")
+
+#         # if templ.x != None and templ.y != None:
+#         #     template_image = db.select('images', dict(iid=templ.image_id), where="id = $iid")[0]
+#         #     # saving image to global dict to speed things up. BEWARE: race conditions?
+#         #     if (template_image.id not in imageList):
+#         #         im = Image.open('./images/' + template_image.path)
+#         #         im.load()
+#         #         imageList[template_image.id] = im
+#         #         print(("adding " + str(template_image.id) + " to dict"))
+#         #     im = imageList[template_image.id]
+#         #     # im.crop((templ.x, templ.y, templ.x + templ.w, templ.y + templ.h)).save("templates/" + str(templ.id) + ".png", "PNG")
+
+#         # run template matching processes in separate thread
+#         processes = {}
+#         for image in images:
+#                 # check whether we have matches for this template and this image already
+#             if (db.query("SELECT COUNT(*) FROM matches WHERE image_id = $iid AND template_id = $tid", vars=dict(iid=image.id, tid=templateId))[0]['COUNT(*)'] > 0):
+#                 continue
+
+#             # otherwise, do the actual template matching by calling the external library
+#             process = subprocess.Popen(
+#                 ["./match", './images/' + image.path, './templates/' +
+#                     str(templ.id) + ".png", str(maxResults)],
+#                 shell=False,
+#                 stdout=subprocess.PIPE,
+#                 stderr=subprocess.PIPE)
+#             out, err = process.communicate()
+#             errcode = process.returncode
+#             if errcode != 0:
+#                 print("Error during template matching")
+#                 continue
+#             matches = json.loads(out)
+#             t = db.transaction()
+#             for match in matches:
+#                 db.insert('matches', image_id=image.id, template_id=templateId, x=match["x"], y=match["y"],
+#                           w=match["w"], h=match["h"], score=match["score"], rank=match["rank"])
+#             t.commit()
+
+#         # get matches again from DB so we return all the ids (and all matches that have been there before)
+#         finalMatches = [finalMatch for finalMatch in db.query(
+#             "SELECT DISTINCT m.* FROM matches m, images i, collections_images ci WHERE i.id = ci.image_id AND ci.collection_id = $cid AND m.template_id = $tid",
+#             vars=dict(cid=collectionId, tid=templateId))]
+#         return json.dumps(finalMatches, cls=DateTimeEncoder)
 
     def predictLabel(self, theta, match):
         a = match.rank / 1000.0
