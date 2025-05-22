@@ -887,7 +887,7 @@ class crop:
         import os
         import io
         from PIL import Image
-        from server import database as db
+#        from server import database as db
         import server.webapp as web
 
         web.header('Access-Control-Allow-Origin', '*')
@@ -909,10 +909,23 @@ class crop:
 
         try:
             # Get image metadata from DB (Row object)
+            # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+            # print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
+
+            # path = image.path  # ✅ Access path directly from Row object
+
             image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
             print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
 
-            path = image.path  # ✅ Access path directly from Row object
+            # Handle both str and object with .path attribute
+            if isinstance(image, str):
+                path = image
+            elif hasattr(image, "path"):
+                path = image.path
+            elif isinstance(image, dict) and "path" in image:
+                path = image["path"]
+            else:
+                raise Exception(f"Unexpected image record: {image}")
 
             # Cache image if not loaded
             if imageId not in imageList:
