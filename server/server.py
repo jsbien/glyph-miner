@@ -884,113 +884,69 @@ class matchselect:
 
 
 class crop:
-
     def GET(self, imageId):
         import os
         import io
         from PIL import Image
-        from server import database as db  # ensure this matches your actual db object
+        from server import database as db
         import server.webapp as web
 
-        args = web.input()
-
         web.header('Access-Control-Allow-Origin', '*')
-        if (int(args.x2) - int(args.x1) <= 0 or int(args.y2) - int(args.y1) <= 0):
-            return web.badrequest("Requested crop has no width or height.")
-
         web.header('Content-Type', 'image/png')
 
-        # get image metadata from DB
-        image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+        try:
+            env = getattr(web.ctx, "env", {})
+            qs = env.get("QUERY_STRING", "")
+            params = dict(q.split("=") for q in qs.split("&"))
+            x1, y1, x2, y2 = int(params["x1"]), int(params["y1"]), int(params["x2"]), int(params["y2"])
+        except Exception as e:
+            print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+            return "400 Bad Request"
 
-        # cache image in memory if not already loaded
-        if imageId not in imageList:
-            im = Image.open('./images/' + image.path)
-            im.load()
-            imageList[imageId] = im
-            print(f"adding {imageId} to dict", flush=True)
+        if (x2 - x1 <= 0 or y2 - y1 <= 0):
+            return "400 Bad Request — zero area crop"
 
-        im = imageList[imageId]
-        buf = io.BytesIO()
-        im.crop((int(args.x1), int(args.y1), int(args.x2), int(args.y2))).save(buf, format="PNG")
-        return buf.getvalue()
+        try:
+            image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+            print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
 
- #    def GET(self, image_id):
- #        from PIL import Image
- #        from io import BytesIO
- # #       import web
- #        import os
- #        import json
+            if isinstance(image, str):
+                path = image
+            elif isinstance(image, dict) and "path" in image:
+                path = image["path"]
+            else:
+                raise Exception(f"Unexpected DB row format: {image}")
 
- #        try:
- #            ctx = getattr(web, "ctx", None)
- #            if ctx is None or not hasattr(ctx, "env"):
- #                raise AttributeError("web.ctx.env is missing")
- #            qs = ctx.env.get("QUERY_STRING", "")
- #            params = dict(qc.split("=") for qc in qs.split("&"))
- #            x1 = int(params["x1"])
- #            y1 = int(params["y1"])
- #            x2 = int(params["x2"])
- #            y2 = int(params["y2"])
- #        except Exception as e:
- #            print(f"[ERROR] crop.GET: failed to parse query or missing ctx: {e}", flush=True)
- #            return "400 Bad Request"
+            if imageId not in imageList:
+                im = Image.open('./images/' + path)
+                im.load()
+                imageList[imageId] = im
+                print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
 
- #        # Manually parse query string from web.ctx.env
- #        try:
- #            qs = web.ctx.env['QUERY_STRING']
- #            params = dict(qc.split("=") for qc in qs.split("&"))
- #            x1 = int(params["x1"])
- #            y1 = int(params["y1"])
- #            x2 = int(params["x2"])
- #            y2 = int(params["y2"])
- #        except Exception as e:
- #            return web.badrequest()
+            im = imageList[imageId]
+            buf = io.BytesIO()
+            im.crop((x1, y1, x2, y2)).save(buf, format="PNG")
+            return buf.getvalue()
 
-        # # Load metadata to resolve image path (this mimics the original code behavior)
-        # with open("data/documents.json") as f:
-        #     documents = json.load(f)
-        #     image_path = None
-        # for doc in documents:
-        #     if str(doc["id"]) == image_id:
-        #         image_path = os.path.join("data", "images", doc["path"])
-        #         break
+        except Exception as e:
+            print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+            return "500 Internal Server Error"
+ 
+            # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+            # if imageId not in imageList:
+            #     im = Image.open('./images/' + image.path)
+            #     im.load()
+            #     imageList[imageId] = im
+            #     print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
 
-        # if image_path is None or not os.path.exists(image_path):
-        #     return web.notfound()
+            # im = imageList[imageId]
+            # buf = io.BytesIO()
+            # im.crop((x1, y1, x2, y2)).save(buf, format="PNG")
+            # return buf.getvalue()
 
-        # im = Image.open(image_path)
-        # crop_box = (x1, y1, x2, y2)
-        # cropped = im.crop(crop_box)
-
-        # web.header("Content-Type", "image/png")
-        # output = BytesIO()
-        # cropped.save(output, format="PNG")
-        # return output.getvalue()
-
-#    def GET(self, class crop:
-        # args = web.input()
-        # web.header('Access-Control-Allow-Origin', '*')
-        # if (int(args.x2) - int(args.x1) <= 0 or int(args.y2) - int(args.y1) <= 0):
-        #     return web.badrequest("Requested crop has no width or height.")
-
-        # web.header('Content-type', 'image/png')
-
-        # # get image from database
-        # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
-
-        # # saving image to global dict to speed things up
-        # if (imageId not in imageList):
-        #     im = Image.open('./images/' + image.path)
-        #     im.load()
-        #     imageList[imageId] = im
-        #     print(("adding " + imageId + " to dict"))
-        # im = imageList[imageId]
-        # buf = io.StringIO()
-        # im.crop((int(args.x1), int(args.y1), int(
-        #     args.x2), int(args.y2))).save(buf, "PNG")
-        # contents = buf.getvalue()
-        # return contents
+        except Exception as e:
+            print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+            return "500 Internal Server Error"
 
 
 class matchcrop:
