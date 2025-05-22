@@ -168,7 +168,8 @@ below.
 
 ### Testing
 
-Various testing tools are available in the `local/` directory.
+Various testing tools are available in the `local/` and `tests`
+directories.
 
 #### Regressions testing
 
@@ -204,7 +205,9 @@ After pulling the image from Docker Hub  with the command
 you can (re)start it with
 
 	local/restart-server_docker.py
-	
+
+and the server will be available at http://localhost:8080/.
+
 In principle the current version should work identically as the
 original one, the only exception are the tooltips of the overview
 page.
