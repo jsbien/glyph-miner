@@ -882,7 +882,6 @@ class matchselect:
         web.header('Access-Control-Allow-Headers', 'Content-Type')
         return
 
-
 class crop:
     def GET(self, imageId):
         import os
@@ -894,6 +893,7 @@ class crop:
         web.header('Access-Control-Allow-Origin', '*')
         web.header('Content-Type', 'image/png')
 
+        # Parse query string safely
         try:
             env = getattr(web.ctx, "env", {})
             qs = env.get("QUERY_STRING", "")
@@ -903,20 +903,18 @@ class crop:
             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
             return "400 Bad Request"
 
+        # Validate crop area
         if (x2 - x1 <= 0 or y2 - y1 <= 0):
             return "400 Bad Request — zero area crop"
 
         try:
+            # Get image metadata from DB (Row object)
             image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
             print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
 
-            if isinstance(image, str):
-                path = image
-            elif isinstance(image, dict) and "path" in image:
-                path = image["path"]
-            else:
-                raise Exception(f"Unexpected DB row format: {image}")
+            path = image.path  # ✅ Access path directly from Row object
 
+            # Cache image if not loaded
             if imageId not in imageList:
                 im = Image.open('./images/' + path)
                 im.load()
@@ -931,22 +929,71 @@ class crop:
         except Exception as e:
             print(f"[ERROR] Failed to serve crop: {e}", flush=True)
             return "500 Internal Server Error"
+
+        # class crop:
+#     def GET(self, imageId):
+#         import os
+#         import io
+#         from PIL import Image
+#         from server import database as db
+#         import server.webapp as web
+
+#         web.header('Access-Control-Allow-Origin', '*')
+#         web.header('Content-Type', 'image/png')
+
+#         try:
+#             env = getattr(web.ctx, "env", {})
+#             qs = env.get("QUERY_STRING", "")
+#             params = dict(q.split("=") for q in qs.split("&"))
+#             x1, y1, x2, y2 = int(params["x1"]), int(params["y1"]), int(params["x2"]), int(params["y2"])
+#         except Exception as e:
+#             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+#             return "400 Bad Request"
+
+#         if (x2 - x1 <= 0 or y2 - y1 <= 0):
+#             return "400 Bad Request — zero area crop"
+
+#         try:
+#             image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+#             print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
+
+#             if isinstance(image, str):
+#                 path = image
+#             elif isinstance(image, dict) and "path" in image:
+#                 path = image["path"]
+#             else:
+#                 raise Exception(f"Unexpected DB row format: {image}")
+
+#             if imageId not in imageList:
+#                 im = Image.open('./images/' + path)
+#                 im.load()
+#                 imageList[imageId] = im
+#                 print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
+
+#             im = imageList[imageId]
+#             buf = io.BytesIO()
+#             im.crop((x1, y1, x2, y2)).save(buf, format="PNG")
+#             return buf.getvalue()
+
+#         except Exception as e:
+#             print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+#             return "500 Internal Server Error"
  
-            # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
-            # if imageId not in imageList:
-            #     im = Image.open('./images/' + image.path)
-            #     im.load()
-            #     imageList[imageId] = im
-            #     print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
+#             # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+#             # if imageId not in imageList:
+#             #     im = Image.open('./images/' + image.path)
+#             #     im.load()
+#             #     imageList[imageId] = im
+#             #     print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
 
-            # im = imageList[imageId]
-            # buf = io.BytesIO()
-            # im.crop((x1, y1, x2, y2)).save(buf, format="PNG")
-            # return buf.getvalue()
+#             # im = imageList[imageId]
+#             # buf = io.BytesIO()
+#             # im.crop((x1, y1, x2, y2)).save(buf, format="PNG")
+#             # return buf.getvalue()
 
-        except Exception as e:
-            print(f"[ERROR] Failed to serve crop: {e}", flush=True)
-            return "500 Internal Server Error"
+#         except Exception as e:
+#             print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+#             return "500 Internal Server Error"
 
 
 class matchcrop:
