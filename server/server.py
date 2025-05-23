@@ -1146,7 +1146,16 @@ class matchcrop:
     def GET(self, imageId, templateId, matchId):
         web.header('Access-Control-Allow-Origin', '*')
         web.header('Content-type', 'image/png')
-        args = web.input()
+#        args = web.input()
+        try:
+            env = getattr(web.ctx, "env", {})
+            qs = env.get("QUERY_STRING", "")
+            args = dict(q.split("=") for q in qs.split("&") if "=" in q)
+            print(f"[DEBUG] Parsed query string: {args}", flush=True)
+        except Exception as e:
+            print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+            args = {}
+
 
         # get image from database
         image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
