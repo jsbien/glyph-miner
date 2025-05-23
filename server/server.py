@@ -976,17 +976,47 @@ class match:
 class matchlabel:
 
     def POST(self, imageId, templateId, matchId):
-        web.header('Access-Control-Allow-Origin', '*')
-        try:
-            env = getattr(web.ctx, "env", {})
-            length = int(env.get("CONTENT_LENGTH", 0))
-            json_data = web.ctx.input_stream.read(length) if length > 0 else b""
-            data = json.loads(json_data.decode("utf-8"))
-        except Exception as e:
-            print(f"[ERROR] Failed to parse JSON POST: {e}", flush=True)
-            return web.badrequest()
 
-%        data = json.loads(web.data())
+     web.header('Access-Control-Allow-Origin', '*')
+
+    # 🔍 Diagnostics: Dump ctx state before anything else
+#    try:
+#      print("🔍 [DEBUG] matchlabel.POST called")
+#        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+
+  # breaks?:
+  #    ctx_vars = vars(web.ctx)
+  #      print("🔍 web.ctx keys:", list(ctx_vars.keys()), flush=True)
+
+        # env = ctx_vars.get("env", None)
+        # if env is None:
+        #     print("❌ ctx.env is missing", flush=True)
+        # else:
+        #     print("🔍 ctx.env keys:", list(env.keys()), flush=True)
+        #     if "CONTENT_LENGTH" in env:
+        #         print("🔢 CONTENT_LENGTH =", env["CONTENT_LENGTH"], flush=True)
+        #     if "wsgi.input" in env:
+        #         print("📥 wsgi.input =", env["wsgi.input"], flush=True)
+
+        # data_present = ctx_vars.get("data", None)
+        # print("🔍 ctx.data =", data_present if data_present else "❌ ctx.data is missing", flush=True)
+
+        # print("🔍 Attempting web.data() read...", flush=True)
+        # raw_data = web.data()
+        # print(f"📦 web.data() = {raw_data[:200]}...", flush=True)  # Print first 200 bytes
+
+    # except Exception as e:
+    #     print(f"[❌ EXCEPTION during diagnostics] {e}", flush=True)
+
+    # ⚠️ TEMPORARY early return to inspect results without triggering original logic
+    #    return web.internalerror("Stopped after diagnostics")
+        print("🔍 [DEBUG] matchlabel.POST called")
+        print("[DEBUG] Values:", imageId, templateId, matchId, flush=True)
+        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+
+        env = getattr(web.ctx, "env", {})
+#        web.header('Access-Control-Allow-Origin', '*')
+        data = json.loads(web.data())
         tid = templateId
         mid = matchId
         dbId = db.insert('labels', match_id=matchId,
