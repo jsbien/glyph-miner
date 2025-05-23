@@ -977,7 +977,16 @@ class matchlabel:
 
     def POST(self, imageId, templateId, matchId):
         web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
+        try:
+            env = getattr(web.ctx, "env", {})
+            length = int(env.get("CONTENT_LENGTH", 0))
+            json_data = web.ctx.input_stream.read(length) if length > 0 else b""
+            data = json.loads(json_data.decode("utf-8"))
+        except Exception as e:
+            print(f"[ERROR] Failed to parse JSON POST: {e}", flush=True)
+            return web.badrequest()
+
+%        data = json.loads(web.data())
         tid = templateId
         mid = matchId
         dbId = db.insert('labels', match_id=matchId,
