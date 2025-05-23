@@ -37,10 +37,23 @@
       return response.data;
     }
 
-    function errorHandler(error) {
-      ErrorService.alert("The Label Service encountered an error while trying to access the API (" + error.statusText + "). " +
-                         "Make sure the server is running and accessible.", error.data);
-    }
+    function errorHandler(error, context = {}) {
+  const details = [];
+
+  if (context.imageId) details.push(`imageId=${context.imageId}`);
+  if (context.templateId) details.push(`templateId=${context.templateId}`);
+  if (context.matchId) details.push(`matchId=${context.matchId}`);
+  if (error.config && error.config.url) details.push(`url=${error.config.url}`);
+
+  const detailMsg = details.length > 0 ? " [" + details.join(", ") + "]" : "";
+
+  ErrorService.alert(
+    "The Label Service encountered an error while trying to access the API (" +
+    error.statusText + "). Make sure the server is running and accessible." + detailMsg,
+    error.data
+  );
+}
+
   }
 
 }());
