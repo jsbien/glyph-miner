@@ -976,55 +976,86 @@ class match:
 class matchlabel:
 
     def POST(self, imageId, templateId, matchId):
+        web.header('Access-Control-Allow-Origin', '*')
+        print("[DEBUG] matchlabel.POST entered", flush=True)
 
-     web.header('Access-Control-Allow-Origin', '*')
+        try:
+            # ✅ Reuse of known-working pattern from collections_handler
+            content_length = int(web.ctx.env.get('CONTENT_LENGTH', 0) or 0)
+            raw = web.ctx.env.get('wsgi.input').read(content_length)
+            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
 
-    # 🔍 Diagnostics: Dump ctx state before anything else
-#    try:
-#      print("🔍 [DEBUG] matchlabel.POST called")
-#        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+            decoded = raw.decode("utf-8", errors="replace")
+            print(f"[DEBUG] decoded input = {decoded}", flush=True)
 
-  # breaks?:
-  #    ctx_vars = vars(web.ctx)
-  #      print("🔍 web.ctx keys:", list(ctx_vars.keys()), flush=True)
+            data = json.loads(decoded)
+        except Exception as e:
+            print(f"[ERROR] Failed to read POST body: {e}", flush=True)
+            return web.badrequest("Malformed input")
 
-        # env = ctx_vars.get("env", None)
-        # if env is None:
-        #     print("❌ ctx.env is missing", flush=True)
-        # else:
-        #     print("🔍 ctx.env keys:", list(env.keys()), flush=True)
-        #     if "CONTENT_LENGTH" in env:
-        #         print("🔢 CONTENT_LENGTH =", env["CONTENT_LENGTH"], flush=True)
-        #     if "wsgi.input" in env:
-        #         print("📥 wsgi.input =", env["wsgi.input"], flush=True)
+        try:
+            dbId = db.insert('labels',
+                             match_id=matchId,
+                             template_id=templateId,
+                             label_value=data["label"],
+                             time=data["label_time"],
+                             iteration=data["label_iteration"])
+            result = db.select('labels', vars={'dbId': dbId}, where="id = $dbId")[0]
+            return json.dumps(result, cls=DateTimeEncoder)
+        except Exception as e:
+            print(f"[ERROR] DB insert failed: {e}", flush=True)
+            return web.internalerror("Failed to save label")
+    
+#      web.header('Access-Control-Allow-Origin', '*')
 
-        # data_present = ctx_vars.get("data", None)
-        # print("🔍 ctx.data =", data_present if data_present else "❌ ctx.data is missing", flush=True)
+#     # 🔍 Diagnostics: Dump ctx state before anything else
+# #    try:
+# #      print("🔍 [DEBUG] matchlabel.POST called")
+# #        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
 
-        # print("🔍 Attempting web.data() read...", flush=True)
-        # raw_data = web.data()
-        # print(f"📦 web.data() = {raw_data[:200]}...", flush=True)  # Print first 200 bytes
+#   # breaks?:
+#   #    ctx_vars = vars(web.ctx)
+#   #      print("🔍 web.ctx keys:", list(ctx_vars.keys()), flush=True)
 
-    # except Exception as e:
-    #     print(f"[❌ EXCEPTION during diagnostics] {e}", flush=True)
+#         # env = ctx_vars.get("env", None)
+#         # if env is None:
+#         #     print("❌ ctx.env is missing", flush=True)
+#         # else:
+#         #     print("🔍 ctx.env keys:", list(env.keys()), flush=True)
+#         #     if "CONTENT_LENGTH" in env:
+#         #         print("🔢 CONTENT_LENGTH =", env["CONTENT_LENGTH"], flush=True)
+#         #     if "wsgi.input" in env:
+#         #         print("📥 wsgi.input =", env["wsgi.input"], flush=True)
 
-    # ⚠️ TEMPORARY early return to inspect results without triggering original logic
-    #    return web.internalerror("Stopped after diagnostics")
-        print("🔍 [DEBUG] matchlabel.POST called")
-        print("[DEBUG] Values:", imageId, templateId, matchId, flush=True)
-        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+#         # data_present = ctx_vars.get("data", None)
+#         # print("🔍 ctx.data =", data_present if data_present else "❌ ctx.data is missing", flush=True)
 
-        env = getattr(web.ctx, "env", {})
-#        web.header('Access-Control-Allow-Origin', '*')
-        data = json.loads(web.data())
-        tid = templateId
-        mid = matchId
-        dbId = db.insert('labels', match_id=matchId,
-                                   template_id=tid,
-                                   label_value=data["label"],
-                                   time=data["label_time"],
-                                   iteration=data["label_iteration"])
-        return json.dumps(db.select('labels', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
+#         # print("🔍 Attempting web.data() read...", flush=True)
+#         # raw_data = web.data()
+#         # print(f"📦 web.data() = {raw_data[:200]}...", flush=True)  # Print first 200 bytes
+
+#     # except Exception as e:
+#     #     print(f"[❌ EXCEPTION during diagnostics] {e}", flush=True)
+
+#     # ⚠️ TEMPORARY early return to inspect results without triggering original logic
+#     #    return web.internalerror("Stopped after diagnostics")
+#         print("🔍 [DEBUG] matchlabel.POST called")
+#         print("[DEBUG] Values:", imageId, templateId, matchId, flush=True)
+#         print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+
+#          data = web.input()  # ✅ safest fallback that avoids ctx.env
+# #        env = web.ctx.__dict__.get("env", None)
+# #        env = getattr(web.ctx, "env", {})
+# #        web.header('Access-Control-Allow-Origin', '*')
+#         data = json.loads(web.data())
+#         tid = templateId
+#         mid = matchId
+#         dbId = db.insert('labels', match_id=matchId,
+#                                    template_id=tid,
+#                                    label_value=data["label"],
+#                                    time=data["label_time"],
+#                                    iteration=data["label_iteration"])
+#         return json.dumps(db.select('labels', vars=locals(), where="id = $dbId")[0], cls=DateTimeEncoder)
 
     def OPTIONS(self, imageId, templateId, matchId):
         web.header('Content-Type', 'application/json')
