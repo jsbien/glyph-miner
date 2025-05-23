@@ -18,7 +18,11 @@
     function postLabel(match, label) {
       return $http.post(apiBasePath + '/images/' + match.image_id + '/templates/' + match.template_id + '/matches/' + match.id + '/label', label)
         .then(getComplete)
-        .catch(errorHandler);
+	 .catch(error => errorHandler(error, {
+      imageId: match.image_id,
+      templateId: match.template_id,
+      matchId: match.id
+    }));
     }
 
     function putModel(imageId, templateId, model) {
