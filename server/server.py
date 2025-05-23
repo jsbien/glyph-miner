@@ -1142,11 +1142,11 @@ class crop:
 
 
 class matchcrop:
-
-    def GET(self, imageId, templateId, matchId):
+    def GET(self, image_id, template_id, match_id):
         web.header('Access-Control-Allow-Origin', '*')
         web.header('Content-type', 'image/png')
-#        args = web.input()
+
+        # --- Parse query string manually ---
         try:
             env = getattr(web.ctx, "env", {})
             qs = env.get("QUERY_STRING", "")
@@ -1156,45 +1156,106 @@ class matchcrop:
             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
             args = {}
 
+        # --- Parse margin + box parameters safely ---
+        try:
+            margin_top = int(args.get("margin_top", 0))
+            margin_left = int(args.get("margin_left", 0))
+            margin_right = int(args.get("margin_right", 0))
+            margin_bottom = int(args.get("margin_bottom", 0))
+            box = args.get("box", "false").lower() == "true"
+        except Exception as e:
+            print(f"[ERROR] Failed to parse margins: {e}", flush=True)
+            return web.badrequest()
 
-        # get image from database
-        image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
-
-        # saving image to global dict to speed things up
-        if (imageId not in imageList):
-            im = Image.open('./images/' + image.path)
+        # --- Get image from DB and cache ---
+        image = db.select('images', dict(iid=image_id), where="id = $iid")[0]
+        if image["id"] not in imageList:
+            im = Image.open('./images/' + image["path"])
             im.load()
-            imageList[imageId] = im
-            print(("adding " + imageId + " to dict"))
-        im = imageList[imageId]
+            imageList[image["id"]] = im
+            print(f"adding {image['id']} to dict", flush=True)
+        im = imageList[image["id"]]
 
-        # get match from database
-        match = db.select('matches', dict(iid=imageId, tid=templateId, mid=matchId),
+        # --- Get match box from DB ---
+        match = db.select('matches', dict(iid=image_id, tid=template_id, mid=match_id),
                           where="id = $mid AND template_id = $tid AND image_id = $iid")[0]
 
-        # crop image of desired size
-        margin_top = int(args.margin_top)
-        margin_left = int(args.margin_left)
-        margin_right = int(args.margin_right)
-        margin_bottom = int(args.margin_bottom)
-        im_cropped = im.crop((match.x - margin_left,
-                              match.y - margin_top,
-                              match.x + match.w + margin_right,
-                              match.y + match.h + margin_bottom))
+        # --- Crop the matched glyph with margins ---
+        x1 = match["x"] - margin_left
+        y1 = match["y"] - margin_top
+        x2 = match["x"] + match["w"] + margin_right
+        y2 = match["y"] + match["h"] + margin_bottom
+        im_cropped = im.crop((x1, y1, x2, y2))
 
-        # draw rectangle around template if desired
-        if (hasattr(args, "box") and args.box == "true"):
+        # --- Draw red box if requested ---
+        if box:
             im_cropped = im_cropped.convert("RGBA")
             draw = ImageDraw.Draw(im_cropped)
-            draw.rectangle([(margin_left, margin_top),
-                            (margin_left + match.w, margin_top + match.h)],
-                           outline=(255, 0, 0, 200))
+            draw.rectangle(
+                [(margin_left, margin_top), (margin_left + match["w"], margin_top + match["h"])],
+                outline=(255, 0, 0, 200)
+            )
 
-        # save image to buffer and return
-        buf = io.StringIO()
-        im_cropped.save(buf, "PNG")
-        contents = buf.getvalue()
-        return contents
+        # --- Return as PNG ---
+        buf = io.BytesIO()
+        im_cropped.save(buf, format="PNG")
+        return buf.getvalue()
+
+#     def GET(self, imageId, templateId, matchId):
+#         web.header('Access-Control-Allow-Origin', '*')
+#         web.header('Content-type', 'image/png')
+# #        args = web.input()
+#         try:
+#             env = getattr(web.ctx, "env", {})
+#             qs = env.get("QUERY_STRING", "")
+#             args = dict(q.split("=") for q in qs.split("&") if "=" in q)
+#             print(f"[DEBUG] Parsed query string: {args}", flush=True)
+#         except Exception as e:
+#             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+#             args = {}
+
+
+#         # get image from database
+#         image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
+
+#         # saving image to global dict to speed things up
+#         if (imageId not in imageList):
+#             im = Image.open('./images/' + image.path)
+#             im.load()
+#             imageList[imageId] = im
+#             print(("adding " + imageId + " to dict"))
+#         im = imageList[imageId]
+
+#         # get match from database
+#         match = db.select('matches', dict(iid=imageId, tid=templateId, mid=matchId),
+#                           where="id = $mid AND template_id = $tid AND image_id = $iid")[0]
+
+#         # crop image of desired size
+#         margin_top = int(args.margin_top)
+#         margin_left = int(args.margin_left)
+#         margin_right = int(args.margin_right)
+#         margin_bottom = int(args.margin_bottom)
+#         im_cropped = im.crop((match.x - margin_left,
+#                               match.y - margin_top,
+#                               match.x + match.w + margin_right,
+#                               match.y + match.h + margin_bottom))
+
+#         # draw rectangle around template if desired
+#         if (hasattr(args, "box") and args.box == "true"):
+#             im_cropped = im_cropped.convert("RGBA")
+#             draw = ImageDraw.Draw(im_cropped)
+#             draw.rectangle([(margin_left, margin_top),
+#                             (margin_left + match.w, margin_top + match.h)],
+#                            outline=(255, 0, 0, 200))
+
+#         # save image to buffer and return
+#         buf = io.BytesIO()
+#         im_cropped.save(buf, format="PNG")
+#         return buf.getvalue()
+# #        buf = io.StringIO()
+#         # im_cropped.save(buf, "PNG")
+#         # contents = buf.getvalue()
+#         # return contents
 
     
 
