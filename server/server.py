@@ -8,6 +8,14 @@ from server import database as db
 from server.webapp.webapi import debug
 import traceback
 
+# --- Optional debug log for noisy output ---
+
+from pathlib import Path
+
+log_path = Path("../logs")
+log_path.mkdir(exist_ok=True)
+
+DEBUG_LOG = open(log_path / "verbose-debug.log", "a", buffering=1)
 
 print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<", flush=True)
 
@@ -144,10 +152,10 @@ class index:
 
 class collections_handler:
     def GET(self):
-        print(">>> ENTERED collection_handler GET <<<", flush=True)
+        print(">>> ENTERED collection_handler GET <<<", file=DEBUG_LOG, flush=True)
         try:
             collections = list(db.select('collections'))
-            print(">>> FETCHED:", collections, flush=True)
+            print(">>> FETCHED:", collections, file=DEBUG_LOG, flush=True)
 
             def serialize(obj):
                 if isinstance(obj, datetime.datetime):
@@ -159,22 +167,22 @@ class collections_handler:
             return json.dumps(collections, default=serialize)
 
         except Exception as e:
-            print(f"[ERROR] GET failed: {e}", flush=True)
+            print(f"[ERROR] GET failed: {e}", file=DEBUG_LOG, flush=True)
             raise web.internalerror()
 
     def POST(self):
-        print(">>> ENTERED POST <<<", flush=True)
+        print(">>> ENTERED POST <<<", file=DEBUG_LOG, flush=True)
         try:
             # ✅ SAFELY read raw POST body without relying on web.data()
             content_length = int(web.ctx.env.get('CONTENT_LENGTH', 0) or 0)
             raw = web.ctx.env.get('wsgi.input').read(content_length)
-            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+            print(f"[DEBUG] raw input = {repr(raw)}", file=DEBUG_LOG, flush=True)
 
             decoded = raw.decode("utf-8", errors="replace")
-            print(f"[DEBUG] decoded input = {decoded}", flush=True)
+            print(f"[DEBUG] decoded input = {decoded}", file=DEBUG_LOG, flush=True)
 
             data = json.loads(decoded)
-            print(f"[DEBUG] POST /collections - Payload: {data}", flush=True)
+            print(f"[DEBUG] POST /collections - Payload: {data}", file=DEBUG_LOG, flush=True)
 
             title = data.get("title")
             if not title:
@@ -194,7 +202,7 @@ class collections_handler:
             return json.dumps({'status': 'ok', 'id': collection['id']})
 
         except Exception as e:
-            print(f"[ERROR] POST failed: {e}", flush=True)
+            print(f"[ERROR] POST failed: {e}", file=DEBUG_LOG, flush=True)
             raise web.internalerror()
           
 class collection_handler:
@@ -414,17 +422,17 @@ class images:
 
     def POST(self):
         web.header('Access-Control-Allow-Origin', '*')
-        print("🔍 [POST /api/images] Handler entered", flush=True)
+        print("🔍 [POST /api/images] Handler entered", file=DEBUG_LOG, flush=True)
         print("📡 DEBUG: ctx.env exists?", hasattr(web.ctx, "env"))
         print("📡 DEBUG: ctx keys:", dir(web.ctx))
 
         try:
-            print(">>> POST /api/images <<<", flush=True)
+            print(">>> POST /api/images <<<", file=DEBUG_LOG, flush=True)
             web.header("Access-Control-Allow-Origin", "*")
             content_length = int(web.ctx.env.get("CONTENT_LENGTH", 0) or 0)
             raw = web.ctx.env.get("wsgi.input").read(content_length)
             data = json.loads(raw.decode("utf-8"))
-            print(f"[DEBUG] JSON input: {data}", flush=True)
+            print(f"[DEBUG] JSON input: {data}", file=DEBUG_LOG, flush=True)
 
             # Insert into DB
             doc_id = db.insert(
@@ -435,17 +443,17 @@ class images:
                 year=data.get("year"),
                 signature=data.get("signature")
             )
-            print(f"[DEBUG] db.insert(...) returned doc_id={doc_id}", flush=True)
+            print(f"[DEBUG] db.insert(...) returned doc_id={doc_id}", file=DEBUG_LOG, flush=True)
 
             if not doc_id:
-                print("❌ db.insert() returned None — insert failed", flush=True)
+                print("❌ db.insert() returned None — insert failed", file=DEBUG_LOG, flush=True)
                 raise web.internalerror("Could not insert document into 'images'")
 
             db.connection.commit()
 
             doc_list = list(db.select("images", where="id=$doc_id", vars={"doc_id": doc_id}))
             if not doc_list:
-                print(f"❌ No document found after insert for id={doc_id}", flush=True)
+                print(f"❌ No document found after insert for id={doc_id}", file=DEBUG_LOG, flush=True)
                 raise web.internalerror("Document inserted but not found")
 
             doc = doc_list[0]
@@ -468,7 +476,7 @@ class images:
             return json.dumps(doc, cls=DateTimeEncoder)
 
         except Exception as e:
-            print(f"[ERROR] POST /api/images failed: {e}", flush=True)
+            print(f"[ERROR] POST /api/images failed: {e}", file=DEBUG_LOG, flush=True)
             raise web.internalerror()
 
         def OPTIONS(self, imageId):
@@ -487,7 +495,7 @@ class image_file:
         import subprocess
 
         web.header("Access-Control-Allow-Origin", "*")
-        print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", flush=True)
+        print(f"[DEBUG] 🔁 Upload requested for imageId={imageId} type={imageType}", file=DEBUG_LOG, flush=True)
 
         # Get WSGI environment
         try:
@@ -495,7 +503,7 @@ class image_file:
             if not env:
                 env = web.ctx.env  # fallback for older web.py
         except Exception as e:
-            print(f"[ERROR] Missing WSGI environment: {e}", flush=True)
+            print(f"[ERROR] Missing WSGI environment: {e}", file=DEBUG_LOG, flush=True)
             raise web.internalerror("Missing WSGI environment")
 
         # Parse multipart form data manually
@@ -512,13 +520,13 @@ class image_file:
             field = fs["file"]
             filename = field.filename
             filedata = field.file.read()
-            print(f"[DEBUG] Uploaded: {filename}, size={len(filedata)}", flush=True)
+            print(f"[DEBUG] Uploaded: {filename}, size={len(filedata)}", file=DEBUG_LOG, flush=True)
 
             # Save a copy to disk
             tmp_path = f"debug-upload-{imageId}-{imageType}.dat"
             with open(tmp_path, "wb") as f:
                 f.write(filedata)
-            print(f"[DEBUG] Saved to {tmp_path}", flush=True)
+            print(f"[DEBUG] Saved to {tmp_path}", file=DEBUG_LOG, flush=True)
 
             # Load image and update DB
             im = Image.open(io.BytesIO(filedata))
@@ -571,7 +579,7 @@ class image_file:
                           web_path=f"tiles_{imageId}")
 
                 path = f'images/{imageId}.png'
-                print(f"[DEBUG] Saving binarized image to {path}", flush=True)
+                print(f"[DEBUG] Saving binarized image to {path}", file=DEBUG_LOG, flush=True)
                 with open(path, 'wb') as f:
                     im.save(f)
 
@@ -591,7 +599,7 @@ class image_file:
             return json.dumps(result, cls=DateTimeEncoder)
 
         except Exception as e:
-            print(f"[ERROR] Upload failed: {e}", flush=True)
+            print(f"[ERROR] Upload failed: {e}", file=DEBUG_LOG, flush=True)
             raise web.internalerror()
 
         
@@ -617,7 +625,7 @@ class templates:
             data = json.loads(body.decode("utf-8"))
 
         except Exception as e:
-            print(f"[ERROR] Failed to parse POST body: {e}", flush=True)
+            print(f"[ERROR] Failed to parse POST body: {e}", file=DEBUG_LOG, flush=True)
             return "400 Bad Request"
 #        data = json.loads(web.data())
         if (int(data["w"]) == 0 or int(data["h"]) == 0):
@@ -787,9 +795,9 @@ class collection_matches:
             env = getattr(web.ctx, "env", {})
             qs = env.get("QUERY_STRING", "")
             params = dict(q.split("=") for q in qs.split("&") if "=" in q)
-            print(f"[DEBUG] Parsed query string: {params}", flush=True)
+            print(f"[DEBUG] Parsed query string: {params}", file=DEBUG_LOG, flush=True)
         except Exception as e:
-            print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+            print(f"[ERROR] Failed to parse query string: {e}", file=DEBUG_LOG, flush=True)
             params = {}
 
         # Predict mode
@@ -824,7 +832,7 @@ class collection_matches:
                 im = Image.open('./images/' + template_image["path"])
                 im.load()
                 imageList[template_image["id"]] = im
-                print("adding " + str(template_image["id"]) + " to dict", flush=True)
+                print("adding " + str(template_image["id"]) + " to dict", file=DEBUG_LOG, flush=True)
             im = imageList[template_image["id"]]
             im.crop((
                 templ["x"], templ["y"],
@@ -848,7 +856,7 @@ class collection_matches:
             )
             out, err = process.communicate()
             if process.returncode != 0:
-                print(f"[ERROR] match failed on image {image['id']}: {err.decode()}", flush=True)
+                print(f"[ERROR] match failed on image {image['id']}: {err.decode()}", file=DEBUG_LOG, flush=True)
                 continue
 
             matches = json.loads(out)
@@ -885,9 +893,9 @@ class collection_matches:
 #             env = getattr(web.ctx, "env", {})
 #             qs = env.get("QUERY_STRING", "")
 #             params = dict(q.split("=") for q in qs.split("&") if "=" in q)
-#             print(f"[DEBUG] Parsed query string: {params}", flush=True)
+#             print(f"[DEBUG] Parsed query string: {params}", file=DEBUG_LOG, flush=True)
 #         except Exception as e:
-#             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+#             print(f"[ERROR] Failed to parse query string: {e}", file=DEBUG_LOG, flush=True)
 #             params = {}
 
 
@@ -988,20 +996,20 @@ class matchlabel:
 
     def POST(self, imageId, templateId, matchId):
         web.header('Access-Control-Allow-Origin', '*')
-        print("[DEBUG] matchlabel.POST entered", flush=True)
+        print("[DEBUG] matchlabel.POST entered", file=DEBUG_LOG, flush=True)
 
         try:
             # ✅ Reuse of known-working pattern from collections_handler
             content_length = int(web.ctx.env.get('CONTENT_LENGTH', 0) or 0)
             raw = web.ctx.env.get('wsgi.input').read(content_length)
-            print(f"[DEBUG] raw input = {repr(raw)}", flush=True)
+            print(f"[DEBUG] raw input = {repr(raw)}", file=DEBUG_LOG, flush=True)
 
             decoded = raw.decode("utf-8", errors="replace")
-            print(f"[DEBUG] decoded input = {decoded}", flush=True)
+            print(f"[DEBUG] decoded input = {decoded}", file=DEBUG_LOG, flush=True)
 
             data = json.loads(decoded)
         except Exception as e:
-            print(f"[ERROR] Failed to read POST body: {e}", flush=True)
+            print(f"[ERROR] Failed to read POST body: {e}", file=DEBUG_LOG, flush=True)
             return web.badrequest("Malformed input")
 
         try:
@@ -1014,7 +1022,7 @@ class matchlabel:
             result = db.select('labels', vars={'dbId': dbId}, where="id = $dbId")[0]
             return json.dumps(result, cls=DateTimeEncoder)
         except Exception as e:
-            print(f"[ERROR] DB insert failed: {e}", flush=True)
+            print(f"[ERROR] DB insert failed: {e}", file=DEBUG_LOG, flush=True)
             return web.internalerror("Failed to save label")
     
 #      web.header('Access-Control-Allow-Origin', '*')
@@ -1022,37 +1030,37 @@ class matchlabel:
 #     # 🔍 Diagnostics: Dump ctx state before anything else
 # #    try:
 # #      print("🔍 [DEBUG] matchlabel.POST called")
-# #        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+# #        print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", file=DEBUG_LOG, flush=True)
 
 #   # breaks?:
 #   #    ctx_vars = vars(web.ctx)
-#   #      print("🔍 web.ctx keys:", list(ctx_vars.keys()), flush=True)
+#   #      print("🔍 web.ctx keys:", list(ctx_vars.keys()), file=DEBUG_LOG, flush=True)
 
 #         # env = ctx_vars.get("env", None)
 #         # if env is None:
-#         #     print("❌ ctx.env is missing", flush=True)
+#         #     print("❌ ctx.env is missing", file=DEBUG_LOG, flush=True)
 #         # else:
-#         #     print("🔍 ctx.env keys:", list(env.keys()), flush=True)
+#         #     print("🔍 ctx.env keys:", list(env.keys()), file=DEBUG_LOG, flush=True)
 #         #     if "CONTENT_LENGTH" in env:
-#         #         print("🔢 CONTENT_LENGTH =", env["CONTENT_LENGTH"], flush=True)
+#         #         print("🔢 CONTENT_LENGTH =", env["CONTENT_LENGTH"], file=DEBUG_LOG, flush=True)
 #         #     if "wsgi.input" in env:
-#         #         print("📥 wsgi.input =", env["wsgi.input"], flush=True)
+#         #         print("📥 wsgi.input =", env["wsgi.input"], file=DEBUG_LOG, flush=True)
 
 #         # data_present = ctx_vars.get("data", None)
-#         # print("🔍 ctx.data =", data_present if data_present else "❌ ctx.data is missing", flush=True)
+#         # print("🔍 ctx.data =", data_present if data_present else "❌ ctx.data is missing", file=DEBUG_LOG, flush=True)
 
-#         # print("🔍 Attempting web.data() read...", flush=True)
+#         # print("🔍 Attempting web.data() read...", file=DEBUG_LOG, flush=True)
 #         # raw_data = web.data()
-#         # print(f"📦 web.data() = {raw_data[:200]}...", flush=True)  # Print first 200 bytes
+#         # print(f"📦 web.data() = {raw_data[:200]}...", file=DEBUG_LOG, flush=True)  # Print first 200 bytes
 
 #     # except Exception as e:
-#     #     print(f"[❌ EXCEPTION during diagnostics] {e}", flush=True)
+#     #     print(f"[❌ EXCEPTION during diagnostics] {e}", file=DEBUG_LOG, flush=True)
 
 #     # ⚠️ TEMPORARY early return to inspect results without triggering original logic
 #     #    return web.internalerror("Stopped after diagnostics")
 #         print("🔍 [DEBUG] matchlabel.POST called")
-#         print("[DEBUG] Values:", imageId, templateId, matchId, flush=True)
-#         print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", flush=True)
+#         print("[DEBUG] Values:", imageId, templateId, matchId, file=DEBUG_LOG, flush=True)
+#         print(f"🧾 imageId={imageId}, templateId={templateId}, matchId={matchId}", file=DEBUG_LOG, flush=True)
 
 #          data = web.input()  # ✅ safest fallback that avoids ctx.env
 # #        env = web.ctx.__dict__.get("env", None)
@@ -1113,7 +1121,7 @@ class crop:
             params = dict(q.split("=") for q in qs.split("&"))
             x1, y1, x2, y2 = int(params["x1"]), int(params["y1"]), int(params["x2"]), int(params["y2"])
         except Exception as e:
-            print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+            print(f"[ERROR] Failed to parse query string: {e}", file=DEBUG_LOG, flush=True)
             return "400 Bad Request"
 
         # Validate crop area
@@ -1123,12 +1131,12 @@ class crop:
         try:
             # Get image metadata from DB (Row object)
             # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
-            # print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
+            # print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", file=DEBUG_LOG, flush=True)
 
             # path = image.path  # ✅ Access path directly from Row object
 
             image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
-            print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
+            print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", file=DEBUG_LOG, flush=True)
 
             # Handle both str and object with .path attribute
             if isinstance(image, str):
@@ -1145,7 +1153,7 @@ class crop:
                 im = Image.open('./images/' + path)
                 im.load()
                 imageList[imageId] = im
-                print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
+                print(f"[DEBUG] Loaded and cached image {imageId}", file=DEBUG_LOG, flush=True)
 
             im = imageList[imageId]
             buf = io.BytesIO()
@@ -1153,7 +1161,7 @@ class crop:
             return buf.getvalue()
 
         except Exception as e:
-            print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+            print(f"[ERROR] Failed to serve crop: {e}", file=DEBUG_LOG, flush=True)
             return "500 Internal Server Error"
 
         # class crop:
@@ -1173,7 +1181,7 @@ class crop:
 #             params = dict(q.split("=") for q in qs.split("&"))
 #             x1, y1, x2, y2 = int(params["x1"]), int(params["y1"]), int(params["x2"]), int(params["y2"])
 #         except Exception as e:
-#             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+#             print(f"[ERROR] Failed to parse query string: {e}", file=DEBUG_LOG, flush=True)
 #             return "400 Bad Request"
 
 #         if (x2 - x1 <= 0 or y2 - y1 <= 0):
@@ -1181,7 +1189,7 @@ class crop:
 
 #         try:
 #             image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
-#             print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", flush=True)
+#             print(f"[DEBUG] DB returned image: {image} (type: {type(image)})", file=DEBUG_LOG, flush=True)
 
 #             if isinstance(image, str):
 #                 path = image
@@ -1194,7 +1202,7 @@ class crop:
 #                 im = Image.open('./images/' + path)
 #                 im.load()
 #                 imageList[imageId] = im
-#                 print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
+#                 print(f"[DEBUG] Loaded and cached image {imageId}", file=DEBUG_LOG, flush=True)
 
 #             im = imageList[imageId]
 #             buf = io.BytesIO()
@@ -1202,7 +1210,7 @@ class crop:
 #             return buf.getvalue()
 
 #         except Exception as e:
-#             print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+#             print(f"[ERROR] Failed to serve crop: {e}", file=DEBUG_LOG, flush=True)
 #             return "500 Internal Server Error"
  
 #             # image = db.select('images', dict(iid=imageId), where="id = $iid")[0]
@@ -1210,7 +1218,7 @@ class crop:
 #             #     im = Image.open('./images/' + image.path)
 #             #     im.load()
 #             #     imageList[imageId] = im
-#             #     print(f"[DEBUG] Loaded and cached image {imageId}", flush=True)
+#             #     print(f"[DEBUG] Loaded and cached image {imageId}", file=DEBUG_LOG, flush=True)
 
 #             # im = imageList[imageId]
 #             # buf = io.BytesIO()
@@ -1218,7 +1226,7 @@ class crop:
 #             # return buf.getvalue()
 
 #         except Exception as e:
-#             print(f"[ERROR] Failed to serve crop: {e}", flush=True)
+#             print(f"[ERROR] Failed to serve crop: {e}", file=DEBUG_LOG, flush=True)
 #             return "500 Internal Server Error"
 
 
@@ -1232,9 +1240,9 @@ class matchcrop:
             env = getattr(web.ctx, "env", {})
             qs = env.get("QUERY_STRING", "")
             args = dict(q.split("=") for q in qs.split("&") if "=" in q)
-            print(f"[DEBUG] Parsed query string: {args}", flush=True)
+            print(f"[DEBUG] Parsed query string: {args}", file=DEBUG_LOG, flush=True)
         except Exception as e:
-            print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+            print(f"[ERROR] Failed to parse query string: {e}", file=DEBUG_LOG, flush=True)
             args = {}
 
         # --- Parse margin + box parameters safely ---
@@ -1245,7 +1253,7 @@ class matchcrop:
             margin_bottom = int(args.get("margin_bottom", 0))
             box = args.get("box", "false").lower() == "true"
         except Exception as e:
-            print(f"[ERROR] Failed to parse margins: {e}", flush=True)
+            print(f"[ERROR] Failed to parse margins: {e}", file=DEBUG_LOG, flush=True)
             return web.badrequest()
 
         # --- Get image from DB and cache ---
@@ -1254,7 +1262,7 @@ class matchcrop:
             im = Image.open('./images/' + image["path"])
             im.load()
             imageList[image["id"]] = im
-            print(f"adding {image['id']} to dict", flush=True)
+            print(f"adding {image['id']} to dict", file=DEBUG_LOG, flush=True)
         im = imageList[image["id"]]
 
         # --- Get match box from DB ---
@@ -1290,9 +1298,9 @@ class matchcrop:
 #             env = getattr(web.ctx, "env", {})
 #             qs = env.get("QUERY_STRING", "")
 #             args = dict(q.split("=") for q in qs.split("&") if "=" in q)
-#             print(f"[DEBUG] Parsed query string: {args}", flush=True)
+#             print(f"[DEBUG] Parsed query string: {args}", file=DEBUG_LOG, flush=True)
 #         except Exception as e:
-#             print(f"[ERROR] Failed to parse query string: {e}", flush=True)
+#             print(f"[ERROR] Failed to parse query string: {e}", file=DEBUG_LOG, flush=True)
 #             args = {}
 
 
@@ -1398,7 +1406,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 # with open(f"./debug-handler-scope-{timestamp}.log", "w") as f:
 #     f.write(f"'PingHandler' in globals(): {'PingHandler' in globals()}\n")
     
-print(f">>> collections_handler has methods: {dir(collections_handler)}", flush=True)
+print(f">>> collections_handler has methods: {dir(collections_handler)}", file=DEBUG_LOG, flush=True)
 
 handler_map = {
     'DebugClearHandler': DebugClearHandler,
@@ -1428,7 +1436,7 @@ handler_map = {
     'collection_matches': collection_matches
 }
 
-print(f"[DEBUG] collections = {handler_map['collections']} (type: {type(handler_map['collections'])})", flush=True)
+print(f"[DEBUG] collections = {handler_map['collections']} (type: {type(handler_map['collections'])})", file=DEBUG_LOG, flush=True)
 
 import datetime
 ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -1438,7 +1446,7 @@ ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 #     debug_file.write(f"handler_map['PingHandler']: {repr(handler)}\n")
 #     debug_file.write(f"type: {type(handler)}\n")
 
-print(f">>> collections_handler has POST: {'POST' in dir(collections_handler)}", flush=True)
+print(f">>> collections_handler has POST: {'POST' in dir(collections_handler)}", file=DEBUG_LOG, flush=True)
 
 #app = web.application(urls, globals())
 app = web.application(urls, handler_map)
@@ -1452,9 +1460,9 @@ ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 #     debug_file.write(f"dir(application): {dir(application)}\n")
 
 if hasattr(collections_handler, "POST"):
-    print(">>> YES: collections_handler.POST exists", flush=True)
+    print(">>> YES: collections_handler.POST exists", file=DEBUG_LOG, flush=True)
 else:
-    print(">>> NO: collections_handler.POST is missing", flush=True)
+    print(">>> NO: collections_handler.POST is missing", file=DEBUG_LOG, flush=True)
 
 print(f"[DEBUG] application = {application}")
 print(f"[DEBUG] application.__module__ = {application.__module__}")
