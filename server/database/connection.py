@@ -6,6 +6,16 @@ import MySQLdb.cursors
 from contextlib import closing
 import server.webapp as web
 
+# --- Optional debug log for noisy output ---
+
+from pathlib import Path
+
+log_path = Path("../logs")
+log_path.mkdir(exist_ok=True)
+
+DEBUG_LOG = open(log_path / "verbose-debug.log", "a", buffering=1)
+
+
 class PatchedDictCursor(MySQLdb.cursors.DictCursor):
     def close(self):
         try:
@@ -51,25 +61,25 @@ class MySQLDB:
         try:
             self.connection.ping(reconnect=True)
         except Exception:
-            print(">>> Reconnecting to MySQL")
+            print(">>> Reconnecting to MySQL", file=DEBUG_LOG, flush=True))
             self.connection = self._connect()
         return self.connection.cursor(PatchedDictCursor)
 
     def query(self, sql, params=None, vars=None):
-        print(f">>> QUERY: {sql}")
-        print(f">>> VARS: {vars}")
+        print(f">>> QUERY: {sql}", file=DEBUG_LOG, flush=True))
+        print(f">>> VARS: {vars}", file=DEBUG_LOG, flush=True))
         try:
             if vars:
                 for key, value in vars.items():
                     sql = sql.replace(f"${key}", sqlify(value))
             with closing(self.get_cursor()) as cur:
-                print(f">>> CURSOR CLASS: {type(cur)}")
+                print(f">>> CURSOR CLASS: {type(cur)}", file=DEBUG_LOG, flush=True))
                 cur.execute(sql, params or ())
                 result = cur.fetchall()
-                print(">>> QUERY SUCCESS")
+                print(">>> QUERY SUCCESS", file=DEBUG_LOG, flush=True))
                 return result
         except Exception as e:
-            print(">>> QUERY FAILED:", e)
+            print(">>> QUERY FAILED:", e), file=DEBUG_LOG, flush=True)
             raise
 
     def select(self, table, vars=None, where=None):
