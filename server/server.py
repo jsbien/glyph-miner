@@ -527,6 +527,16 @@ class image_file:
 #            db.update('images', where="id = %s", params=(imageId,), w=width, h=height)
             db.update('images', vars=dict(iid=imageId), where="id = $iid", w=width, h=height)
 
+            from datetime import datetime
+            import os
+
+            # Ensure log directory exists
+            os.makedirs("../logs", exist_ok=True)
+
+            # Generate timestamped log filename
+            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+            log_filename = f"logs/tilegen-{timestamp}.log"
+            
             if imageType == "color":
 ##                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
 #                         (f"{imageId}-color.png", imageId))
@@ -538,16 +548,17 @@ class image_file:
                  with open(path, 'wb') as f:
                      im.convert('RGB').save(f)
 
-                 subprocess.Popen([
-                    "./img2tiles.py",
-                     path,
-                     f"../web/tiles/tiles_{imageId}-color.png",
-#                    f"../web/tiles/{imageId}-color.png",
-                     "0",
-                     "--verbose"
-                ], close_fds=True)
 
-#                 thumb = ImageOps.fit(im, (500, 300), Image.ANTIALIAS, 0.0, (0.0, 0.0))
+                 with open(log_filename, "a") as log:
+                     subprocess.Popen([
+                         "./img2tiles.py",
+                         path,
+                         f"../web/tiles/tiles_{imageId}-color.png",
+                         "0",
+                         "--verbose"
+                     ], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
+   
+
                  thumb = ImageOps.fit(im, (500, 300), Image.LANCZOS)
                  with open(f"../web/thumbnails/thumb-{imageId}-color.png", 'wb') as f:
                      thumb.convert('RGB').save(f)
@@ -564,15 +575,15 @@ class image_file:
                 with open(path, 'wb') as f:
                     im.save(f)
 
-                subprocess.Popen([
-                    "./img2tiles.py",
-                    path,
-                    f"../web/tiles/tiles_{imageId}",
-                    "0",
-                     "--verbose"
-                ], close_fds=True)
+                with open(log_filename, "a") as log:
+                    subprocess.Popen([
+                        "./img2tiles.py",
+                        path,
+                        f"../web/tiles/tiles_{imageId}",
+                        "0",
+                        "--verbose"
+                    ], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
 
-#                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
                 db.update('images', vars=dict(iid=imageId), where="id = $iid",
                           path=(imageId + ".png"))
 
