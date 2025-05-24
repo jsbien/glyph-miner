@@ -61,7 +61,22 @@ def main():
     except Exception as e:
         print(f"❌ Error during curl request: {e}")
 
-    
+        # Remove and recreate local directories with .gitkeep
+    from shutil import rmtree
+
+    def reset_dir(path):
+        dir_path = Path(path)
+        if dir_path.exists():
+            print(f"🧹 Removing {dir_path}")
+            rmtree(dir_path)
+        dir_path.mkdir(parents=True, exist_ok=True)
+        (dir_path / ".gitkeep").touch()
+        print(f"📁 Recreated {dir_path} with .gitkeep")
+
+    reset_dir("web/synthetic_pages")
+    reset_dir("web/thumbnails")
+    reset_dir("web/tiles")
+        
     print("=== Uploading to port 9090 ===")
     run_and_log([
         "python3", "batch_upload_pages.py", "9090",
