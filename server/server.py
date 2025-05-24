@@ -535,7 +535,7 @@ class image_file:
 
             # Generate timestamped log filename
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            log_filename = f"logs/tilegen-{timestamp}.log"
+            log_filename = f"../logs/tilegen-{timestamp}.log"
             
             if imageType == "color":
 ##                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
