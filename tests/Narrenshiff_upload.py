@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import requests
 from pathlib import Path
+from PIL import Image
 import argparse
 import logging
 from datetime import datetime
-from PIL import Image
+from collections import defaultdict
+import re
 
 __version__ = "1.1.0"
 
@@ -12,7 +14,7 @@ __version__ = "1.1.0"
 logs_dir = Path("logs")
 logs_dir.mkdir(exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-log_file = logs_dir / f"upload_narrenshiff_{timestamp}.log"
+log_file = logs_dir / f"narrenshiff_upload_{timestamp}.log"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,16 +42,7 @@ def find_or_create_collection(title, dry_run, api):
     res = requests.post(f"{api}/collections", json={"title": title})
     res.raise_for_status()
     data = res.json()
-
-    if isinstance(data, dict) and "id" in data:
-        return data["id"]
-    elif isinstance(data, list) and data and "id" in data[0]:
-        return data[0]["id"]
-    else:
-        logger.error("Server returned empty or invalid response when creating collection.")
-        logger.error(f"Request payload: title={title}")
-        logger.error(f"Response body: {data}")
-        raise RuntimeError("Collection creation failed unexpectedly. Check backend behavior.")
+    return data["id"] if isinstance(data, dict) else data[0]["id"]
 
 
 def create_document(title, dry_run, api):
@@ -73,12 +66,13 @@ def upload_image(image_id, path, img_type, dry_run, api):
 
 def assign_to_collection(image_id, collection_id, dry_run, title, collection_name, api):
     if dry_run:
-        logger.info(f"[DRY-RUN] Would assign doc {image_id} to collection {collection_id}")
+        if image_id == -1 or collection_id == -1:
+            logger.info(f"[DRY-RUN] Would assign document (not created: {title}) "
+                        f"to collection (not created: {collection_name})")
+        else:
+            logger.info(f"[DRY-RUN] Would assign document {image_id} to collection {collection_id}")
         return
-    res = requests.post(f"{api}/memberships", json={
-        "image_id": image_id,
-        "collection_id": collection_id
-    })
+    res = requests.post(f"{api}/memberships", json={"image_id": image_id, "collection_id": collection_id})
     res.raise_for_status()
     logger.info(f"[+] Assigned document {image_id} to collection {collection_id}")
 
@@ -90,56 +84,79 @@ def is_binary_image(path):
         return colors.issubset({0, 255})
 
 
+def collect_ordered_images(color_dir, bw_dir):
+    """
+    Collects and returns matched color and binarized files in sorted (0001v, 0001r...) order.
+    """
+    def group_files(directory):
+        grouped = defaultdict(dict)
+        for file in directory.glob("*.tif*"):
+            match = re.match(r"(\d{4})([vr])", file.stem)
+            if match:
+                number, side = match.groups()
+                grouped[number][side] = file
+        return grouped
+
+    color_grouped = group_files(color_dir)
+    bw_grouped = group_files(bw_dir)
+
+    ordered_pairs = []
+    for number in sorted(bw_grouped.keys()):
+        for side in ("v", "r"):
+            if side in bw_grouped[number] and side in color_grouped[number]:
+                ordered_pairs.append((bw_grouped[number][side], color_grouped[number][side]))
+            elif side in bw_grouped[number]:
+                logger.warning(f"[!] Missing color match for: {bw_grouped[number][side].name}")
+            elif side in color_grouped[number]:
+                logger.warning(f"[!] Missing binarized match for: {color_grouped[number][side].name}")
+    return ordered_pairs
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Upload Das Narrenschiff page images.")
-    parser.add_argument("port", help="Port number of the running Glyph Miner server (e.g., 8080)")
-    parser.add_argument("--dry-run", action="store_true", help="Simulate without modifying anything.")
+    parser = argparse.ArgumentParser(description="Upload Das Narrenschiff pages into Glyph Miner.")
+    parser.add_argument("port", help="Port number of the running Glyph Miner server (e.g., 9090)")
+    parser.add_argument("--dry-run", action="store_true", help="Run in dry-run mode (no changes will be made).")
     args = parser.parse_args()
 
     api = f"http://localhost:{args.port}/api"
-    collection_title = "Das Narrenschiff"
-    base_title = "Das Narrenschiff"
 
-    color_dir = Path("tests/Narrenshiff/color")
     bw_dir = Path("tests/Narrenshiff/bw")
+    color_dir = Path("tests/Narrenshiff/color")
 
-    assert color_dir.is_dir(), f"Missing dir: {color_dir}"
-    assert bw_dir.is_dir(), f"Missing dir: {bw_dir}"
+    if not bw_dir.is_dir() or not color_dir.is_dir():
+        logger.error("Missing required subdirectories: tests/Narrenshiff/bw and /color")
+        return
 
-    logger.info(f"Using color images from: {color_dir.resolve()}")
-    logger.info(f"Using binary images from: {bw_dir.resolve()}")
+    logger.info("📁 Uploading from: tests/Narrenshiff")
+    logger.info("🖼️  Binary images: %s", bw_dir.resolve())
+    logger.info("🌈 Color images:  %s", color_dir.resolve())
 
-    collection_id = find_or_create_collection(collection_title, args.dry_run, api)
+    collection_name = "Das Narrenschiff"
+    collection_id = find_or_create_collection(collection_name, args.dry_run, api)
 
-    color_images = sorted(color_dir.glob("*.tif*"))
-    count_uploaded = 0
-    count_skipped = 0
+    pairs = collect_ordered_images(color_dir, bw_dir)
+    logger.info(f"📄 Matched and ordered image pairs: {len(pairs)}")
 
-    for color_img in color_images:
-        page_stem = color_img.stem
-        bw_img = bw_dir / f"{page_stem}.tiff"
+    uploaded = 0
+    for bw_img, color_img in pairs:
+        page_label = bw_img.stem  # e.g., "0001v"
+        title = f"{collection_name} - Page {page_label}"
 
-        if not bw_img.exists():
-            logger.warning(f"[!] No matching B/W image for {page_stem}. Skipping.")
-            count_skipped += 1
+        if not is_binary_image(bw_img):
+            logger.warning(f"[!] Skipping {bw_img.name}: not binary")
             continue
 
-        title = f"{base_title} - Page {page_stem}"
         doc_id = create_document(title, args.dry_run, api)
-
         upload_image(doc_id, color_img, "color", args.dry_run, api)
         upload_image(doc_id, bw_img, "binarized", args.dry_run, api)
+        assign_to_collection(doc_id, collection_id, args.dry_run, title, collection_name, api)
+        logger.info(f"[✓] Uploaded page: {page_label}")
+        uploaded += 1
 
-        assign_to_collection(doc_id, collection_id, args.dry_run, title, collection_title, api)
-
-        logger.info(f"[✓] Uploaded: {title}")
-        count_uploaded += 1
-
-    logger.info("========== Summary ==========")
-    logger.info(f"Color images processed   : {len(color_images)}")
-    logger.info(f"Uploaded successfully    : {count_uploaded}")
-    logger.info(f"Skipped (missing B/W)    : {count_skipped}")
-    logger.info("=============================")
+    logger.info("========== ✅ Summary ==========")
+    logger.info(f"Total page pairs processed: {len(pairs)}")
+    logger.info(f"Successfully uploaded       : {uploaded}")
+    logger.info("================================")
 
 
 if __name__ == "__main__":
