@@ -152,7 +152,7 @@ class index:
 
 class collections_handler:
     def GET(self):
-        print(">>> ENTERED collection_handler GET <<<", file=DEBUG_LOG, flush=True)
+        print(">>> ENTERED collections_handler GET <<<", file=DEBUG_LOG, flush=True)
         try:
             collections = list(db.select('collections'))
             print(">>> FETCHED:", collections, file=DEBUG_LOG, flush=True)
@@ -209,8 +209,8 @@ class collection_handler:
 
     def GET(self, collectionId):
         web.header('Access-Control-Allow-Origin', '*')
-        collections = db.query('SELECT * FROM collections')
-#        collections = db.select('collections')
+#        collections = db.query('SELECT * FROM collections')
+        collections = db.select('collections')
         output = [collection for collection in collections]
         return json.dumps(output, cls=DateTimeEncoder)
 
