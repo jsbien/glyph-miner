@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# git rev-list HEAD > commit-list.txt
+
 import subprocess
 import sys
 import os
@@ -7,6 +9,37 @@ from datetime import datetime
 import requests
 import shutil
 
+import subprocess
+from pathlib import Path
+
+COMMIT_LIST_PATH = Path("commit-list.txt")
+import subprocess
+import time
+
+def stop_uwsgi():
+    print("🛑 Stopping uWSGI server...")
+    subprocess.run(["local/kill-uwsgi.sh"], check=True)
+
+def start_uwsgi():
+    print("🚀 Starting uWSGI server...")
+    uwsgi_process = subprocess.Popen(["local/run-uwsgi.sh"])
+    time.sleep(2)  # Give it a moment to boot up
+    return uwsgi_process
+
+def generate_commit_list_if_needed():
+        if COMMIT_LIST_PATH.exists():
+#        print(f"📄 Using existing commit list at {COMMIT_LIST_PATH}")
+            print(f"📄 Using existing commit list at {COMMIT_LIST_PATH.resolve()}")
+        else:
+            print("🧾 Generating commit list with timestamps...")
+            commits = subprocess.check_output(
+                ["git", "log", "--pretty=format:%h %ad %s", "--date=iso"],
+                text=True
+            )
+            with open(COMMIT_LIST_PATH, "w", encoding="utf-8") as f:
+                f.write(commits)
+                print(f"📄 Saved to: {COMMIT_LIST_PATH.resolve()}")
+    
 REPO_DIR = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(".")
 os.chdir(REPO_DIR)
 
@@ -24,9 +57,10 @@ print(f"🔁 Returning to original ref: {original_ref}")
 
 commit_list_path = Path("commit-list.txt")
 with open(commit_list_path, "r") as f:
-    commits = [line.strip() for line in f if line.strip()]
+    commits = [line.strip().split()[0] for line in f if line.strip()]
 
 result_file = Path("search-results.txt")
+print(f"📄 Result file absolute path: {result_file.resolve()}")
 results = {}
 if result_file.exists():
     with open(result_file, "r") as f:
@@ -91,6 +125,11 @@ def run_test(port, log_path):
     with open(log_path, "a") as log:
         log.write(f"[✓] Uploaded {len(bw_pages)} pages into '{collection_title}'\n")
 
+if __name__ == "__main__":
+    generate_commit_list_if_needed()
+    # then continue with the backward search loop...
+        
+        
 # Begin loop
 for commit in commits:
     if commit in results:
@@ -102,21 +141,17 @@ for commit in commits:
 
     log_path = f"test-output-{commit}.log"
     try:
-        run(["./kill-uwsgi.sh"])
+        stop_uwsgi()
     except Exception:
         pass
 
-    run(["./run-uwsgi.sh"])
+    uwsgi_process = start_uwsgi()
+
     try:
         run_test(port="9090", log_path=log_path)
     except Exception as e:
         with open(log_path, "a") as log:
             log.write(f"[!] Error during test: {e}\n")
-
-    try:
-        run(["./kill-uwsgi.sh"])
-    except Exception:
-        pass
 
     verdict = input(f"📝 Enter result for commit {commit} (0 = PASS, 1 = FAIL, q = quit): ").strip()
     if verdict == "q":
