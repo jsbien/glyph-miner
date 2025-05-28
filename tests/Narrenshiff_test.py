@@ -2,80 +2,53 @@
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from shutil import rmtree
+import shutil
+import sys
 
-def run_and_log(command, cwd=None, log_path=None):
-    process = subprocess.Popen(
-        command,
-        cwd=cwd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True
-    )
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        for line in process.stdout:
-            print(line, end="")
-            log_file.write(line)
-    process.wait()
-    if process.returncode != 0:
-        raise subprocess.CalledProcessError(process.returncode, command)
-
-def reset_dir(path):
-    dir_path = Path(path)
-    if dir_path.exists():
-        print(f"🧹 Removing {dir_path}")
-        rmtree(dir_path)
-    dir_path.mkdir(parents=True, exist_ok=True)
-    (dir_path / ".gitkeep").touch()
-    print(f"📁 Recreated {dir_path} with .gitkeep")
+def run_and_log(cmd, cwd=None, log_path=None, env=None):
+    cmd_display = " ".join(str(c) for c in cmd)
+    print(f"\n🚀 Running: {cmd_display}\n")
+    with subprocess.Popen(
+        cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        text=True, bufsize=1, env=env
+    ) as proc:
+        with open(log_path, "a", encoding="utf-8") as logf:
+            for line in proc.stdout:
+                print(line, end="")
+                logf.write(line)
+        if proc.wait() != 0:
+            raise RuntimeError(f"Command failed: {cmd_display}")
 
 def main():
-    VERSION = "Narrenshiff_test.py v1.0"
+    # Prepare logs/
+    logs_dir = Path("logs")
+    logs_dir.mkdir(exist_ok=True)
+
+    # Generate unique run ID
+    commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_path = Path(f"logs/test-{timestamp}.log")
-    log_path.parent.mkdir(exist_ok=True)
+    run_id = f"{commit}_{timestamp}"
 
-    # Log to both file and console
-    print(f"📄 Logging to: {log_path}")
-    exec_log = open(log_path, "w", encoding="utf-8")
-    tee = lambda text: (print(text), exec_log.write(text + "\n"))
-    tee(f"🧪 {VERSION}")
-    tee(f"🕒 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    log_path = logs_dir / f"test-run-{run_id}.log"
+    print(f"📄 Logging to: {log_path.resolve()}")
 
-    try:
-        commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
-        tee(f"🔢 Commit: {commit}")
-    except Exception as e:
-        tee(f"❌ Could not get commit hash: {e}")
+    # Clean previous database and uploads
+    print("🧹 Cleaning previous run data...")
+    for sub in ("web/synthetic_pages", "web/thumbnails", "web/tiles"):
+        path = Path(sub)
+        for child in path.iterdir():
+            if child.is_file():
+                child.unlink()
+            elif child.is_dir():
+                shutil.rmtree(child)
 
-    print("=== Restarting server on port 9090 ===")
-    run_and_log(["bash", "local/restart-server.sh"], log_path=log_path)
+    # Restart server with run ID passed to uwsgi
+    run_and_log(["bash", "local/restart-server.sh", run_id], log_path=log_path)
 
-    print("🧹 Clearing backend database via debug endpoint...")
-    try:
-        result = subprocess.run(
-            ["curl", "-X", "POST", "-s", "http://localhost:9090/api/debug/clear"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        if result.returncode != 0:
-            print("❌ Failed to clear collections")
-        else:
-            print("✅ Cleared database")
-    except Exception as e:
-        print(f"❌ curl error: {e}")
-
-    # Clean directories
-    reset_dir("web/synthetic_pages")
-    reset_dir("web/thumbnails")
-    reset_dir("web/tiles")
-
-    print("=== Uploading Das Narrenschiff test set ===")
+    # Upload documents (from outside the repo!)
     run_and_log([
-        "python3", "tests/Narrenshiff_upload.py", "9090"
-    ], log_path=log_path)
-
-    print(f"\n✅ All done. Log saved to {log_path}")
+        "python3", "Narrenshiff_upload.py", "9090"
+    ], cwd="tests", log_path=log_path)
 
 if __name__ == "__main__":
     main()
