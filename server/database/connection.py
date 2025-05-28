@@ -79,7 +79,7 @@ class MySQLDB:
                 print(">>> QUERY SUCCESS", file=DEBUG_LOG, flush=True)
                 return result
         except Exception as e:
-            print(">>> QUERY FAILED:", e), file=DEBUG_LOG, flush=True)
+            print(">>> QUERY FAILED:", e, file=DEBUG_LOG, flush=True)
             raise
 
     def select(self, table, vars=None, where=None):
