@@ -32,22 +32,43 @@ def main():
     log_path = logs_dir / f"test-run-{run_id}.log"
     print(f"📄 Logging to: {log_path.resolve()}")
 
-    # Clean previous database and uploads
-    print("🧹 Cleaning previous run data...")
-    for sub in ("web/synthetic_pages", "web/thumbnails", "web/tiles"):
-        path = Path(sub)
-        for child in path.iterdir():
-            if child.is_file():
-                child.unlink()
-            elif child.is_dir():
-                shutil.rmtree(child)
+    print("🧹 Clearing collections table...")
+
+    try:
+        result = subprocess.run(
+            ["curl", "-X", "POST", "-s", "http://localhost:9090/api/debug/clear"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        if result.returncode != 0:
+            print("❌ Failed to clear collections via debug endpoint")
+        else:
+            print("✅ Collections cleared")
+    except Exception as e:
+        print(f"❌ Error during curl request: {e}")
+
+        # Remove and recreate local directories with .gitkeep
+    from shutil import rmtree
+
+    def reset_dir(path):
+        dir_path = Path(path)
+        if dir_path.exists():
+            print(f"🧹 Removing {dir_path}")
+            rmtree(dir_path)
+        dir_path.mkdir(parents=True, exist_ok=True)
+        (dir_path / ".gitkeep").touch()
+        print(f"📁 Recreated {dir_path} with .gitkeep")
+
+    reset_dir("web/synthetic_pages")
+    reset_dir("web/thumbnails")
+    reset_dir("web/tiles")
 
     # Restart server with run ID passed to uwsgi
     run_and_log(["bash", "local/restart-server.sh", run_id], log_path=log_path)
 
     # Upload documents (from outside the repo!)
     run_and_log([
-        "python3", "Narrenshiff_upload.py", "9090"
+        "python3", "Narrenshiff_upload.py", "9090", f"--run-id={run_id}"
     ], cwd="tests", log_path=log_path)
 
 if __name__ == "__main__":
