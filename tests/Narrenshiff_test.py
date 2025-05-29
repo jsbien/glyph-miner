@@ -59,6 +59,7 @@ def main():
         (dir_path / ".gitkeep").touch()
         print(f"📁 Recreated {dir_path} with .gitkeep")
 
+    reset_dir("server/images")
     reset_dir("web/synthetic_pages")
     reset_dir("web/thumbnails")
     reset_dir("web/tiles")
