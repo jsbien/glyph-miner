@@ -15,7 +15,11 @@ from pathlib import Path
 log_path = Path("../logs")
 log_path.mkdir(exist_ok=True)
 
-DEBUG_LOG = open(log_path / "verbose-debug.log", "a", buffering=1)
+
+
+RUN_ID = os.environ.get("RUN_ID", "default")
+DEBUG_LOG = open(log_path / f"verbose_{RUN_ID}.log", "a", buffering=1)
+# DEBUG_LOG = open(log_path / "verbose-debug.log", "a", buffering=1)
 
 print(">>> LOADED: /home/jsbien/git/glyph-miner/server/server.py ver. 0.05 <<<", flush=True)
 
