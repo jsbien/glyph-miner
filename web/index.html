@@ -37,17 +37,20 @@
         <img src="/img/UB-Logo.png" height="20" style="display:inline-block; vertical-align:middle; margin-left:8px;" alt="UB Logo">
       </a>
     </div>
-
     <!-- Right-side menu -->
-    <div class="collapse navbar-collapse" id="navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li ng-class="{ active: $state.includes('overview') }"><a ui-sref="overview">Document Overview</a></li>
-        <li ng-class="{ active: $state.includes('glyphs') }"><a ui-sref="glyphs">Glyph Library</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li ng-class="{ active: $state.includes('about') }"><a ui-sref="about">About</a></li>
-      </ul>
-    </div>
+<div class="collapse navbar-collapse" id="navbar-collapse">
+  <ul class="nav navbar-nav">
+    <li ng-class="{ active: $state.includes('overview') }"><a ui-sref="overview">Document Overview</a></li>
+    <li ng-class="{ active: $state.includes('glyphs') }"><a ui-sref="glyphs">Glyph Library</a></li>
+  </ul>
+
+  <ul class="nav navbar-nav navbar-right">
+    <!-- 🟩 Existing About link -->
+    <li ng-class="{ active: $state.includes('about') }"><a ui-sref="about">About</a></li>
+    <!-- 🟦 New Run ID display -->
+    <li class="navbar-text" id="run-id-display" style="font-size: 0.9em; color: #888;"></li>
+  </ul>
+</div>
   </div>
 </nav>
 
@@ -120,5 +123,10 @@
     <script src="app/page-creator/fileread.directive.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <!-- Optionally place this script inline or in main.js -->
+<script>
+  if (window.RUN_ID) {
+    document.getElementById('run-id-display').textContent = 'Run ID: ' + window.RUN_ID;
+  }
+</script>
   </body>
 </html>
