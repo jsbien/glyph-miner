@@ -70,6 +70,8 @@ class RunIdHandler:
     def GET(self):
         web.header('Access-Control-Allow-Origin', '*')
         run_id = os.environ.get("RUN_ID", "default")
+        print(">>> /api/run-id returns:", run_id)
+        web.header('Content-Type', 'application/json')
         return json.dumps({"run_id": run_id})
 
 class DebugClearHandler:
