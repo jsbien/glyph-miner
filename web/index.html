@@ -123,10 +123,17 @@
     <script src="app/page-creator/fileread.directive.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <!-- Optionally place this script inline or in main.js -->
-<script>
-  if (window.RUN_ID) {
-    document.getElementById('run-id-display').textContent = 'Run ID: ' + window.RUN_ID;
-  }
-</script>
   </body>
+  <script>
+  window.onload = async () => {
+    const response = await fetch('/api/run-id');
+    if (response.ok) {
+      const data = await response.json();
+      const runIdElement = document.getElementById('run-id-display');
+      if (runIdElement) {
+        runIdElement.textContent = `Run ID: ${data.run_id}`;
+      }
+    }
+  };
+</script>
 </html>
