@@ -1406,7 +1406,7 @@ urls = (
     # Utility
     '/api/debug/clear', 'DebugClearHandler',
     '/api/ping', 'PingHandler',
-    '/api/run-id', 'RunIdHandler',
+    '/api/run-id', RunIdHandler,
 )
 
 # DEBUG: inspect the structure of urls
