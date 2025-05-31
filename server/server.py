@@ -66,6 +66,12 @@ from datetime import datetime
 
 import datetime
 
+class RunIdHandler:
+    def GET(self):
+        web.header('Access-Control-Allow-Origin', '*')
+        run_id = os.environ.get("RUN_ID", "default")
+        return json.dumps({"run_id": run_id})
+
 class DebugClearHandler:
     def POST(self):
         try:
@@ -546,9 +552,11 @@ class image_file:
             os.makedirs("../logs", exist_ok=True)
 
             # Generate timestamped log filename
-            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            log_filename = f"../logs/tilegen-{timestamp}.log"
-            
+            # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+            # log_filename = f"../logs/tilegen-{timestamp}.log"
+            RUN_ID = os.environ.get("RUN_ID", "default")
+            log_filename = f"../logs/tilegen_{RUN_ID}.log"
+
             if imageType == "color":
 ##                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
 #                         (f"{imageId}-color.png", imageId))
@@ -1396,6 +1404,7 @@ urls = (
     # Utility
     '/api/debug/clear', 'DebugClearHandler',
     '/api/ping', 'PingHandler',
+    '/api/run-id', 'RunIdHandler',
 )
 
 # DEBUG: inspect the structure of urls
