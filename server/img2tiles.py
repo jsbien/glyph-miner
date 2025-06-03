@@ -1,63 +1,80 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import os
-import sys
 import math
-import argparse
+import sys
 from PIL import Image
 
-def create_tiles(image_path, output_dir, color_flag, verbose=False):
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+def create_tiles(image_path, base_path, verbose=0):
+    """
+    Generates tile pyramid for the image at image_path, storing tiles under base_path.
+    Tiles are 256x256 by default.
+    """
+    tile_size = (256, 256)
+    os.makedirs(base_path, exist_ok=True)
+
+    # Open the image
+    img = Image.open(image_path)
+    image_width, image_height = img.size
 
     if verbose:
-        print(f"[INFO] Opening image: {image_path}")
-    im = Image.open(image_path)
-    width, height = im.size
+        print(f"[INFO] Input image size: {image_width}x{image_height}")
 
-    tile_size = 256
-    max_level = math.ceil(math.log2(max(width, height)))
+    # Calculate the number of columns and rows at base zoom level (zoom level 0)
+    tile_width, tile_height = tile_size
+    cols = int(math.ceil(image_width / tile_width))
+    rows = int(math.ceil(image_height / tile_height))
 
-    for level in range(max_level + 1):
-        scale = 2 ** (max_level - level)
-        level_width = math.ceil(width / scale)
-        level_height = math.ceil(height / scale)
+    # Determine maximum zoom level
+    max_zoom = int(max(math.ceil(math.log(cols, 2)),
+                        math.ceil(math.log(rows, 2))))
+    if verbose:
+        print(f"[INFO] Max zoom level: {max_zoom} (cols={cols}, rows={rows})")
+
+    # Generate tiles for each zoom level
+    for z in range(max_zoom + 1):
+        scale = 2 ** (max_zoom - z)
+        zoom_width = int(math.ceil(image_width / scale))
+        zoom_height = int(math.ceil(image_height / scale))
 
         if verbose:
-            print(f"[INFO] Generating level {level}: {level_width}x{level_height} tiles")
+            print(f"[INFO] Zoom level {z}: scaled size = {zoom_width}x{zoom_height}")
 
-        resized = im.resize((level_width, level_height), Image.LANCZOS)
+        # Resize the image
+        zoom_img = img.resize((zoom_width, zoom_height), Image.LANCZOS)
 
-        tiles_x = math.ceil(level_width / tile_size)
-        tiles_y = math.ceil(level_height / tile_size)
+        # Calculate number of tiles
+        cols_z = int(math.ceil(zoom_width / tile_width))
+        rows_z = int(math.ceil(zoom_height / tile_height))
 
-        for x in range(tiles_x):
-            for y in range(tiles_y):
-                left = x * tile_size
-                upper = y * tile_size
-                right = min(left + tile_size, resized.width)
-                lower = min(upper + tile_size, resized.height)
+        for x in range(cols_z):
+            for y in range(rows_z):
+                left = x * tile_width
+                upper = y * tile_height
+                right = min(left + tile_width, zoom_width)
+                lower = min(upper + tile_height, zoom_height)
 
-                tile = resized.crop((left, upper, right, lower))
-
-                tile_dir = os.path.join(output_dir, str(level), str(x))
+                tile = zoom_img.crop((left, upper, right, lower))
+                tile_dir = os.path.join(base_path, str(z), str(x))
                 os.makedirs(tile_dir, exist_ok=True)
                 tile_path = os.path.join(tile_dir, f"{y}.png")
                 tile.save(tile_path)
 
-                if verbose:
-                    print(f"  ↳ Saved tile {tile_path} ({tile.width}x{tile.height})")
+                if verbose >= 2:
+                    print(f"[DEBUG] Saved tile: zoom {z}, x {x}, y {y}")
 
     if verbose:
-        print("[DONE] Tile generation complete.")
+        print("[INFO] Tile pyramid generation completed for:", image_path)
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate tiles from an image.")
-    parser.add_argument("input_path", help="Path to the input image")
-    parser.add_argument("output_dir", help="Path to the output tile directory")
-    parser.add_argument("color_flag", help="Color mode (currently unused)")
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    if len(sys.argv) < 3:
+        print("Usage: python3 img2tiles.py <image_path> <base_path> [verbose_level]")
+        sys.exit(1)
 
-    args = parser.parse_args()
+    image_path = sys.argv[1]
+    base_path = sys.argv[2]
+    verbose_level = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 
-    create_tiles(args.input_path, args.output_dir, args.color_flag, verbose=args.verbose)
+    create_tiles(image_path, base_path, verbose=verbose_level)
