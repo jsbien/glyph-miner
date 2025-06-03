@@ -575,7 +575,7 @@ class image_file:
                      subprocess.Popen([
                          "./img2tiles.py",
                          path,
-                         f"../web/tiles/tiles_{imageId}-color.png",
+                         f"../web/tiles/{imageId}-color.png",
                          "0",
                          "--verbose"
                      ], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
@@ -589,8 +589,8 @@ class image_file:
 
 #                db.query("UPDATE images SET web_path_color = %s WHERE id = %s", 
                 db.update('images', vars=dict(iid=imageId), where="id = $iid",
-#                          web_path=(imageId + ".png"))
-                          web_path=f"tiles_{imageId}")
+                          web_path=(imageId + ".png"))
+#                          web_path=f"{imageId}")
 
                 path = f'images/{imageId}.png'
                 print(f"[DEBUG] Saving binarized image to {path}", file=DEBUG_LOG, flush=True)
@@ -601,7 +601,7 @@ class image_file:
                     subprocess.Popen([
                         "./img2tiles.py",
                         path,
-                        f"../web/tiles/tiles_{imageId}",
+                        f"../web/tiles/{imageId}",
                         "0",
                         "--verbose"
                     ], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
