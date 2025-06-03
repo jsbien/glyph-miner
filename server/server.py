@@ -601,7 +601,7 @@ class image_file:
                     subprocess.Popen([
                         "./img2tiles.py",
                         path,
-                        f"../web/tiles/{imageId}",
+                        f"../web/tiles/{imageId}.png",
                         "0",
                         "--verbose"
                     ], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
