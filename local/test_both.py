@@ -82,7 +82,7 @@ def main():
     reset_dir("web/tiles")
     
     print("=== Restarting Python 3 port via restart-server.sh (port 9090) ===")
-    run_and_log(["bash", "local/restart-server.sh"], log_path=log_path)
+    run_and_log(["bash", "local/restart-server.sh", run_id], log_path=log_path)
 
     print("=== Uploading to port 8080 ===")
 
