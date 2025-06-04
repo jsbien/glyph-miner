@@ -12,12 +12,12 @@ Glyph Miner is a software for rapidly extracting glyph occurrences from early
 typeset prints. 
 
 This is the port of the original Glyph Miner to Python 3 [not yet
-working] made by [AsktheCode](https://docs.askthecode.ai/) under the
-supervision of [Janusz S. Bień](https://orcid.org/0000-0001-5006-8183)
-(or vice versa ☺)).  The port with some minor improvements is
-available in the present repository
-(https://github.com/jsbien/glyph-miner) and as a Docker image [not yet
-ready].
+fully tested] made by [AsktheCode](https://docs.askthecode.ai/) under
+the supervision of [Janusz
+S. Bień](https://orcid.org/0000-0001-5006-8183) (or vice versa ☺)).
+The port with some minor improvements is available in the present
+repository (https://github.com/jsbien/glyph-miner) and as a Docker
+image [not yet ready].
 
 
 
